@@ -117,7 +117,7 @@ class DetailViewController: UIViewController {
         dismiss(animated: true)
     }
     
-    func makeLabel(with title: String, textColor: UIColor, backgroundColor: UIColor?, border: Bool, borderColor: UIColor?) -> PaddingLabel {
+    private func makeLabel(with title: String, textColor: UIColor, backgroundColor: UIColor?, border: Bool, borderColor: UIColor?) -> PaddingLabel {
         let label = PaddingLabel()
         label.font = UIFont.systemFont(ofSize: 15)
         label.textColor = textColor
@@ -138,7 +138,7 @@ class DetailViewController: UIViewController {
         return label
     }
     
-    func setupUI() {
+    private func setupUI() {
         let exitButton = UIButton.systemButton(with: UIImage(systemName: "xmark")!, target: self, action: #selector(dismissView))
         exitButton.tintColor = UIColor.white
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: exitButton)
@@ -211,7 +211,7 @@ class DetailViewController: UIViewController {
         ])
     }
     
-    func configureWithData() {
+    private func configureWithData() {
         guard let movieDetails = movieDetails else { return }
 
         titleLabel.text = movieDetails.title

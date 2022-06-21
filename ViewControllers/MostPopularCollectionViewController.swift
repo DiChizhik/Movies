@@ -90,6 +90,24 @@ class MostPopularViewController: UIViewController, UICollectionViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setupUI()
+        
+        movieDataService.getMostPopularMoviesList { [weak self] (moviesList: [Movie]?) in
+            if let moviesList = moviesList {
+                self?.movies = moviesList
+            }
+            
+            DispatchQueue.main.async { [weak self] in
+                self?.collectionView.reloadData()
+                self?.itemInViewIndex = Int(round(Double((self?.movies.count)! / 2)))
+                self?.collectionView.scrollToItem(at: IndexPath(item: self!.itemInViewIndex, section: 0), at: UICollectionView.ScrollPosition.centeredHorizontally, animated: false)
+                self?.configureWithData(index: self!.itemInViewIndex)
+                self?.fadeIn()
+                }
+        }
+    }
+    
+    private func setupUI() {
         title = "Most Popular"
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white, .font: UIFont.systemFont(ofSize: 20, weight: .heavy)]
         navigationController?.navigationBar.backgroundColor = UIColor(named: "backgroundColor")
@@ -133,20 +151,6 @@ class MostPopularViewController: UIViewController, UICollectionViewDelegate {
             seeMoreButton.topAnchor.constraint(equalTo: movieDescription.bottomAnchor, constant: 8),
             seeMoreButton.centerXAnchor.constraint(equalTo: reviewsScore.centerXAnchor)
         ])
-        
-        movieDataService.getMostPopularMoviesList { [weak self] (moviesList: [Movie]?) in
-            if let moviesList = moviesList {
-                self?.movies = moviesList
-            }
-            
-            DispatchQueue.main.async { [weak self] in
-                self?.collectionView.reloadData()
-                self?.itemInViewIndex = Int(round(Double((self?.movies.count)! / 2)))
-                self?.collectionView.scrollToItem(at: IndexPath(item: self!.itemInViewIndex, section: 0), at: UICollectionView.ScrollPosition.centeredHorizontally, animated: false)
-                self?.configureWithData(index: self!.itemInViewIndex)
-                self?.fadeIn()
-                }
-        }
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
@@ -183,7 +187,7 @@ class MostPopularViewController: UIViewController, UICollectionViewDelegate {
 //        }
     }
 
-    func configureWithData(index: Int) {
+    private func configureWithData(index: Int) {
         let movieName = movies[index].title
         let reviewsScore = "\(movies[index].voteAverage)%"
         let movieDescription = movies[index].overview
@@ -195,7 +199,18 @@ class MostPopularViewController: UIViewController, UICollectionViewDelegate {
         updateReviewScoreIndicator(reviewsScore: reviewsScore)
     }
     
-    func fadeIn() {
+    func updateReviewScoreIndicator(reviewsScore: String) {
+        let score = reviewsScore.components(separatedBy: "%")
+        if let scoreInt = Int(score[0]) {
+            if scoreInt > 50 {
+                reviewsScoreIndicator.image = UIImage(named: "highReviewsScore")
+            } else {
+                reviewsScoreIndicator.image = UIImage(named: "lowReviewsScore")
+            }
+        }
+    }
+    
+    private func fadeIn() {
         UIView.animate(withDuration: 1,
                        delay: 0,
                        options: [],
@@ -208,7 +223,7 @@ class MostPopularViewController: UIViewController, UICollectionViewDelegate {
                     }, completion: nil)
     }
     
-    func fadeOut() {
+    private func fadeOut() {
         UIView.animate(withDuration: 1,
                        delay: 0,
                        options: [],
@@ -220,17 +235,6 @@ class MostPopularViewController: UIViewController, UICollectionViewDelegate {
             self.seeMoreButton.alpha = 0
             },
                        completion: nil)
-    }
-    
-    func updateReviewScoreIndicator(reviewsScore: String) {
-        let score = reviewsScore.components(separatedBy: "%")
-        if let scoreInt = Int(score[0]) {
-            if scoreInt > 50 {
-                reviewsScoreIndicator.image = UIImage(named: "highReviewsScore")
-            } else {
-                reviewsScoreIndicator.image = UIImage(named: "lowReviewsScore")
-            }
-        }
     }
     
     @objc func seeMoreTapped(_ sender: UIButton) {
