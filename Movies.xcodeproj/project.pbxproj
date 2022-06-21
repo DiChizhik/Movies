@@ -23,6 +23,7 @@
 		026D0D37284F8A3C00B5BF8B /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 026D0D36284F8A3C00B5BF8B /* DetailViewController.swift */; };
 		026D0D39284F9CE900B5BF8B /* PaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 026D0D38284F9CE900B5BF8B /* PaddingLabel.swift */; };
 		0277AE182861C76700054D50 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0277AE172861C76700054D50 /* String.swift */; };
+		0277AE1A2861DF9100054D50 /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0277AE192861DF9100054D50 /* LaunchViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +44,7 @@
 		026D0D36284F8A3C00B5BF8B /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		026D0D38284F9CE900B5BF8B /* PaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingLabel.swift; sourceTree = "<group>"; };
 		0277AE172861C76700054D50 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		0277AE192861DF9100054D50 /* LaunchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +98,7 @@
 		02271139285A7DE10049BECA /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				0277AE192861DF9100054D50 /* LaunchViewController.swift */,
 				026D0D38284F9CE900B5BF8B /* PaddingLabel.swift */,
 				02334D24283E438F0099C92B /* PlayingNowCollectionViewCell.swift */,
 				025F059828476BD200FF070D /* MostPopularCollectionViewCell.swift */,
@@ -229,6 +232,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0277AE1A2861DF9100054D50 /* LaunchViewController.swift in Sources */,
 				02334D23283E26980099C92B /* MostPopularCollectionViewController.swift in Sources */,
 				02334D0D283E185E0099C92B /* AppDelegate.swift in Sources */,
 				026D0D13284E646F00B5BF8B /* MovieDataService.swift in Sources */,

@@ -37,9 +37,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             mostPopularTabNavigationController
         ]
         
+//        let launchViewController = LaunchViewController()
+        
         window = UIWindow(windowScene: windowScene)
     
         window?.rootViewController = tabBarController
+//        window?.rootViewController = launchViewController
         
         window?.makeKeyAndVisible()
     }
