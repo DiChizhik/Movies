@@ -22,6 +22,7 @@
 		026D0D13284E646F00B5BF8B /* MovieDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 026D0D12284E646F00B5BF8B /* MovieDataService.swift */; };
 		026D0D37284F8A3C00B5BF8B /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 026D0D36284F8A3C00B5BF8B /* DetailViewController.swift */; };
 		026D0D39284F9CE900B5BF8B /* PaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 026D0D38284F9CE900B5BF8B /* PaddingLabel.swift */; };
+		0277AE182861C76700054D50 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0277AE172861C76700054D50 /* String.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +42,7 @@
 		026D0D12284E646F00B5BF8B /* MovieDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDataService.swift; sourceTree = "<group>"; };
 		026D0D36284F8A3C00B5BF8B /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		026D0D38284F9CE900B5BF8B /* PaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingLabel.swift; sourceTree = "<group>"; };
+		0277AE172861C76700054D50 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +114,7 @@
 		02334D00283E185E0099C92B = {
 			isa = PBXGroup;
 			children = (
+				0277AE162861C75500054D50 /* Extensions */,
 				02271138285A7D6C0049BECA /* Application */,
 				02271137285A7AAD0049BECA /* Storyboards */,
 				0223A3DB285A734600E3602D /* Models */,
@@ -139,6 +142,14 @@
 				026D0D36284F8A3C00B5BF8B /* DetailViewController.swift */,
 			);
 			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		0277AE162861C75500054D50 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				0277AE172861C76700054D50 /* String.swift */,
+			);
+			name = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -224,6 +235,7 @@
 				025F059928476BD200FF070D /* MostPopularCollectionViewCell.swift in Sources */,
 				02334D21283E228F0099C92B /* PlayingNowCollectionViewController.swift in Sources */,
 				0223A3DE285A739B00E3602D /* MovieDetails.swift in Sources */,
+				0277AE182861C76700054D50 /* String.swift in Sources */,
 				025F059B284786CF00FF070D /* Movie.swift in Sources */,
 				026D0D37284F8A3C00B5BF8B /* DetailViewController.swift in Sources */,
 				02334D25283E438F0099C92B /* PlayingNowCollectionViewCell.swift in Sources */,

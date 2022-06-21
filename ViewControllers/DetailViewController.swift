@@ -22,7 +22,7 @@ class DetailViewController: UIViewController {
     private lazy var titleLabel: UILabel = {
        let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 24, weight: .heavy)
+        label.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
         label.textAlignment = .center
         label.textColor = UIColor.white
         label.text = "Movie Title"
@@ -45,7 +45,7 @@ class DetailViewController: UIViewController {
        let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 15)
-        label.textColor = UIColor(named: "grey")
+        label.textColor = UIColor(named: "staticTextColor")
         label.text = "Released on"
         label.textAlignment = .left
         return label
@@ -55,7 +55,7 @@ class DetailViewController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 15)
-        label.textColor = UIColor.white
+        label.textColor = UIColor(named: "descriptionColor")
         label.text = "date"
         label.textAlignment = .left
         return label
@@ -65,7 +65,7 @@ class DetailViewController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 15)
-        label.textColor = UIColor(named: "grey")
+        label.textColor = UIColor(named: "staticTextColor")
         label.text = "Lasts"
         label.textAlignment = .left
         return label
@@ -75,7 +75,7 @@ class DetailViewController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 15)
-        label.textColor = UIColor.white
+        label.textColor = UIColor(named: "descriptionColor")
         label.text = "0h0"
         label.textAlignment = .left
         return label
@@ -119,9 +119,9 @@ class DetailViewController: UIViewController {
     
     func makeLabel(with title: String, textColor: UIColor, backgroundColor: UIColor?, border: Bool, borderColor: UIColor?) -> PaddingLabel {
         let label = PaddingLabel()
-        label.font = UIFont.systemFont(ofSize: 12)
+        label.font = UIFont.systemFont(ofSize: 15)
         label.textColor = textColor
-        label.text = title.uppercased()
+        label.text = title.lowercased().capitalizingFirstLetter()
         label.textAlignment = .center
         if border == true {
             label.layer.borderWidth = 1
@@ -134,7 +134,7 @@ class DetailViewController: UIViewController {
         }
         label.layer.cornerRadius = 4
         label.layer.masksToBounds = true
-        label.inset = UIEdgeInsets(top: 4, left: 5, bottom: 5, right: 4)
+        label.inset = UIEdgeInsets(top: 4, left: 15, bottom: 5, right: 15)
         return label
     }
     
@@ -164,7 +164,7 @@ class DetailViewController: UIViewController {
         languageStack.axis = .horizontal
         languageStack.spacing = 4
         
-        let languageLabels: [PaddingLabel] = languages.map { makeLabel(with: $0, textColor: UIColor.white, backgroundColor: nil, border: true, borderColor: UIColor.white)}
+        let languageLabels: [PaddingLabel] = languages.map { makeLabel(with: $0, textColor: UIColor(named: "descriptionColor")!, backgroundColor: UIColor(named: "languageBackgroundColor")!, border: true, borderColor: UIColor(named: "languageBorderColor")!)}
         languageLabels.forEach {languageStack.addArrangedSubview($0)}
         
         let genreStack = UIStackView()
@@ -172,7 +172,7 @@ class DetailViewController: UIViewController {
         genreStack.axis = .horizontal
         genreStack.spacing = 4
         
-        let genreLabels: [PaddingLabel] = genres.map { makeLabel(with: $0, textColor: UIColor(named: "genreText")!, backgroundColor: UIColor(named: "genreBackground"), border: false, borderColor: nil)}
+        let genreLabels: [PaddingLabel] = genres.map { makeLabel(with: $0, textColor: UIColor(named: "titleColor")!, backgroundColor: UIColor(named: "genreBackgroundColor"), border: true, borderColor: UIColor(named: "genreBorderColor")!)}
         genreLabels.forEach {genreStack.addArrangedSubview($0)}
         
         view.addSubview(titleLabel)
@@ -188,13 +188,13 @@ class DetailViewController: UIViewController {
             titleLabel.leftAnchor.constraint(equalTo: view.layoutMarginsGuide.leftAnchor),
             titleLabel.rightAnchor.constraint(equalTo: view.layoutMarginsGuide.rightAnchor),
 
-            imageView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 23),
+            imageView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 16),
             imageView.centerXAnchor.constraint(equalTo: titleLabel.centerXAnchor),
             imageView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.61),
             imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: 1.41),
             
             releaseStack.leftAnchor.constraint(equalTo: view.layoutMarginsGuide.leftAnchor),
-            releaseStack.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 24),
+            releaseStack.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 35),
 
             durationStack.leftAnchor.constraint(equalTo: releaseStack.leftAnchor),
             durationStack.topAnchor.constraint(equalTo: releaseStack.bottomAnchor, constant: 8),

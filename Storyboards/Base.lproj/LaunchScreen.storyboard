@@ -15,19 +15,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="MovieBox" translatesAutoresizingMaskIntoConstraints="NO" id="l17-aJ-TII">
-                                <rect key="frame" x="61" y="393" width="292" height="71.5"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="l17-aJ-TII" secondAttribute="height" multiplier="45:11" id="wUu-eP-bpt"/>
-                                </constraints>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="MoviewLogo" translatesAutoresizingMaskIntoConstraints="NO" id="l17-aJ-TII">
+                                <rect key="frame" x="64" y="310" width="286" height="286"/>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                        <color key="backgroundColor" red="0.23921568627450979" green="0.23921568627450979" blue="0.30588235294117649" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <color key="backgroundColor" red="0.0039215686274509803" green="0.22745098039215686" blue="0.38823529411764707" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="l17-aJ-TII" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="61" id="Pi4-10-wUJ"/>
+                            <constraint firstItem="l17-aJ-TII" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="aua-eI-am1"/>
                             <constraint firstItem="l17-aJ-TII" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="mKF-OI-fbQ"/>
-                            <constraint firstItem="l17-aJ-TII" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="349" id="zPT-i2-Y0z"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -37,6 +33,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="MovieBox" width="272" height="68"/>
+        <image name="MoviewLogo" width="286" height="286"/>
     </resources>
 </document>

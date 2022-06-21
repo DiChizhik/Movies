@@ -22,43 +22,31 @@ class PlayingNowCollectionViewCell: UICollectionViewCell {
     private lazy var name: UILabel = {
        let name = UILabel()
         name.translatesAutoresizingMaskIntoConstraints = false
-        name.font = UIFont.systemFont(ofSize: 14, weight: .heavy)
+        name.font = UIFont.systemFont(ofSize: 15, weight: .heavy)
         name.textAlignment = .left
-        name.textColor = UIColor.white
+        name.textColor = UIColor(named: "titleColor")
         name.numberOfLines = 1
         name.setContentHuggingPriority(.defaultLow, for: .horizontal)
         name.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         return name
     }()
     
-    private var duration: UILabel = {
-       let duration = UILabel()
-        duration.translatesAutoresizingMaskIntoConstraints = false
-        duration.font = UIFont.systemFont(ofSize: 14)
-        duration.textAlignment = .left
-        duration.textColor = UIColor(named: "grey")
-        return duration
-    }()
-    
     private lazy var reviewsScore: UILabel = {
        let reviewsScore = UILabel()
         reviewsScore.translatesAutoresizingMaskIntoConstraints = false
-        reviewsScore.font = UIFont.systemFont(ofSize: 14)
+        reviewsScore.font = UIFont.systemFont(ofSize: 15)
         reviewsScore.textAlignment = .right
-        reviewsScore.textColor = UIColor(named: "grey")
+        reviewsScore.textColor = UIColor(named: "titleColor")
         reviewsScore.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         reviewsScore.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         return reviewsScore
     }()
     
-    private lazy var reviewsScoreIndicator: UIView = {
-        let reviewsScoreIndicator = UIView()
+    private lazy var reviewsScoreIndicator: UIImageView = {
+        let reviewsScoreIndicator = UIImageView()
         reviewsScoreIndicator.translatesAutoresizingMaskIntoConstraints = false
-        reviewsScoreIndicator.widthAnchor.constraint(equalToConstant: 12).isActive = true
-        reviewsScoreIndicator.heightAnchor.constraint(equalTo: reviewsScoreIndicator.widthAnchor).isActive = true
-        reviewsScoreIndicator.layer.cornerRadius = 6
-        reviewsScoreIndicator.layer.masksToBounds = true
-        reviewsScoreIndicator.backgroundColor = UIColor(named: "red")
+        reviewsScoreIndicator.heightAnchor.constraint(equalToConstant: 15).isActive = true
+        reviewsScoreIndicator.widthAnchor.constraint(equalTo: reviewsScoreIndicator.heightAnchor, multiplier: 1.13).isActive = true
         return reviewsScoreIndicator
     }()
     
@@ -78,7 +66,6 @@ class PlayingNowCollectionViewCell: UICollectionViewCell {
         
         contentView.addSubview(imageView)
         contentView.addSubview(name)
-        contentView.addSubview(duration)
         contentView.addSubview(reviewsScore)
         contentView.addSubview(reviewsScoreIndicator)
         
@@ -88,32 +75,33 @@ class PlayingNowCollectionViewCell: UICollectionViewCell {
             imageView.widthAnchor.constraint(equalTo: contentView.widthAnchor),
             imageView.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.83),
             
-            reviewsScore.rightAnchor.constraint(equalTo: contentView.rightAnchor),
-            reviewsScore.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8),
-            
-            reviewsScoreIndicator.rightAnchor.constraint(equalTo: reviewsScore.leftAnchor, constant: -2),
-            reviewsScoreIndicator.centerYAnchor.constraint(equalTo: reviewsScore.centerYAnchor),
+//            reviewsScoreIndicator.rightAnchor.constraint(equalTo: reviewsScore.leftAnchor, constant: -2),
+//            reviewsScoreIndicator.centerYAnchor.constraint(equalTo: reviewsScore.centerYAnchor),
             
             name.leftAnchor.constraint(equalTo: contentView.leftAnchor),
-            name.rightAnchor.constraint(equalTo: reviewsScoreIndicator.leftAnchor),
-            name.centerYAnchor.constraint(equalTo: reviewsScore.centerYAnchor),
+            name.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+            name.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8),
             
-            duration.leftAnchor.constraint(equalTo: contentView.leftAnchor),
-            duration.topAnchor.constraint(equalTo: name.bottomAnchor, constant: 4),
-            duration.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            reviewsScoreIndicator.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            reviewsScoreIndicator.topAnchor.constraint(equalTo: name.bottomAnchor, constant: 4),
+            reviewsScoreIndicator.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            
+            reviewsScore.leftAnchor.constraint(equalTo: reviewsScoreIndicator.rightAnchor, constant: 8),
+            reviewsScore.centerYAnchor.constraint(equalTo: reviewsScoreIndicator.centerYAnchor)
         ])
     }
     
-    func configure(imageURL: URL, name: String, duration: String, reviewsScore: String) {
+    func configure(imageURL: URL, name: String, reviewsScore: String) {
         imageView.kf.setImage(with: imageURL)
         self.name.text = name
-        self.duration.text = duration
         self.reviewsScore.text = reviewsScore
         
         let score = reviewsScore.components(separatedBy: "%")
         if let scoreInt = Int(score[0]) {
             if scoreInt > 50 {
-                reviewsScoreIndicator.backgroundColor = UIColor(named: "green")
+                reviewsScoreIndicator.image = UIImage(named: "highReviewsScore")
+            } else {
+                reviewsScoreIndicator.image = UIImage(named: "lowReviewsScore")
             }
         }
     

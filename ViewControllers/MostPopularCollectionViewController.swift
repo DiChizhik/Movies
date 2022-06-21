@@ -34,8 +34,8 @@ class MostPopularViewController: UIViewController, UICollectionViewDelegate {
         name.translatesAutoresizingMaskIntoConstraints = false
         name.text = "Film name"
         name.textAlignment = .center
-        name.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
-        name.textColor = UIColor.white
+        name.font = UIFont.systemFont(ofSize: 15, weight: .heavy)
+        name.textColor = UIColor(named: "titleColor")
         name.alpha = 0
         return name
     }()
@@ -43,27 +43,18 @@ class MostPopularViewController: UIViewController, UICollectionViewDelegate {
     private var reviewsScore: UILabel = {
        let reviewsScore = UILabel()
         reviewsScore.translatesAutoresizingMaskIntoConstraints = false
-        reviewsScore.font = UIFont.systemFont(ofSize: 14)
+        reviewsScore.font = UIFont.systemFont(ofSize: 15)
         reviewsScore.text = "00%"
-        reviewsScore.textColor = UIColor(named: "grey")
+        reviewsScore.textColor = UIColor(named: "titleColor")
         reviewsScore.alpha = 0
         return reviewsScore
     }()
     
-    private lazy var reviewsScoreIndicator: UIView = {
-        let reviewsScoreIndicator = UIView()
+    private lazy var reviewsScoreIndicator: UIImageView = {
+        let reviewsScoreIndicator = UIImageView()
         reviewsScoreIndicator.translatesAutoresizingMaskIntoConstraints = false
-        reviewsScoreIndicator.widthAnchor.constraint(equalToConstant: 12).isActive = true
-        reviewsScoreIndicator.heightAnchor.constraint(equalTo: reviewsScoreIndicator.widthAnchor).isActive = true
-//        Alternatively:
-//        override func viewDidAppear(_ animated: Bool) {
-//            super.viewDidAppear(animated)
-//
-//            reviewsScoreIndicator.layer.cornerRadius = reviewsScoreIndicator.bounds.size.width / 2
-//        }
-        reviewsScoreIndicator.layer.cornerRadius = 6
-        reviewsScoreIndicator.layer.masksToBounds = true
-        reviewsScoreIndicator.backgroundColor = UIColor(named: "red")
+        reviewsScoreIndicator.heightAnchor.constraint(equalToConstant: 15).isActive = true
+        reviewsScoreIndicator.widthAnchor.constraint(equalTo: reviewsScoreIndicator.heightAnchor, multiplier: 1.13).isActive = true
         reviewsScoreIndicator.alpha = 0
         return reviewsScoreIndicator
     }()
@@ -91,7 +82,7 @@ class MostPopularViewController: UIViewController, UICollectionViewDelegate {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("See more", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
-        button.tintColor = UIColor(named: "acidGreen")
+        button.tintColor = UIColor(named: "titleColor")
         button.alpha = 0
         return button
     }()
@@ -99,8 +90,8 @@ class MostPopularViewController: UIViewController, UICollectionViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "Most popular"
-        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white, .font: UIFont.systemFont(ofSize: 24, weight: .heavy)]
+        title = "Most Popular"
+        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white, .font: UIFont.systemFont(ofSize: 20, weight: .heavy)]
         navigationController?.navigationBar.backgroundColor = UIColor(named: "backgroundColor")
         
         view.backgroundColor = UIColor(named: "backgroundColor")
@@ -113,7 +104,7 @@ class MostPopularViewController: UIViewController, UICollectionViewDelegate {
             collectionView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.4),
             collectionView.widthAnchor.constraint(equalTo: view.widthAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionView.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor)
+            collectionView.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: 27)
         ])
         
         view.addSubview(name)
@@ -123,18 +114,18 @@ class MostPopularViewController: UIViewController, UICollectionViewDelegate {
         view.addSubview(seeMoreButton)
         
         NSLayoutConstraint.activate([
-            name.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 32),
+            name.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 15),
             name.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             name.widthAnchor.constraint(equalToConstant: 195),
             name.heightAnchor.constraint(equalToConstant: 24),
             
-            reviewsScore.topAnchor.constraint(equalTo: name.bottomAnchor, constant: 8),
+            reviewsScore.topAnchor.constraint(equalTo: name.bottomAnchor, constant: 6),
             reviewsScore.centerXAnchor.constraint(equalTo: name.centerXAnchor),
             
             reviewsScoreIndicator.centerYAnchor.constraint(equalTo: reviewsScore.centerYAnchor),
-            reviewsScoreIndicator.trailingAnchor.constraint(equalTo: reviewsScore.leadingAnchor, constant: -2),
+            reviewsScoreIndicator.trailingAnchor.constraint(equalTo: reviewsScore.leadingAnchor, constant: -8),
             
-            movieDescription.topAnchor.constraint(equalTo: reviewsScore.bottomAnchor, constant: 25),
+            movieDescription.topAnchor.constraint(equalTo: reviewsScore.bottomAnchor, constant: 24),
             movieDescription.centerXAnchor.constraint(equalTo: reviewsScore.centerXAnchor),
             movieDescription.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
             movieDescription.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
@@ -235,7 +226,9 @@ class MostPopularViewController: UIViewController, UICollectionViewDelegate {
         let score = reviewsScore.components(separatedBy: "%")
         if let scoreInt = Int(score[0]) {
             if scoreInt > 50 {
-                reviewsScoreIndicator.backgroundColor = UIColor(named: "green")
+                reviewsScoreIndicator.image = UIImage(named: "highReviewsScore")
+            } else {
+                reviewsScoreIndicator.image = UIImage(named: "lowReviewsScore")
             }
         }
     }
