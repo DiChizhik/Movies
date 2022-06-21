@@ -75,9 +75,6 @@ class PlayingNowCollectionViewCell: UICollectionViewCell {
             imageView.widthAnchor.constraint(equalTo: contentView.widthAnchor),
             imageView.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.83),
             
-//            reviewsScoreIndicator.rightAnchor.constraint(equalTo: reviewsScore.leftAnchor, constant: -2),
-//            reviewsScoreIndicator.centerYAnchor.constraint(equalTo: reviewsScore.centerYAnchor),
-            
             name.leftAnchor.constraint(equalTo: contentView.leftAnchor),
             name.rightAnchor.constraint(equalTo: contentView.rightAnchor),
             name.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8),
@@ -91,19 +88,19 @@ class PlayingNowCollectionViewCell: UICollectionViewCell {
         ])
     }
     
-    func configure(imageURL: URL, name: String, reviewsScore: String) {
+    func configure(imageURL: URL, name: String, reviewsScore: Int, popularity: Movie.Popularity) {
         imageView.kf.setImage(with: imageURL)
         self.name.text = name
-        self.reviewsScore.text = reviewsScore
+        self.reviewsScore.text = "\(reviewsScore)%"
         
-        let score = reviewsScore.components(separatedBy: "%")
-        if let scoreInt = Int(score[0]) {
-            if scoreInt > 50 {
-                reviewsScoreIndicator.image = UIImage(named: "highReviewsScore")
-            } else {
-                reviewsScoreIndicator.image = UIImage(named: "lowReviewsScore")
-            }
-        }
+        reviewsScoreIndicator.image = popularity == .high ? UIImage(named: "highReviewsScore") : UIImage(named: "lowReviewsScore")
+//        if pop {
+//            if scoreInt > 50 {
+//                reviewsScoreIndicator.image = UIImage(named: "highReviewsScore")
+//            } else {
+//                reviewsScoreIndicator.image = UIImage(named: "lowReviewsScore")
+//            }
+//        }
     
     }
 }

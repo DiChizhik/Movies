@@ -9,12 +9,12 @@ import Foundation
 
 struct MovieDetails: Codable {
     let title: String
-    let posterPath: String
+    let posterPath: URL?
     let spokenLanguages: [Language]
     let genres: [Genre]
 //    Date type
     let releaseDate: String
-    let runtime: Int
+    let runtime: String
     let overview: String
     
     enum CodingKeys: String, CodingKey {
@@ -26,10 +26,32 @@ struct MovieDetails: Codable {
         case runtime
         case overview
     }
+    
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        
+        title = try values.decode(String.self, forKey: .title)
+        
+        let posterPathString = try values.decode(String.self, forKey: .posterPath)
+        posterPath = URL(string: "https://image.tmdb.org/t/p/w500" + posterPathString)
+        
+        spokenLanguages = try values.decode([Language].self, forKey: .spokenLanguages)
+        genres = try values.decode([Genre].self, forKey: .genres)
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .none
+        dateFormatter.locale = Locale(identifier: "en_US")
+        releaseDate = dateFormatter.string(from: try values.decode(Date.self, forKey: .releaseDate))
+        
+        let runtimeInt = try values.decode(Int.self, forKey: .runtime)
+        runtime = "\(Int(runtimeInt / 60))h \(runtimeInt % 60)min"
+        
+        overview = try values.decode(String.self, forKey: .overview)
+    }
 }
 
 struct Genre: Codable {
-    let id: Int
     let name: String
 }
 

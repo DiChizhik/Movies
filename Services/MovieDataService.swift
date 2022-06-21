@@ -85,22 +85,17 @@ class MovieDataService: MovieDataServiceProtocol {
                 completion(nil)
                 return
             }
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
             let jsonDecoder = JSONDecoder()
-//            jsonDecoder.dateDecodingStrategy = .iso8601
+            jsonDecoder.dateDecodingStrategy = .formatted(dateFormatter)
+            
             guard let movieDetails = try? jsonDecoder.decode(MovieDetails.self, from: data) else {
                 completion(nil)
                 return
             }
             completion(movieDetails)
         }.resume()
-    }
-    
-    func getMoviePosterURL(posterPath: String) -> URL? {
-        let urlString = "https://image.tmdb.org/t/p/w500" + posterPath
-        if let url = URL(string: urlString) {
-                return url
-        }
-        return nil
     }
     
 }

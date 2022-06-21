@@ -216,13 +216,12 @@ class DetailViewController: UIViewController {
 
         titleLabel.text = movieDetails.title
         
-        let path = movieDetails.posterPath
-            if let url = movieDataService.getMoviePosterURL(posterPath: path) {
-                imageView.kf.setImage(with: url)
-            }
+        if let path = movieDetails.posterPath {
+            imageView.kf.setImage(with: path)
+        }
         
-        releaseDateLabel.text = movieDetails.releaseDate
-        durationLabel.text = "\(movieDetails.runtime)m"
+        releaseDateLabel.text = "\(movieDetails.releaseDate)"
+        durationLabel.text = movieDetails.runtime
         movieDescriptionLabel.text = movieDetails.overview
         languages = movieDetails.spokenLanguages.map{$0.englishName}
         genres = movieDetails.genres.map{$0.name}

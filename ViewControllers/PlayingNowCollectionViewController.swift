@@ -56,11 +56,12 @@ class PlayingNowCollectionViewController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PlayingNowCollectionViewCell.reuseIdentifier, for: indexPath) as? PlayingNowCollectionViewCell else { fatalError() }
         
-        let movieName = movies[indexPath.item].title
-        let reviewsScore = "\(movies[indexPath.item].voteAverage)%"
-        let path = movies[indexPath.item].posterPath
-        if let url = movieDataService.getMoviePosterURL(posterPath: path) {
-            cell.configure(imageURL: url, name: movieName, reviewsScore: reviewsScore)
+        let movie = movies[indexPath.item]
+        let movieName = movie.title
+        let reviewsScore = movie.voteAverage
+        let popularity = movie.popularity
+        if let path = movie.posterPath {
+            cell.configure(imageURL: path, name: movieName, reviewsScore: reviewsScore, popularity: popularity)
         }
         
         return cell

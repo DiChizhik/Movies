@@ -254,10 +254,8 @@ extension MostPopularViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MostPopularCollectionViewCell.reuseIndentifier, for: indexPath) as? MostPopularCollectionViewCell else { fatalError() }
             
-        let path = movies[indexPath.item].posterPath
-        
-        if let url = movieDataService.getMoviePosterURL(posterPath: path) {
-            cell.configure(imageURL: url)
+        if let path = movies[indexPath.item].posterPath {
+            cell.configure(imageURL: path)
         }
         
         return cell
