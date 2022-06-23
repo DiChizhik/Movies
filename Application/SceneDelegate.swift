@@ -76,8 +76,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func setupTabBar() {
-        UITabBarItem.appearance().setTitleTextAttributes([.foregroundColor: UIColor(named: "nonSelectedTab")], for: .normal)
-        UITabBarItem.appearance().setTitleTextAttributes([.foregroundColor : UIColor(named: "selectedTab")], for: .selected)
+        UITabBarItem.appearance().setTitleTextAttributes([.foregroundColor: UIColor(named: "nonSelectedTab")!], for: .normal)
+        UITabBarItem.appearance().setTitleTextAttributes([.foregroundColor : UIColor(named: "selectedTab")!], for: .selected)
         UITabBar.appearance().tintColor = UIColor(named: "selectedTab")
         UITabBar.appearance().unselectedItemTintColor = UIColor(named: "nonSelectedTab")
         UITabBar.appearance().barTintColor = UIColor(named: "backgroundColor")

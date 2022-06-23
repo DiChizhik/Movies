@@ -24,6 +24,8 @@
 		026D0D39284F9CE900B5BF8B /* PaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 026D0D38284F9CE900B5BF8B /* PaddingLabel.swift */; };
 		0277AE182861C76700054D50 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0277AE172861C76700054D50 /* String.swift */; };
 		0277AE1A2861DF9100054D50 /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0277AE192861DF9100054D50 /* LaunchViewController.swift */; };
+		0277AE5528646E0800054D50 /* DetailCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0277AE5428646E0800054D50 /* DetailCollectionViewCell.swift */; };
+		0277AE572864963D00054D50 /* AlignedCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0277AE562864963D00054D50 /* AlignedCollectionViewFlowLayout.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +47,8 @@
 		026D0D38284F9CE900B5BF8B /* PaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingLabel.swift; sourceTree = "<group>"; };
 		0277AE172861C76700054D50 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		0277AE192861DF9100054D50 /* LaunchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
+		0277AE5428646E0800054D50 /* DetailCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCollectionViewCell.swift; sourceTree = "<group>"; };
+		0277AE562864963D00054D50 /* AlignedCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlignedCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,9 +103,11 @@
 			isa = PBXGroup;
 			children = (
 				0277AE192861DF9100054D50 /* LaunchViewController.swift */,
+				0277AE562864963D00054D50 /* AlignedCollectionViewFlowLayout.swift */,
 				026D0D38284F9CE900B5BF8B /* PaddingLabel.swift */,
 				02334D24283E438F0099C92B /* PlayingNowCollectionViewCell.swift */,
 				025F059828476BD200FF070D /* MostPopularCollectionViewCell.swift */,
+				0277AE5428646E0800054D50 /* DetailCollectionViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -235,10 +241,12 @@
 				0277AE1A2861DF9100054D50 /* LaunchViewController.swift in Sources */,
 				02334D23283E26980099C92B /* MostPopularCollectionViewController.swift in Sources */,
 				02334D0D283E185E0099C92B /* AppDelegate.swift in Sources */,
+				0277AE572864963D00054D50 /* AlignedCollectionViewFlowLayout.swift in Sources */,
 				026D0D13284E646F00B5BF8B /* MovieDataService.swift in Sources */,
 				025F059928476BD200FF070D /* MostPopularCollectionViewCell.swift in Sources */,
 				02334D21283E228F0099C92B /* PlayingNowCollectionViewController.swift in Sources */,
 				0223A3DE285A739B00E3602D /* MovieDetails.swift in Sources */,
+				0277AE5528646E0800054D50 /* DetailCollectionViewCell.swift in Sources */,
 				0277AE182861C76700054D50 /* String.swift in Sources */,
 				025F059B284786CF00FF070D /* Movie.swift in Sources */,
 				026D0D37284F8A3C00B5BF8B /* DetailViewController.swift in Sources */,

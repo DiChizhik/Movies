@@ -12,12 +12,13 @@ class DetailViewController: UIViewController {
     static var identifier: String{NSStringFromClass(self)}
     
     var selectedMovieId: Int?
-    
-    let movieDataService = MovieDataService()
-    
     var movieDetails: MovieDetails?
     var languages = [String]()
+    var languagesTest = ["German", "Dutch", "English", "Chinese", "Icelandic", "Russian", "Spanish", "Italian", "Japanese", ]
     var genres = [String]()
+    var genresTest = ["thriller", "action", "science finction", "romcom", "adventure"]
+    
+    let movieDataService = MovieDataService()
     
     private lazy var titleLabel: UILabel = {
        let label = UILabel()
@@ -96,6 +97,51 @@ class DetailViewController: UIViewController {
                         """
         return description
     }()
+    
+    private lazy var collectionViewFlowLayout: AlignedCollectionViewFlowLayout = {
+        let layout = AlignedCollectionViewFlowLayout()
+        layout.minimumInteritemSpacing = 4
+        layout.minimumLineSpacing = 4
+        layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+        layout.horizontalAlignment = .left
+        return layout
+    }()
+    
+    private lazy var collectionView: UICollectionView = {
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewFlowLayout)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.register(DetailCollectionViewCell.self, forCellWithReuseIdentifier: DetailCollectionViewCell.reuseIdentifier)
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.isScrollEnabled = false
+        collectionView.backgroundColor = UIColor(named: "backgroundColor")
+        return collectionView
+    }()
+    
+    private enum CollectionViewSectionIdentifier {
+        case languages, genres
+    }
+    
+    private struct CollectionViewItem {
+        let title: String
+    }
+    
+    private struct CollectionViewSection {
+        let identifier: CollectionViewSectionIdentifier
+        let items: [CollectionViewItem]
+    }
+    
+    private lazy var viewData: [CollectionViewSection] = makeViewData()
+    
+    private func makeViewData() -> [CollectionViewSection] {
+        let languages: [CollectionViewItem] = languages.map{CollectionViewItem(title: $0)}
+        let languagesSection = CollectionViewSection(identifier: CollectionViewSectionIdentifier.languages, items: languages)
+        
+        let genres: [CollectionViewItem] = genres.map{CollectionViewItem(title: $0)}
+        let genreSection = CollectionViewSection(identifier: .genres, items: genres)
+    
+        return [languagesSection, genreSection]
+        }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -115,6 +161,12 @@ class DetailViewController: UIViewController {
     
     @objc func dismissView(_ sender: UIButton) {
         dismiss(animated: true)
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+
+        collectionView.collectionViewLayout.invalidateLayout()
     }
     
     private func makeLabel(with title: String, textColor: UIColor, backgroundColor: UIColor?, border: Bool, borderColor: UIColor?) -> PaddingLabel {
@@ -159,29 +211,12 @@ class DetailViewController: UIViewController {
         durationStack.addArrangedSubview(lastsLabel)
         durationStack.addArrangedSubview(durationLabel)
         
-        let languageStack = UIStackView()
-        languageStack.translatesAutoresizingMaskIntoConstraints = false
-        languageStack.axis = .horizontal
-        languageStack.spacing = 4
-        
-        let languageLabels: [PaddingLabel] = languages.map { makeLabel(with: $0, textColor: UIColor(named: "descriptionColor")!, backgroundColor: UIColor(named: "languageBackgroundColor")!, border: true, borderColor: UIColor(named: "languageBorderColor")!)}
-        languageLabels.forEach {languageStack.addArrangedSubview($0)}
-        
-        let genreStack = UIStackView()
-        genreStack.translatesAutoresizingMaskIntoConstraints = false
-        genreStack.axis = .horizontal
-        genreStack.spacing = 4
-        
-        let genreLabels: [PaddingLabel] = genres.map { makeLabel(with: $0, textColor: UIColor(named: "titleColor")!, backgroundColor: UIColor(named: "genreBackgroundColor"), border: true, borderColor: UIColor(named: "genreBorderColor")!)}
-        genreLabels.forEach {genreStack.addArrangedSubview($0)}
-        
         view.addSubview(titleLabel)
         view.addSubview(imageView)
         view.addSubview(releaseStack)
         view.addSubview(durationStack)
         view.addSubview(movieDescriptionLabel)
-        view.addSubview(languageStack)
-        view.addSubview(genreStack)
+        view.addSubview(collectionView)
         
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
@@ -203,11 +238,10 @@ class DetailViewController: UIViewController {
             movieDescriptionLabel.rightAnchor.constraint(equalTo: view.layoutMarginsGuide.rightAnchor),
             movieDescriptionLabel.topAnchor.constraint(equalTo: durationStack.bottomAnchor, constant: 16),
 
-            languageStack.leftAnchor.constraint(equalTo: releaseStack.leftAnchor),
-            languageStack.topAnchor.constraint(equalTo: movieDescriptionLabel.bottomAnchor, constant: 16),
-
-            genreStack.leftAnchor.constraint(equalTo: releaseStack.leftAnchor),
-            genreStack.topAnchor.constraint(equalTo: languageStack.bottomAnchor, constant: 8)
+            collectionView.leftAnchor.constraint(equalTo: releaseStack.leftAnchor),
+            collectionView.topAnchor.constraint(equalTo: movieDescriptionLabel.bottomAnchor, constant: 16),
+            collectionView.rightAnchor.constraint(equalTo: movieDescriptionLabel.rightAnchor),
+            collectionView.heightAnchor.constraint(equalToConstant: 200),
         ])
     }
     
@@ -227,4 +261,39 @@ class DetailViewController: UIViewController {
         genres = movieDetails.genres.map{$0.name}
     }
 
+}
+
+extension DetailViewController: UICollectionViewDataSource {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return viewData.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        assert(!languages.isEmpty, "Languages array is empty")
+        return viewData[section].items.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailCollectionViewCell.reuseIdentifier, for: indexPath) as? DetailCollectionViewCell else { fatalError() }
+        let item = viewData[indexPath.section].items[indexPath.item].title.lowercased().capitalizingFirstLetter()
+        
+        if viewData[indexPath.section].identifier == .languages {
+        cell.configure(title: item, backgroundColor: UIColor(named: "languageBackgroundColor")!, borderColor: UIColor(named: "languageBorderColor")!)
+        } else {
+            cell.configure(title: item, backgroundColor: UIColor(named: "genreBackgroundColor")!, borderColor: UIColor(named: "genreBorderColor")!)
+        }
+        
+        return cell
+    }
+}
+
+extension DetailViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: 1, height: 1)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0)
+    }
 }

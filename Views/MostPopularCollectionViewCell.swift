@@ -29,7 +29,7 @@ class MostPopularCollectionViewCell: UICollectionViewCell {
         setupUI()
     }
     
-    func setupUI() {
+    private func setupUI() {
         contentView.addSubview(imageView)
         
         NSLayoutConstraint.activate([

@@ -61,7 +61,7 @@ class PlayingNowCollectionViewCell: UICollectionViewCell {
     }
 
     
-    func setupUI() {
+    private func setupUI() {
         contentView.backgroundColor = UIColor(named: "backgroundColor")
         
         contentView.addSubview(imageView)
@@ -94,13 +94,6 @@ class PlayingNowCollectionViewCell: UICollectionViewCell {
         self.reviewsScore.text = "\(reviewsScore)%"
         
         reviewsScoreIndicator.image = popularity == .high ? UIImage(named: "highReviewsScore") : UIImage(named: "lowReviewsScore")
-//        if pop {
-//            if scoreInt > 50 {
-//                reviewsScoreIndicator.image = UIImage(named: "highReviewsScore")
-//            } else {
-//                reviewsScoreIndicator.image = UIImage(named: "lowReviewsScore")
-//            }
-//        }
     
     }
 }
