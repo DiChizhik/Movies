@@ -102,7 +102,6 @@
 		02271139285A7DE10049BECA /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				0277AE192861DF9100054D50 /* LaunchViewController.swift */,
 				0277AE562864963D00054D50 /* AlignedCollectionViewFlowLayout.swift */,
 				026D0D38284F9CE900B5BF8B /* PaddingLabel.swift */,
 				02334D24283E438F0099C92B /* PlayingNowCollectionViewCell.swift */,
@@ -146,6 +145,7 @@
 		02334D0B283E185E0099C92B /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				0277AE192861DF9100054D50 /* LaunchViewController.swift */,
 				02334D20283E228F0099C92B /* PlayingNowCollectionViewController.swift */,
 				02334D22283E26980099C92B /* MostPopularCollectionViewController.swift */,
 				026D0D36284F8A3C00B5BF8B /* DetailViewController.swift */,

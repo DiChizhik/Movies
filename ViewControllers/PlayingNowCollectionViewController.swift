@@ -20,14 +20,19 @@ class PlayingNowCollectionViewController: UICollectionViewController {
         
         collectionView.register(PlayingNowCollectionViewCell.self, forCellWithReuseIdentifier: PlayingNowCollectionViewCell.reuseIdentifier)
 
-        movieDataService.getPlayingNowMoviesList { [weak self] (moviesList: [Movie]?) in
-                if let moviesList = moviesList {
-                    self?.movies = moviesList
-                }
-                
-                DispatchQueue.main.async { [weak self] in
-                    self?.collectionView.reloadData()
-                }
+        movieDataService.getPlayingNowMoviesList { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let moviesList):
+                self.movies = moviesList
+            case .failure(_):
+                break
+            }
+            
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+            }
         }
     }
     
@@ -60,9 +65,9 @@ class PlayingNowCollectionViewController: UICollectionViewController {
         let movieName = movie.title
         let reviewsScore = movie.voteAverage
         let popularity = movie.popularity
-        if let path = movie.posterPath {
-            cell.configure(imageURL: path, name: movieName, reviewsScore: reviewsScore, popularity: popularity)
-        }
+        let path = movie.posterPath
+        
+        cell.configure(imageURL: path, name: movieName, reviewsScore: reviewsScore, popularity: popularity)
         
         return cell
     }

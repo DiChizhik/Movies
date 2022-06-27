@@ -36,8 +36,6 @@ class DetailViewController: UIViewController {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.layer.cornerRadius = 10
         imageView.layer.masksToBounds = true
-//        imageView.setContentHuggingPriority(.defaultHigh, for: .vertical)
-//        imageView.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
         imageView.contentMode = .scaleAspectFill
         return imageView
     }()
@@ -147,14 +145,28 @@ class DetailViewController: UIViewController {
         super.viewDidLoad()
 
         guard let id = selectedMovieId else { return }
-        movieDataService.getMovieDetails(movieId: id) { [weak self] (movieDetails: MovieDetails?) in
-            if let movieDetails = movieDetails {
-                self?.movieDetails = movieDetails
+        
+        movieDataService.getMovieDetails(movieId: id) { [weak self] result in
+            guard let self = self else {return}
+            
+            switch result {
+            case .success(let details):
+                self.movieDetails = details
+            case .failure(let error):
+//                Here I wanted to display an alert controller with the info about the error. Not sure if error.localizedDescription will hold anything though.
+                switch error {
+                case .errorOccurred:
+                    let ac = UIAlertController(title: "Error", message: "\(error.localizedDescription)", preferredStyle: .alert)
+                    ac.addAction(UIAlertAction(title: "OK", style: .default))
+                    self.present(ac, animated: true)
+                default:
+                    break
+                }
             }
         
             DispatchQueue.main.async {
-                self?.configureWithData()
-                self?.setupUI()
+                self.configureWithData()
+                self.setupUI()
             }
         }
     }
@@ -167,27 +179,6 @@ class DetailViewController: UIViewController {
         super.viewWillTransition(to: size, with: coordinator)
 
         collectionView.collectionViewLayout.invalidateLayout()
-    }
-    
-    private func makeLabel(with title: String, textColor: UIColor, backgroundColor: UIColor?, border: Bool, borderColor: UIColor?) -> PaddingLabel {
-        let label = PaddingLabel()
-        label.font = UIFont.systemFont(ofSize: 15)
-        label.textColor = textColor
-        label.text = title.lowercased().capitalizingFirstLetter()
-        label.textAlignment = .center
-        if border == true {
-            label.layer.borderWidth = 1
-        }
-        if let borderColor = borderColor {
-            label.layer.borderColor = borderColor.cgColor
-        }
-        if let backgroundColor = backgroundColor {
-            label.backgroundColor = backgroundColor
-        }
-        label.layer.cornerRadius = 4
-        label.layer.masksToBounds = true
-        label.inset = UIEdgeInsets(top: 4, left: 15, bottom: 5, right: 15)
-        return label
     }
     
     private func setupUI() {
@@ -254,7 +245,7 @@ class DetailViewController: UIViewController {
             imageView.kf.setImage(with: path)
         }
         
-        releaseDateLabel.text = "\(movieDetails.releaseDate)"
+        releaseDateLabel.text = movieDetails.releaseDate
         durationLabel.text = movieDetails.runtime
         movieDescriptionLabel.text = movieDetails.overview
         languages = movieDetails.spokenLanguages.map{$0.englishName}
@@ -278,9 +269,10 @@ extension DetailViewController: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailCollectionViewCell.reuseIdentifier, for: indexPath) as? DetailCollectionViewCell else { fatalError() }
         let item = viewData[indexPath.section].items[indexPath.item].title.lowercased().capitalizingFirstLetter()
         
-        if viewData[indexPath.section].identifier == .languages {
-        cell.configure(title: item, backgroundColor: UIColor(named: "languageBackgroundColor")!, borderColor: UIColor(named: "languageBorderColor")!)
-        } else {
+        switch viewData[indexPath.section].identifier {
+        case .languages:
+            cell.configure(title: item, backgroundColor: UIColor(named: "languageBackgroundColor")!, borderColor: UIColor(named: "languageBorderColor")!)
+        case .genres:
             cell.configure(title: item, backgroundColor: UIColor(named: "genreBackgroundColor")!, borderColor: UIColor(named: "genreBorderColor")!)
         }
         

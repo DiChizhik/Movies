@@ -33,18 +33,12 @@ class DetailCollectionViewCell: UICollectionViewCell {
     
     private func setupUI() {
         contentView.addSubview(label)
-//        contentView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             label.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4),
             label.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
             label.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
             label.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4),
-//
-//            contentView.leadingAnchor.constraint(equalTo: leadingAnchor),
-//            contentView.topAnchor.constraint(equalTo: topAnchor),
-//            contentView.trailingAnchor.constraint(equalTo: trailingAnchor),
-//            contentView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
     

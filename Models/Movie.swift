@@ -18,7 +18,7 @@ struct Movie: Decodable {
     
     let id: Int
     let posterPath: URL?
-    let overview: String
+    let overview: String?
     let title: String
     let voteAverage: Int
     let popularity: Popularity
@@ -33,10 +33,13 @@ struct Movie: Decodable {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         id = try values.decode(Int.self, forKey: .id)
         
-        let posterPathString = try values.decode(String.self, forKey: .posterPath)
-        posterPath = URL(string: "https://image.tmdb.org/t/p/w500" + posterPathString)
+        if let posterPathString = try values.decodeIfPresent(String.self, forKey: .posterPath) {
+            posterPath = URL(string: "https://image.tmdb.org/t/p/w500" + posterPathString)
+        } else {
+            posterPath = nil
+        }
         
-        overview = try values.decode(String.self, forKey: .overview)
+        overview = try values.decodeIfPresent(String.self, forKey: .overview)
         title = try values.decode(String.self, forKey: .title)
         voteAverage = Int(try values.decode(Double.self, forKey: .voteAverage) * 10)
         

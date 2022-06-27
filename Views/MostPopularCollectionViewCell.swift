@@ -40,8 +40,9 @@ class MostPopularCollectionViewCell: UICollectionViewCell {
         ])
     }
     
-    func configure(imageURL: URL) {
-        imageView.kf.setImage(with: imageURL)
+    func configure(imageURL: URL?) {
+        guard let url = imageURL else { return }
+        imageView.kf.setImage(with: url)
     }
 
 

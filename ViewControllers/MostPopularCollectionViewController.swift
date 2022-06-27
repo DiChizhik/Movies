@@ -81,7 +81,7 @@ class MostPopularViewController: UIViewController, UICollectionViewDelegate {
         button.addTarget(self, action: #selector(seeMoreTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("See more", for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
         button.tintColor = UIColor(named: "titleColor")
         button.alpha = 0
         return button
@@ -92,17 +92,22 @@ class MostPopularViewController: UIViewController, UICollectionViewDelegate {
         
         setupUI()
         
-        movieDataService.getMostPopularMoviesList { [weak self] (moviesList: [Movie]?) in
-            if let moviesList = moviesList {
-                self?.movies = moviesList
+        movieDataService.getMostPopularMoviesList { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let moviesList):
+                self.movies = moviesList
+            case .failure(_):
+                break
             }
             
-            DispatchQueue.main.async { [weak self] in
-                self?.collectionView.reloadData()
-                self?.itemInViewIndex = Int(round(Double((self?.movies.count)! / 2)))
-                self?.collectionView.scrollToItem(at: IndexPath(item: self!.itemInViewIndex, section: 0), at: UICollectionView.ScrollPosition.centeredHorizontally, animated: false)
-                self?.configureWithData(index: self!.itemInViewIndex)
-                self?.fadeIn()
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+                self.itemInViewIndex = Int(round(Double((self.movies.count) / 2)))
+                self.collectionView.scrollToItem(at: IndexPath(item: self.itemInViewIndex, section: 0), at: UICollectionView.ScrollPosition.centeredHorizontally, animated: false)
+                self.configureWithData(index: self.itemInViewIndex)
+                self.fadeIn()
                 }
         }
     }
@@ -138,18 +143,18 @@ class MostPopularViewController: UIViewController, UICollectionViewDelegate {
             name.heightAnchor.constraint(equalToConstant: 24),
             
             reviewsScore.topAnchor.constraint(equalTo: name.bottomAnchor, constant: 6),
-            reviewsScore.centerXAnchor.constraint(equalTo: name.centerXAnchor),
+            reviewsScore.centerXAnchor.constraint(equalTo: name.centerXAnchor, constant: 12),
             
             reviewsScoreIndicator.centerYAnchor.constraint(equalTo: reviewsScore.centerYAnchor),
             reviewsScoreIndicator.trailingAnchor.constraint(equalTo: reviewsScore.leadingAnchor, constant: -8),
             
             movieDescription.topAnchor.constraint(equalTo: reviewsScore.bottomAnchor, constant: 24),
-            movieDescription.centerXAnchor.constraint(equalTo: reviewsScore.centerXAnchor),
+            movieDescription.centerXAnchor.constraint(equalTo: name.centerXAnchor),
             movieDescription.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
             movieDescription.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
             
             seeMoreButton.topAnchor.constraint(equalTo: movieDescription.bottomAnchor, constant: 8),
-            seeMoreButton.centerXAnchor.constraint(equalTo: reviewsScore.centerXAnchor)
+            seeMoreButton.centerXAnchor.constraint(equalTo: name.centerXAnchor)
         ])
     }
     
@@ -175,22 +180,14 @@ class MostPopularViewController: UIViewController, UICollectionViewDelegate {
         configureWithData(index: pageInt)
         
         fadeIn()
-        
-//
-//        switch pageInt {
-//            case 0:
-//                collectionView.scrollToItem(at: [0, movies.count - 2], at: .centeredHorizontally, animated: false)
-//            case movies.count - 1:
-//                collectionView.scrollToItem(at: [0, 1], at: .centeredHorizontally, animated: false)
-//            default:
-//                break
-//        }
     }
 
     private func configureWithData(index: Int) {
-        let movieName = movies[index].title
-        let reviewsScore = "\(movies[index].voteAverage)%"
-        let movieDescription = movies[index].overview
+        let movie = movies[index]
+        
+        let movieName = movie.title
+        let reviewsScore = "\(movie.voteAverage)%"
+        let movieDescription = movie.overview
         
         name.text = movieName
         self.reviewsScore.text = reviewsScore
@@ -254,9 +251,8 @@ extension MostPopularViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MostPopularCollectionViewCell.reuseIndentifier, for: indexPath) as? MostPopularCollectionViewCell else { fatalError() }
             
-        if let path = movies[indexPath.item].posterPath {
-            cell.configure(imageURL: path)
-        }
+        let path = movies[indexPath.item].posterPath
+        cell.configure(imageURL: path)
         
         return cell
     }

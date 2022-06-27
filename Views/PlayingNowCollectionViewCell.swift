@@ -88,8 +88,10 @@ class PlayingNowCollectionViewCell: UICollectionViewCell {
         ])
     }
     
-    func configure(imageURL: URL, name: String, reviewsScore: Int, popularity: Movie.Popularity) {
-        imageView.kf.setImage(with: imageURL)
+    func configure(imageURL: URL?, name: String, reviewsScore: Int, popularity: Movie.Popularity) {
+        if let url = imageURL {
+            imageView.kf.setImage(with: url)
+        }
         self.name.text = name
         self.reviewsScore.text = "\(reviewsScore)%"
         
