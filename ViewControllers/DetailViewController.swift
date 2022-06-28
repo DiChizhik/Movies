@@ -20,6 +20,27 @@ class DetailViewController: UIViewController {
     
     let movieDataService = MovieDataService()
     
+    private lazy var scrollView: UIScrollView = {
+        let scroll = UIScrollView(frame: view.bounds)
+//        scroll.translatesAutoresizingMaskIntoConstraints = false
+        scroll.backgroundColor = .gray
+        scroll.contentSize = contentSize
+        return scroll
+    }()
+    
+    private var contentSize: CGSize {
+        let height = view.frame.height + 200
+        return CGSize(width: view.frame.width, height: height)
+    }
+    
+    private lazy var contentView: UIView = {
+       let view = UIView()
+//        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .orange
+        view.frame.size = contentSize
+        return view
+    }()
+    
     private lazy var titleLabel: UILabel = {
        let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -86,7 +107,7 @@ class DetailViewController: UIViewController {
         description.numberOfLines = 0
         description.font = UIFont.systemFont(ofSize: 15)
         description.textColor = UIColor(named: "descriptionColor")
-        description.textAlignment = .left
+        description.textAlignment = .center
         description.text = """
                         a very
                         thought-provocing
@@ -132,7 +153,7 @@ class DetailViewController: UIViewController {
     private lazy var viewData: [CollectionViewSection] = makeViewData()
     
     private func makeViewData() -> [CollectionViewSection] {
-        let languages: [CollectionViewItem] = languages.map{CollectionViewItem(title: $0)}
+        let languages: [CollectionViewItem] = languagesTest.map{CollectionViewItem(title: $0)}
         let languagesSection = CollectionViewSection(identifier: CollectionViewSectionIdentifier.languages, items: languages)
         
         let genres: [CollectionViewItem] = genres.map{CollectionViewItem(title: $0)}
@@ -194,6 +215,21 @@ class DetailViewController: UIViewController {
         
         view.backgroundColor = UIColor(named: "backgroundColor")
 
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        
+//        NSLayoutConstraint.activate([
+//            scrollView.leftAnchor.constraint(equalTo: view.leftAnchor),
+//            scrollView.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
+//            scrollView.rightAnchor.constraint(equalTo: view.rightAnchor),
+//            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+//
+//            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+//            contentView.leftAnchor.constraint(equalTo: scrollView.leftAnchor),
+//            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+//            contentView.heightAnchor.constraint(equalTo: scrollView.heightAnchor),
+//        ])
+        
         let releaseStack = UIStackView()
         releaseStack.translatesAutoresizingMaskIntoConstraints = false
         releaseStack.axis = .horizontal
@@ -208,31 +244,31 @@ class DetailViewController: UIViewController {
         durationStack.addArrangedSubview(lastsLabel)
         durationStack.addArrangedSubview(durationLabel)
         
-        view.addSubview(titleLabel)
-        view.addSubview(imageView)
-        view.addSubview(releaseStack)
-        view.addSubview(durationStack)
-        view.addSubview(movieDescriptionLabel)
-        view.addSubview(collectionView)
+        contentView.addSubview(titleLabel)
+        contentView.addSubview(imageView)
+        contentView.addSubview(releaseStack)
+        contentView.addSubview(durationStack)
+        contentView.addSubview(movieDescriptionLabel)
+        contentView.addSubview(collectionView)
         
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
-            titleLabel.leftAnchor.constraint(equalTo: view.layoutMarginsGuide.leftAnchor),
-            titleLabel.rightAnchor.constraint(equalTo: view.layoutMarginsGuide.rightAnchor),
+            titleLabel.topAnchor.constraint(equalTo: contentView.layoutMarginsGuide.topAnchor),
+            titleLabel.leftAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leftAnchor),
+            titleLabel.rightAnchor.constraint(equalTo: contentView.layoutMarginsGuide.rightAnchor),
 
             imageView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 16),
             imageView.centerXAnchor.constraint(equalTo: titleLabel.centerXAnchor),
-            imageView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.61),
+            imageView.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.61),
             imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: 1.41),
             
-            releaseStack.leftAnchor.constraint(equalTo: view.layoutMarginsGuide.leftAnchor),
+            releaseStack.leftAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leftAnchor),
             releaseStack.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 35),
 
             durationStack.leftAnchor.constraint(equalTo: releaseStack.leftAnchor),
             durationStack.topAnchor.constraint(equalTo: releaseStack.bottomAnchor, constant: 8),
 
             movieDescriptionLabel.leftAnchor.constraint(equalTo: releaseStack.leftAnchor),
-            movieDescriptionLabel.rightAnchor.constraint(equalTo: view.layoutMarginsGuide.rightAnchor),
+            movieDescriptionLabel.rightAnchor.constraint(equalTo: contentView.layoutMarginsGuide.rightAnchor),
             movieDescriptionLabel.topAnchor.constraint(equalTo: durationStack.bottomAnchor, constant: 16),
 
             collectionView.leftAnchor.constraint(equalTo: releaseStack.leftAnchor),

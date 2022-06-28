@@ -31,11 +31,10 @@ enum MovieServiceError: Error, LocalizedError {
 }
 
 class MovieDataService: MovieDataServiceProtocol {
-    var playingNowPage = 0
-    var mostPopularPage = 0
+    var playingNowPage = 1
+    var mostPopularPage = 1
     
     func getPlayingNowMoviesList(completion: @escaping (Result<[Movie], MovieServiceError>)-> Void) {
-        playingNowPage += 1
         guard let url = URL(string: "https://api.themoviedb.org/3/movie/popular?api_key=b2b14caf40262a9c19a366b15e4e3537&language=en-US&page=\(playingNowPage)") else { return }
 
         let request = URLRequest(url: url)
@@ -57,7 +56,8 @@ class MovieDataService: MovieDataServiceProtocol {
                 return
                 }
             
-                completion(.success(moviesData.results))
+            self.playingNowPage += 1
+            completion(.success(moviesData.results))
         }.resume()
     }
     
