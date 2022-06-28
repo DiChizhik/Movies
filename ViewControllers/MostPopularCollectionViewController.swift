@@ -34,8 +34,8 @@ class MostPopularViewController: UIViewController, UICollectionViewDelegate {
         name.translatesAutoresizingMaskIntoConstraints = false
         name.text = "Film name"
         name.textAlignment = .center
-        name.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
-        name.textColor = UIColor.white
+        name.font = UIFont.systemFont(ofSize: 15, weight: .heavy)
+        name.textColor = UIColor(named: "titleColor")
         name.alpha = 0
         return name
     }()
@@ -43,27 +43,18 @@ class MostPopularViewController: UIViewController, UICollectionViewDelegate {
     private var reviewsScore: UILabel = {
        let reviewsScore = UILabel()
         reviewsScore.translatesAutoresizingMaskIntoConstraints = false
-        reviewsScore.font = UIFont.systemFont(ofSize: 14)
+        reviewsScore.font = UIFont.systemFont(ofSize: 15)
         reviewsScore.text = "00%"
-        reviewsScore.textColor = UIColor(named: "grey")
+        reviewsScore.textColor = UIColor(named: "titleColor")
         reviewsScore.alpha = 0
         return reviewsScore
     }()
     
-    private lazy var reviewsScoreIndicator: UIView = {
-        let reviewsScoreIndicator = UIView()
+    private lazy var reviewsScoreIndicator: UIImageView = {
+        let reviewsScoreIndicator = UIImageView()
         reviewsScoreIndicator.translatesAutoresizingMaskIntoConstraints = false
-        reviewsScoreIndicator.widthAnchor.constraint(equalToConstant: 12).isActive = true
-        reviewsScoreIndicator.heightAnchor.constraint(equalTo: reviewsScoreIndicator.widthAnchor).isActive = true
-//        Alternatively:
-//        override func viewDidAppear(_ animated: Bool) {
-//            super.viewDidAppear(animated)
-//
-//            reviewsScoreIndicator.layer.cornerRadius = reviewsScoreIndicator.bounds.size.width / 2
-//        }
-        reviewsScoreIndicator.layer.cornerRadius = 6
-        reviewsScoreIndicator.layer.masksToBounds = true
-        reviewsScoreIndicator.backgroundColor = UIColor(named: "red")
+        reviewsScoreIndicator.heightAnchor.constraint(equalToConstant: 15).isActive = true
+        reviewsScoreIndicator.widthAnchor.constraint(equalTo: reviewsScoreIndicator.heightAnchor, multiplier: 1.13).isActive = true
         reviewsScoreIndicator.alpha = 0
         return reviewsScoreIndicator
     }()
@@ -90,8 +81,8 @@ class MostPopularViewController: UIViewController, UICollectionViewDelegate {
         button.addTarget(self, action: #selector(seeMoreTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("See more", for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
-        button.tintColor = UIColor(named: "acidGreen")
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
+        button.tintColor = UIColor(named: "titleColor")
         button.alpha = 0
         return button
     }()
@@ -99,8 +90,31 @@ class MostPopularViewController: UIViewController, UICollectionViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "Most popular"
-        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white, .font: UIFont.systemFont(ofSize: 24, weight: .heavy)]
+        setupUI()
+        
+        movieDataService.getMostPopularMoviesList { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let moviesList):
+                self.movies = moviesList
+            case .failure(_):
+                break
+            }
+            
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+                self.itemInViewIndex = Int(round(Double((self.movies.count) / 2)))
+                self.collectionView.scrollToItem(at: IndexPath(item: self.itemInViewIndex, section: 0), at: UICollectionView.ScrollPosition.centeredHorizontally, animated: false)
+                self.configureWithData(index: self.itemInViewIndex)
+                self.fadeIn()
+                }
+        }
+    }
+    
+    private func setupUI() {
+        title = "Most Popular"
+        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white, .font: UIFont.systemFont(ofSize: 20, weight: .heavy)]
         navigationController?.navigationBar.backgroundColor = UIColor(named: "backgroundColor")
         
         view.backgroundColor = UIColor(named: "backgroundColor")
@@ -113,7 +127,7 @@ class MostPopularViewController: UIViewController, UICollectionViewDelegate {
             collectionView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.4),
             collectionView.widthAnchor.constraint(equalTo: view.widthAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionView.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor)
+            collectionView.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: 27)
         ])
         
         view.addSubview(name)
@@ -123,39 +137,25 @@ class MostPopularViewController: UIViewController, UICollectionViewDelegate {
         view.addSubview(seeMoreButton)
         
         NSLayoutConstraint.activate([
-            name.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 32),
+            name.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 15),
             name.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             name.widthAnchor.constraint(equalToConstant: 195),
             name.heightAnchor.constraint(equalToConstant: 24),
             
-            reviewsScore.topAnchor.constraint(equalTo: name.bottomAnchor, constant: 8),
-            reviewsScore.centerXAnchor.constraint(equalTo: name.centerXAnchor),
+            reviewsScore.topAnchor.constraint(equalTo: name.bottomAnchor, constant: 6),
+            reviewsScore.centerXAnchor.constraint(equalTo: name.centerXAnchor, constant: 12),
             
             reviewsScoreIndicator.centerYAnchor.constraint(equalTo: reviewsScore.centerYAnchor),
-            reviewsScoreIndicator.trailingAnchor.constraint(equalTo: reviewsScore.leadingAnchor, constant: -2),
+            reviewsScoreIndicator.trailingAnchor.constraint(equalTo: reviewsScore.leadingAnchor, constant: -8),
             
-            movieDescription.topAnchor.constraint(equalTo: reviewsScore.bottomAnchor, constant: 25),
-            movieDescription.centerXAnchor.constraint(equalTo: reviewsScore.centerXAnchor),
+            movieDescription.topAnchor.constraint(equalTo: reviewsScore.bottomAnchor, constant: 24),
+            movieDescription.centerXAnchor.constraint(equalTo: name.centerXAnchor),
             movieDescription.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
             movieDescription.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
             
             seeMoreButton.topAnchor.constraint(equalTo: movieDescription.bottomAnchor, constant: 8),
-            seeMoreButton.centerXAnchor.constraint(equalTo: reviewsScore.centerXAnchor)
+            seeMoreButton.centerXAnchor.constraint(equalTo: name.centerXAnchor)
         ])
-        
-        movieDataService.getMostPopularMoviesList { [weak self] (moviesList: [Movie]?) in
-            if let moviesList = moviesList {
-                self?.movies = moviesList
-            }
-            
-            DispatchQueue.main.async { [weak self] in
-                self?.collectionView.reloadData()
-                self?.itemInViewIndex = Int(round(Double((self?.movies.count)! / 2)))
-                self?.collectionView.scrollToItem(at: IndexPath(item: self!.itemInViewIndex, section: 0), at: UICollectionView.ScrollPosition.centeredHorizontally, animated: false)
-                self?.configureWithData(index: self!.itemInViewIndex)
-                self?.fadeIn()
-                }
-        }
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
@@ -180,22 +180,14 @@ class MostPopularViewController: UIViewController, UICollectionViewDelegate {
         configureWithData(index: pageInt)
         
         fadeIn()
-        
-//
-//        switch pageInt {
-//            case 0:
-//                collectionView.scrollToItem(at: [0, movies.count - 2], at: .centeredHorizontally, animated: false)
-//            case movies.count - 1:
-//                collectionView.scrollToItem(at: [0, 1], at: .centeredHorizontally, animated: false)
-//            default:
-//                break
-//        }
     }
 
-    func configureWithData(index: Int) {
-        let movieName = movies[index].title
-        let reviewsScore = "\(movies[index].voteAverage)%"
-        let movieDescription = movies[index].overview
+    private func configureWithData(index: Int) {
+        let movie = movies[index]
+        
+        let movieName = movie.title
+        let reviewsScore = "\(movie.voteAverage)%"
+        let movieDescription = movie.overview
         
         name.text = movieName
         self.reviewsScore.text = reviewsScore
@@ -204,7 +196,18 @@ class MostPopularViewController: UIViewController, UICollectionViewDelegate {
         updateReviewScoreIndicator(reviewsScore: reviewsScore)
     }
     
-    func fadeIn() {
+    func updateReviewScoreIndicator(reviewsScore: String) {
+        let score = reviewsScore.components(separatedBy: "%")
+        if let scoreInt = Int(score[0]) {
+            if scoreInt > 50 {
+                reviewsScoreIndicator.image = UIImage(named: "highReviewsScore")
+            } else {
+                reviewsScoreIndicator.image = UIImage(named: "lowReviewsScore")
+            }
+        }
+    }
+    
+    private func fadeIn() {
         UIView.animate(withDuration: 1,
                        delay: 0,
                        options: [],
@@ -217,7 +220,7 @@ class MostPopularViewController: UIViewController, UICollectionViewDelegate {
                     }, completion: nil)
     }
     
-    func fadeOut() {
+    private func fadeOut() {
         UIView.animate(withDuration: 1,
                        delay: 0,
                        options: [],
@@ -229,15 +232,6 @@ class MostPopularViewController: UIViewController, UICollectionViewDelegate {
             self.seeMoreButton.alpha = 0
             },
                        completion: nil)
-    }
-    
-    func updateReviewScoreIndicator(reviewsScore: String) {
-        let score = reviewsScore.components(separatedBy: "%")
-        if let scoreInt = Int(score[0]) {
-            if scoreInt > 50 {
-                reviewsScoreIndicator.backgroundColor = UIColor(named: "green")
-            }
-        }
     }
     
     @objc func seeMoreTapped(_ sender: UIButton) {
@@ -258,10 +252,7 @@ extension MostPopularViewController: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MostPopularCollectionViewCell.reuseIndentifier, for: indexPath) as? MostPopularCollectionViewCell else { fatalError() }
             
         let path = movies[indexPath.item].posterPath
-        
-        if let url = movieDataService.getMoviePosterURL(posterPath: path) {
-            cell.configure(imageURL: url)
-        }
+        cell.configure(imageURL: path)
         
         return cell
     }
