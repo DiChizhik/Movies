@@ -33,10 +33,14 @@ enum MovieServiceError: Error, LocalizedError {
 class MovieDataService: MovieDataServiceProtocol {
     var playingNowPage = 1
     var mostPopularPage = 1
+    var isPlayingNowRequestCompleted = true
+    var isMostPopularRequestCompleted = true
     
     func getPlayingNowMoviesList(completion: @escaping (Result<[Movie], MovieServiceError>)-> Void) {
+        guard isPlayingNowRequestCompleted else { return }
         guard let url = URL(string: "https://api.themoviedb.org/3/movie/popular?api_key=b2b14caf40262a9c19a366b15e4e3537&language=en-US&page=\(playingNowPage)") else { return }
-
+        
+        isPlayingNowRequestCompleted = false
         let request = URLRequest(url: url)
         URLSession.shared.dataTask(with: request) {(data, response, error) in
             if let error = error {
@@ -49,7 +53,9 @@ class MovieDataService: MovieDataServiceProtocol {
                 completion(.failure(.failedToGetData))
                 return
             }
-                   
+             
+            self.isPlayingNowRequestCompleted = true
+            
             let jsonDecoder = JSONDecoder()
             guard let moviesData = try? jsonDecoder.decode(Movies.self, from: data) else {
                 completion(.failure(.failedToDecode))
@@ -62,9 +68,10 @@ class MovieDataService: MovieDataServiceProtocol {
     }
     
     func getMostPopularMoviesList(completion: @escaping (Result<[Movie], MovieServiceError>)-> Void) {
-        mostPopularPage += 1
+        guard isMostPopularRequestCompleted else { return }
         guard let url = URL(string: "https://api.themoviedb.org/3/movie/now_playing?api_key=94806a6f0ae52fc236885e625fc54d47&language=en-US&page=\(mostPopularPage)") else { return }
 
+        isMostPopularRequestCompleted = false
         let request = URLRequest(url: url)
         URLSession.shared.dataTask(with: request) {(data, response, error) in
             if let error = error {
@@ -77,13 +84,16 @@ class MovieDataService: MovieDataServiceProtocol {
                 completion(.failure(.failedToGetData))
                 return
             }
-                    
+            
+            self.isMostPopularRequestCompleted = true
+            
             let jsonDecoder = JSONDecoder()
             guard let moviesData = try? jsonDecoder.decode(Movies.self, from: data) else {
                 completion(.failure(.failedToDecode))
                 return
             }
             
+            self.mostPopularPage += 1
             completion(.success(moviesData.results))
         }.resume()
     }

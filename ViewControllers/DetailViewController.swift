@@ -22,21 +22,19 @@ class DetailViewController: UIViewController {
     
     private lazy var scrollView: UIScrollView = {
         let scroll = UIScrollView(frame: view.bounds)
-//        scroll.translatesAutoresizingMaskIntoConstraints = false
-        scroll.backgroundColor = .gray
+        scroll.backgroundColor = UIColor(named: "backgroundColor")
         scroll.contentSize = contentSize
         return scroll
     }()
     
     private var contentSize: CGSize {
-        let height = view.frame.height + 200
+        let height = view.frame.height + 100
         return CGSize(width: view.frame.width, height: height)
     }
     
     private lazy var contentView: UIView = {
        let view = UIView()
-//        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .orange
+        view.backgroundColor = UIColor(named: "backgroundColor")
         view.frame.size = contentSize
         return view
     }()
@@ -121,7 +119,7 @@ class DetailViewController: UIViewController {
         let layout = AlignedCollectionViewFlowLayout()
         layout.minimumInteritemSpacing = 4
         layout.minimumLineSpacing = 4
-        layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+//        layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
         layout.horizontalAlignment = .left
         return layout
     }()
@@ -132,7 +130,6 @@ class DetailViewController: UIViewController {
         collectionView.register(DetailCollectionViewCell.self, forCellWithReuseIdentifier: DetailCollectionViewCell.reuseIdentifier)
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.isScrollEnabled = false
         collectionView.backgroundColor = UIColor(named: "backgroundColor")
         return collectionView
     }()
@@ -167,7 +164,7 @@ class DetailViewController: UIViewController {
         super.viewDidLoad()
 
         guard let id = selectedMovieId else { return }
-            
+        
         movieDataService.getMovieDetails(movieId: id) { [weak self] result in
             guard let self = self else {return}
                 
@@ -213,22 +210,12 @@ class DetailViewController: UIViewController {
         exitButton.tintColor = UIColor.white
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: exitButton)
         
+        navigationController?.navigationBar.barTintColor = UIColor(named: "backgroundColor")
+        
         view.backgroundColor = UIColor(named: "backgroundColor")
 
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
-        
-//        NSLayoutConstraint.activate([
-//            scrollView.leftAnchor.constraint(equalTo: view.leftAnchor),
-//            scrollView.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
-//            scrollView.rightAnchor.constraint(equalTo: view.rightAnchor),
-//            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-//
-//            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-//            contentView.leftAnchor.constraint(equalTo: scrollView.leftAnchor),
-//            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
-//            contentView.heightAnchor.constraint(equalTo: scrollView.heightAnchor),
-//        ])
         
         let releaseStack = UIStackView()
         releaseStack.translatesAutoresizingMaskIntoConstraints = false
@@ -274,8 +261,20 @@ class DetailViewController: UIViewController {
             collectionView.leftAnchor.constraint(equalTo: releaseStack.leftAnchor),
             collectionView.topAnchor.constraint(equalTo: movieDescriptionLabel.bottomAnchor, constant: 16),
             collectionView.rightAnchor.constraint(equalTo: movieDescriptionLabel.rightAnchor),
-            collectionView.heightAnchor.constraint(equalToConstant: 200),
+            collectionView.heightAnchor.constraint(equalToConstant: CGFloat(calculateCollectionViewHeight()))
         ])
+    }
+    
+    private func calculateCollectionViewHeight()-> Float {
+        var languageRows = languagesTest.count / 4
+        languagesTest.count % 4 != 0 ? languageRows += 1 : nil
+        let languageRowsHeight = (languageRows * 27) + ((languageRows - 1) * 4)
+        
+        var genreRows = genres.count / 4
+        genres.count % 4 != 0 ? genreRows += 1 : nil
+        let genreRowsHeight = (genreRows * 27) + ((genreRows - 1) * 4)
+        
+        return Float(languageRowsHeight + 16 + genreRowsHeight)
     }
     
     private func configureWithData() {
@@ -324,7 +323,9 @@ extension DetailViewController: UICollectionViewDataSource {
 
 extension DetailViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 1, height: 1)
+        let item = viewData[indexPath.section].items[indexPath.item].title.lowercased().capitalizingFirstLetter()
+        
+        return CGSize(width: item.size(withAttributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 15)]).width + 31, height: item.size(withAttributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 15)]).height + 8)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
