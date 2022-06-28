@@ -165,18 +165,19 @@ class MostPopularViewController: UIViewController, UICollectionViewDelegate {
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         guard decelerate == false else { return }
         
-        let pageFloat = (collectionView.contentOffset.x / ((collectionView.bounds.size.height * 0.7) + 32))
-            let pageInt = Int(round(pageFloat))
-            itemInViewIndex = pageInt
-            collectionView.scrollToItem(at: IndexPath(item: pageInt, section: 0), at: .centeredHorizontally, animated: true)
+        configureForItemInView()
     }
 
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+       configureForItemInView()
+    }
+    
+    private func configureForItemInView() {
         let pageFloat = (collectionView.contentOffset.x / ((collectionView.bounds.size.height * 0.7) + 32))
         let pageInt = Int(round(pageFloat))
         itemInViewIndex = pageInt
-        collectionView.scrollToItem(at: IndexPath(item: pageInt, section: 0), at: .centeredHorizontally, animated: true)
         
+        collectionView.scrollToItem(at: IndexPath(item: pageInt, section: 0), at: .centeredHorizontally, animated: true)
         configureWithData(index: pageInt)
         
         fadeIn()
@@ -255,6 +256,27 @@ extension MostPopularViewController: UICollectionViewDataSource {
         cell.configure(imageURL: path)
         
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        let movieInViewIndex = indexPath.item
+        let lastMovieIndex = movies.count - 1
+        if movieInViewIndex == lastMovieIndex {
+            movieDataService.getMostPopularMoviesList{ [weak self] result in
+                guard let self = self else { return }
+                
+                switch result {
+                case .success(let additionalMovies):
+                    self.movies.append(contentsOf: additionalMovies)
+                case .failure(_):
+                    break
+                }
+                
+                DispatchQueue.main.async {
+                    self.collectionView.reloadData()
+                }
+            }
+        }
     }
 }
 

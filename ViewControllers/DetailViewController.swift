@@ -141,34 +141,40 @@ class DetailViewController: UIViewController {
         return [languagesSection, genreSection]
         }
 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         guard let id = selectedMovieId else { return }
-        
+            
         movieDataService.getMovieDetails(movieId: id) { [weak self] result in
             guard let self = self else {return}
-            
+                
             switch result {
             case .success(let details):
                 self.movieDetails = details
             case .failure(let error):
-//                Here I wanted to display an alert controller with the info about the error. Not sure if error.localizedDescription will hold anything though.
                 switch error {
-                case .errorOccurred:
-                    let ac = UIAlertController(title: "Error", message: "\(error.localizedDescription)", preferredStyle: .alert)
-                    ac.addAction(UIAlertAction(title: "OK", style: .default))
-                    self.present(ac, animated: true)
-                default:
-                    break
+                case .failedToGetResponse:
+                    self.showError(message: error.localizedDescription)
+                case .failedToDecode:
+                    self.showError(message: error.localizedDescription)
+                case .failedToGetData:
+                    self.showError(message: error.localizedDescription)
                 }
             }
-        
+            
             DispatchQueue.main.async {
                 self.configureWithData()
                 self.setupUI()
             }
         }
+    }
+        
+    private func showError(message: String) {
+        let ac = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "OK", style: .default))
+        self.present(ac, animated: true)
     }
     
     @objc func dismissView(_ sender: UIButton) {

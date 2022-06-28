@@ -20,6 +20,7 @@ class PlayingNowCollectionViewController: UICollectionViewController {
         
         collectionView.register(PlayingNowCollectionViewCell.self, forCellWithReuseIdentifier: PlayingNowCollectionViewCell.reuseIdentifier)
 
+        // Shall I make it a separate method to reuse it in willDisplayCell method?
         movieDataService.getPlayingNowMoviesList { [weak self] result in
             guard let self = self else { return }
             
@@ -79,6 +80,27 @@ class PlayingNowCollectionViewController: UICollectionViewController {
         let detailViewNavigationController = UINavigationController(rootViewController: detailViewController)
         detailViewController.selectedMovieId = id
         present(detailViewNavigationController, animated: true)
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        let movieInViewIndex = indexPath.item
+        let lastMovieIndex = movies.count - 1
+        if movieInViewIndex == lastMovieIndex {
+            movieDataService.getPlayingNowMoviesList{ [weak self] result in
+                guard let self = self else { return }
+                
+                switch result {
+                case .success(let additionalMovies):
+                    self.movies.append(contentsOf: additionalMovies)
+                case .failure(_):
+                    break
+                }
+                
+                DispatchQueue.main.async {
+                    self.collectionView.reloadData()
+                }
+            }
+        }
     }
 }
 
