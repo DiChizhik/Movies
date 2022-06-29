@@ -28,6 +28,7 @@
 		0277AE572864963D00054D50 /* AlignedCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0277AE562864963D00054D50 /* AlignedCollectionViewFlowLayout.swift */; };
 		2D259806286C4F5300DD7999 /* IntrinsicallySizedCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D259805286C4F5300DD7999 /* IntrinsicallySizedCollectionView.swift */; };
 		2D259808286C57B700DD7999 /* UIStackView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D259807286C57B700DD7999 /* UIStackView+Extensions.swift */; };
+		2D25980C286C66D400DD7999 /* LeftAlignedCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D25980B286C66D400DD7999 /* LeftAlignedCollectionViewFlowLayout.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -53,6 +54,7 @@
 		0277AE562864963D00054D50 /* AlignedCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlignedCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 		2D259805286C4F5300DD7999 /* IntrinsicallySizedCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntrinsicallySizedCollectionView.swift; sourceTree = "<group>"; };
 		2D259807286C57B700DD7999 /* UIStackView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+Extensions.swift"; sourceTree = "<group>"; };
+		2D25980B286C66D400DD7999 /* LeftAlignedCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftAlignedCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -171,6 +173,7 @@
 			isa = PBXGroup;
 			children = (
 				2D259805286C4F5300DD7999 /* IntrinsicallySizedCollectionView.swift */,
+				2D25980B286C66D400DD7999 /* LeftAlignedCollectionViewFlowLayout.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -260,6 +263,7 @@
 				026D0D13284E646F00B5BF8B /* MovieDataService.swift in Sources */,
 				025F059928476BD200FF070D /* MostPopularCollectionViewCell.swift in Sources */,
 				02334D21283E228F0099C92B /* PlayingNowCollectionViewController.swift in Sources */,
+				2D25980C286C66D400DD7999 /* LeftAlignedCollectionViewFlowLayout.swift in Sources */,
 				0223A3DE285A739B00E3602D /* MovieDetails.swift in Sources */,
 				0277AE5528646E0800054D50 /* DetailCollectionViewCell.swift in Sources */,
 				2D259806286C4F5300DD7999 /* IntrinsicallySizedCollectionView.swift in Sources */,
