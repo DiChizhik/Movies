@@ -26,6 +26,7 @@
 		0277AE1A2861DF9100054D50 /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0277AE192861DF9100054D50 /* LaunchViewController.swift */; };
 		0277AE5528646E0800054D50 /* DetailCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0277AE5428646E0800054D50 /* DetailCollectionViewCell.swift */; };
 		0277AE572864963D00054D50 /* AlignedCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0277AE562864963D00054D50 /* AlignedCollectionViewFlowLayout.swift */; };
+		2D259806286C4F5300DD7999 /* IntrinsicallySizedCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D259805286C4F5300DD7999 /* IntrinsicallySizedCollectionView.swift */; };
 		2D259808286C57B700DD7999 /* UIStackView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D259807286C57B700DD7999 /* UIStackView+Extensions.swift */; };
 /* End PBXBuildFile section */
 
@@ -50,6 +51,7 @@
 		0277AE192861DF9100054D50 /* LaunchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
 		0277AE5428646E0800054D50 /* DetailCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCollectionViewCell.swift; sourceTree = "<group>"; };
 		0277AE562864963D00054D50 /* AlignedCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlignedCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
+		2D259805286C4F5300DD7999 /* IntrinsicallySizedCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntrinsicallySizedCollectionView.swift; sourceTree = "<group>"; };
 		2D259807286C57B700DD7999 /* UIStackView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -125,6 +127,7 @@
 			isa = PBXGroup;
 			children = (
 				0277AE162861C75500054D50 /* Extensions */,
+				2D259804286C4F4100DD7999 /* Utils */,
 				02271138285A7D6C0049BECA /* Application */,
 				02271137285A7AAD0049BECA /* Storyboards */,
 				0223A3DB285A734600E3602D /* Models */,
@@ -162,6 +165,14 @@
 				2D259807286C57B700DD7999 /* UIStackView+Extensions.swift */,
 			);
 			name = Extensions;
+			sourceTree = "<group>";
+		};
+		2D259804286C4F4100DD7999 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				2D259805286C4F5300DD7999 /* IntrinsicallySizedCollectionView.swift */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -251,6 +262,7 @@
 				02334D21283E228F0099C92B /* PlayingNowCollectionViewController.swift in Sources */,
 				0223A3DE285A739B00E3602D /* MovieDetails.swift in Sources */,
 				0277AE5528646E0800054D50 /* DetailCollectionViewCell.swift in Sources */,
+				2D259806286C4F5300DD7999 /* IntrinsicallySizedCollectionView.swift in Sources */,
 				0277AE182861C76700054D50 /* String.swift in Sources */,
 				025F059B284786CF00FF070D /* Movie.swift in Sources */,
 				026D0D37284F8A3C00B5BF8B /* DetailViewController.swift in Sources */,
