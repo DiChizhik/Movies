@@ -26,6 +26,7 @@
 		0277AE1A2861DF9100054D50 /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0277AE192861DF9100054D50 /* LaunchViewController.swift */; };
 		0277AE5528646E0800054D50 /* DetailCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0277AE5428646E0800054D50 /* DetailCollectionViewCell.swift */; };
 		0277AE572864963D00054D50 /* AlignedCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0277AE562864963D00054D50 /* AlignedCollectionViewFlowLayout.swift */; };
+		2D259801286C4BB900DD7999 /* StackMovieDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D259800286C4BB900DD7999 /* StackMovieDetailView.swift */; };
 		2D259806286C4F5300DD7999 /* IntrinsicallySizedCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D259805286C4F5300DD7999 /* IntrinsicallySizedCollectionView.swift */; };
 		2D259808286C57B700DD7999 /* UIStackView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D259807286C57B700DD7999 /* UIStackView+Extensions.swift */; };
 		2D25980C286C66D400DD7999 /* LeftAlignedCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D25980B286C66D400DD7999 /* LeftAlignedCollectionViewFlowLayout.swift */; };
@@ -53,6 +54,7 @@
 		0277AE192861DF9100054D50 /* LaunchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
 		0277AE5428646E0800054D50 /* DetailCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCollectionViewCell.swift; sourceTree = "<group>"; };
 		0277AE562864963D00054D50 /* AlignedCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlignedCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
+		2D259800286C4BB900DD7999 /* StackMovieDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackMovieDetailView.swift; sourceTree = "<group>"; };
 		2D259805286C4F5300DD7999 /* IntrinsicallySizedCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntrinsicallySizedCollectionView.swift; sourceTree = "<group>"; };
 		2D259807286C57B700DD7999 /* UIStackView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+Extensions.swift"; sourceTree = "<group>"; };
 		2D25980B286C66D400DD7999 /* LeftAlignedCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftAlignedCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
@@ -175,6 +177,7 @@
 		2D2597FF286C4B7200DD7999 /* MovieDetail */ = {
 			isa = PBXGroup;
 			children = (
+				2D259800286C4BB900DD7999 /* StackMovieDetailView.swift */,
 				2D25980D286C682100DD7999 /* ConstraintMovieDetailView.swift */,
 			);
 			path = MovieDetail;
@@ -278,6 +281,7 @@
 				2D25980C286C66D400DD7999 /* LeftAlignedCollectionViewFlowLayout.swift in Sources */,
 				0223A3DE285A739B00E3602D /* MovieDetails.swift in Sources */,
 				0277AE5528646E0800054D50 /* DetailCollectionViewCell.swift in Sources */,
+				2D259801286C4BB900DD7999 /* StackMovieDetailView.swift in Sources */,
 				2D259806286C4F5300DD7999 /* IntrinsicallySizedCollectionView.swift in Sources */,
 				0277AE182861C76700054D50 /* String.swift in Sources */,
 				025F059B284786CF00FF070D /* Movie.swift in Sources */,
