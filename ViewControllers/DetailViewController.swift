@@ -9,113 +9,136 @@ import UIKit
 import Kingfisher
 
 class DetailViewController: UIViewController {
-    static var identifier: String{NSStringFromClass(self)}
+    private let selectedMovieID: Int
+    private let movieDataService = MovieDataService()
     
-    var selectedMovieId: Int?
-    var movieDetails: MovieDetails?
-    var languages = [String]()
-    var languagesTest = ["German", "Dutch", "English", "Chinese", "Icelandic", "Russian", "Spanish", "Italian", "Japanese", ]
-    var genres = [String]()
-    var genresTest = ["thriller", "action", "science finction", "romcom", "adventure"]
+    private var movieDetails: MovieDetails?
+    private var languageAndGenreData = [CollectionViewSection]()
     
-    let movieDataService = MovieDataService()
-    
-    private lazy var titleLabel: UILabel = {
-       let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
-        label.textAlignment = .center
-        label.textColor = UIColor.white
-        label.text = "Movie Title"
-        label.numberOfLines = 1
-        return label
+    // StackMovieDetailView and ConstraintMovieDetailView are basically the same,
+    // they are only built internally differently. One using stacks the other using plain constraints.
+    // Feel free to choose which one you prefer. Other one would look like:
+    /// ```
+    /// private lazy var contentView: ConstraintMovieDetailView = {
+    ///     let view = ConstraintMovieDetailView()
+    ///     view.collectionView.dataSource = self
+    ///     return view
+    /// }()
+    private lazy var contentView: StackMovieDetailView = {
+        let view = StackMovieDetailView()
+        view.collectionView.dataSource = self
+        return view
     }()
     
-    private lazy var imageView: UIImageView = {
-       let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.layer.cornerRadius = 10
-        imageView.layer.masksToBounds = true
-        imageView.contentMode = .scaleAspectFill
-        return imageView
-    }()
+    // Since it doesn't make sense to load a movie detail screen without a movie selected we pass it on init :)
+    init(selectedMovieID: Int) {
+        self.selectedMovieID = selectedMovieID
+        super.init(nibName: nil, bundle: nil)
+    }
     
-    private lazy var releasedOnLabel: UILabel = {
-       let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 15)
-        label.textColor = UIColor(named: "staticTextColor")
-        label.text = "Released on"
-        label.textAlignment = .left
-        return label
-    }()
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func loadView() {
+        super.loadView()
+        
+        // I'm just moving the view configuration to a separate class so we can fully follow MVC.
+        // Ideally in the MVC architecture we separate in 3 components:
+        // M (Model)
+        //      Where your data resides. This will be persistance (database), API fetching, parsing objects, etc.
+        //      In your case it's already separated in the MovieService class
+        //
+        // V (View)
+        //      This is your UI. There is no code to handle user interaction or load content. Simply configure UI elements and style
+        //      Will be our StackMovieDetailView or ConstraintMovieDetailView, depending on which one you choose
+        //
+        // C (Controller)
+        //      This will mediate interactions between View and Model. Handles user interactions, loads data from model, etc.
+        //      We already have this in the project, it's the DetailViewController itself
+        //
+        // NOTE: If you were using storyboards then the storyboard would be your "View", and the ViewController class the "Controller" part.
+        // Since we are not using storyboards it's a good practice to take the "View" part from the "Controller" class to make it more readable.
+        self.view = contentView
+        
+        let exitButton = UIButton.systemButton(with: UIImage(systemName: "xmark")!, target: self, action: #selector(dismissView))
+        exitButton.tintColor = UIColor.white
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: exitButton)
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        fetchMovieDetails()
+    }
     
-    private lazy var releaseDateLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 15)
-        label.textColor = UIColor(named: "descriptionColor")
-        label.text = "date"
-        label.textAlignment = .left
-        return label
-    }()
+    @objc func dismissView(_ sender: UIButton) {
+        dismiss(animated: true)
+    }
     
-    private lazy var lastsLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 15)
-        label.textColor = UIColor(named: "staticTextColor")
-        label.text = "Lasts"
-        label.textAlignment = .left
-        return label
-    }()
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        contentView.collectionView.collectionViewLayout.invalidateLayout()
+    }
     
-    private lazy var durationLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 15)
-        label.textColor = UIColor(named: "descriptionColor")
-        label.text = "0h0"
-        label.textAlignment = .left
-        return label
-    }()
+    private func fetchMovieDetails() {
+        movieDataService.getMovieDetails(movieId: selectedMovieID) { [weak self] result in
+            guard let self = self else {return}
+            
+            switch result {
+            case .success(let details):
+                self.movieDetails = details
+                DispatchQueue.main.async {
+                    self.updateViewData()
+                }
+                
+            case .failure(let error):
+//                Here I wanted to display an alert controller with the info about the error. Not sure if error.localizedDescription will hold anything though.
+                switch error {
+                case .errorOccurred:
+                    let ac = UIAlertController(title: "Error", message: "\(error.localizedDescription)", preferredStyle: .alert)
+                    ac.addAction(UIAlertAction(title: "OK", style: .default))
+                    
+                    DispatchQueue.main.async {
+                        self.present(ac, animated: true)
+                    }
+                default:
+                    break
+                }
+            }
+        }
+    }
     
-    private lazy var movieDescriptionLabel: UILabel = {
-        let description = UILabel()
-        description.translatesAutoresizingMaskIntoConstraints = false
-        description.numberOfLines = 0
-        description.font = UIFont.systemFont(ofSize: 15)
-        description.textColor = UIColor(named: "descriptionColor")
-        description.textAlignment = .left
-        description.text = """
-                        a very
-                        thought-provocing
-                        black-humoured
-                        romcom
-                        """
-        return description
-    }()
-    
-    private lazy var collectionViewFlowLayout: AlignedCollectionViewFlowLayout = {
-        let layout = AlignedCollectionViewFlowLayout()
-        layout.minimumInteritemSpacing = 4
-        layout.minimumLineSpacing = 4
-        layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
-        layout.horizontalAlignment = .left
-        return layout
-    }()
-    
-    private lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewFlowLayout)
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.register(DetailCollectionViewCell.self, forCellWithReuseIdentifier: DetailCollectionViewCell.reuseIdentifier)
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        collectionView.isScrollEnabled = false
-        collectionView.backgroundColor = UIColor(named: "backgroundColor")
-        return collectionView
-    }()
-    
+    private func updateViewData() {
+        guard let movieDetails = movieDetails else { return }
+
+        contentView.titleLabel.text = movieDetails.title
+
+        if let path = movieDetails.posterPath {
+            contentView.imageView.kf.setImage(with: path)
+        }
+        
+        contentView.releaseDateLabel.text = movieDetails.releaseDate
+        contentView.durationLabel.text = movieDetails.runtime
+        contentView.movieDescriptionLabel.text = movieDetails.overview
+        
+        // I've moved the code from "makeViewData" to here
+        let languages = movieDetails.spokenLanguages
+            .map { CollectionViewItem(title: $0.englishName) }
+        
+        let genres = movieDetails.genres
+            .map { CollectionViewItem(title: $0.name) }
+        
+        let languagesSection = CollectionViewSection(identifier: CollectionViewSectionIdentifier.languages, items: languages)
+        let genreSection = CollectionViewSection(identifier: .genres, items: genres)
+        languageAndGenreData = [languagesSection, genreSection]
+        contentView.collectionView.reloadData()
+    }
+}
+
+// MARK: Custom models
+
+private extension DetailViewController {
     private enum CollectionViewSectionIdentifier {
         case languages, genres
     }
@@ -128,148 +151,25 @@ class DetailViewController: UIViewController {
         let identifier: CollectionViewSectionIdentifier
         let items: [CollectionViewItem]
     }
-    
-    private lazy var viewData: [CollectionViewSection] = makeViewData()
-    
-    private func makeViewData() -> [CollectionViewSection] {
-        let languages: [CollectionViewItem] = languages.map{CollectionViewItem(title: $0)}
-        let languagesSection = CollectionViewSection(identifier: CollectionViewSectionIdentifier.languages, items: languages)
-        
-        let genres: [CollectionViewItem] = genres.map{CollectionViewItem(title: $0)}
-        let genreSection = CollectionViewSection(identifier: .genres, items: genres)
-    
-        return [languagesSection, genreSection]
-        }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        guard let id = selectedMovieId else { return }
-        
-        movieDataService.getMovieDetails(movieId: id) { [weak self] result in
-            guard let self = self else {return}
-            
-            switch result {
-            case .success(let details):
-                self.movieDetails = details
-            case .failure(let error):
-//                Here I wanted to display an alert controller with the info about the error. Not sure if error.localizedDescription will hold anything though.
-                switch error {
-                case .errorOccurred:
-                    let ac = UIAlertController(title: "Error", message: "\(error.localizedDescription)", preferredStyle: .alert)
-                    ac.addAction(UIAlertAction(title: "OK", style: .default))
-                    self.present(ac, animated: true)
-                default:
-                    break
-                }
-            }
-        
-            DispatchQueue.main.async {
-                self.configureWithData()
-                self.setupUI()
-            }
-        }
-    }
-    
-    @objc func dismissView(_ sender: UIButton) {
-        dismiss(animated: true)
-    }
-    
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
-
-        collectionView.collectionViewLayout.invalidateLayout()
-    }
-    
-    private func setupUI() {
-        let exitButton = UIButton.systemButton(with: UIImage(systemName: "xmark")!, target: self, action: #selector(dismissView))
-        exitButton.tintColor = UIColor.white
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: exitButton)
-        
-        view.backgroundColor = UIColor(named: "backgroundColor")
-
-        let releaseStack = UIStackView()
-        releaseStack.translatesAutoresizingMaskIntoConstraints = false
-        releaseStack.axis = .horizontal
-        releaseStack.spacing = 4
-        releaseStack.addArrangedSubview(releasedOnLabel)
-        releaseStack.addArrangedSubview(releaseDateLabel)
-        
-        let durationStack = UIStackView()
-        durationStack.translatesAutoresizingMaskIntoConstraints = false
-        durationStack.axis = .horizontal
-        durationStack.spacing = 4
-        durationStack.addArrangedSubview(lastsLabel)
-        durationStack.addArrangedSubview(durationLabel)
-        
-        view.addSubview(titleLabel)
-        view.addSubview(imageView)
-        view.addSubview(releaseStack)
-        view.addSubview(durationStack)
-        view.addSubview(movieDescriptionLabel)
-        view.addSubview(collectionView)
-        
-        NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
-            titleLabel.leftAnchor.constraint(equalTo: view.layoutMarginsGuide.leftAnchor),
-            titleLabel.rightAnchor.constraint(equalTo: view.layoutMarginsGuide.rightAnchor),
-
-            imageView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 16),
-            imageView.centerXAnchor.constraint(equalTo: titleLabel.centerXAnchor),
-            imageView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.61),
-            imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: 1.41),
-            
-            releaseStack.leftAnchor.constraint(equalTo: view.layoutMarginsGuide.leftAnchor),
-            releaseStack.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 35),
-
-            durationStack.leftAnchor.constraint(equalTo: releaseStack.leftAnchor),
-            durationStack.topAnchor.constraint(equalTo: releaseStack.bottomAnchor, constant: 8),
-
-            movieDescriptionLabel.leftAnchor.constraint(equalTo: releaseStack.leftAnchor),
-            movieDescriptionLabel.rightAnchor.constraint(equalTo: view.layoutMarginsGuide.rightAnchor),
-            movieDescriptionLabel.topAnchor.constraint(equalTo: durationStack.bottomAnchor, constant: 16),
-
-            collectionView.leftAnchor.constraint(equalTo: releaseStack.leftAnchor),
-            collectionView.topAnchor.constraint(equalTo: movieDescriptionLabel.bottomAnchor, constant: 16),
-            collectionView.rightAnchor.constraint(equalTo: movieDescriptionLabel.rightAnchor),
-            collectionView.heightAnchor.constraint(equalToConstant: 200),
-        ])
-    }
-    
-    private func configureWithData() {
-        guard let movieDetails = movieDetails else { return }
-
-        titleLabel.text = movieDetails.title
-        
-        if let path = movieDetails.posterPath {
-            imageView.kf.setImage(with: path)
-        }
-        
-        releaseDateLabel.text = movieDetails.releaseDate
-        durationLabel.text = movieDetails.runtime
-        movieDescriptionLabel.text = movieDetails.overview
-        languages = movieDetails.spokenLanguages.map{$0.englishName}
-        genres = movieDetails.genres.map{$0.name}
-    }
-
 }
+
+// MARK: UICollectionViewDataSource
 
 extension DetailViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return viewData.count
+        return languageAndGenreData.count
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        assert(!languages.isEmpty, "Languages array is empty")
-        return viewData[section].items.count
+        return languageAndGenreData[section].items.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailCollectionViewCell.reuseIdentifier, for: indexPath) as? DetailCollectionViewCell else { fatalError() }
-        let item = viewData[indexPath.section].items[indexPath.item].title.lowercased().capitalizingFirstLetter()
+        let item = languageAndGenreData[indexPath.section].items[indexPath.item].title.lowercased().capitalizingFirstLetter()
         
-        switch viewData[indexPath.section].identifier {
+        switch languageAndGenreData[indexPath.section].identifier {
         case .languages:
             cell.configure(title: item, backgroundColor: UIColor(named: "languageBackgroundColor")!, borderColor: UIColor(named: "languageBorderColor")!)
         case .genres:
@@ -277,15 +177,5 @@ extension DetailViewController: UICollectionViewDataSource {
         }
         
         return cell
-    }
-}
-
-extension DetailViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 1, height: 1)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0)
     }
 }

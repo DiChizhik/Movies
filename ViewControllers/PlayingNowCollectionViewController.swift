@@ -75,9 +75,8 @@ class PlayingNowCollectionViewController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let id = movies[indexPath.item].id
         
-        let detailViewController = DetailViewController()
+        let detailViewController = DetailViewController(selectedMovieID: id)
         let detailViewNavigationController = UINavigationController(rootViewController: detailViewController)
-        detailViewController.selectedMovieId = id
         present(detailViewNavigationController, animated: true)
     }
 }
