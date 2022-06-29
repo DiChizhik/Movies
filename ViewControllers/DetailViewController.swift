@@ -22,20 +22,14 @@ class DetailViewController: UIViewController {
     
     private lazy var scrollView: UIScrollView = {
         let scroll = UIScrollView(frame: view.bounds)
+        scroll.translatesAutoresizingMaskIntoConstraints = false
         scroll.backgroundColor = UIColor(named: "backgroundColor")
-        scroll.contentSize = contentSize
         return scroll
     }()
     
-    private var contentSize: CGSize {
-        let height = view.frame.height + 100
-        return CGSize(width: view.frame.width, height: height)
-    }
-    
     private lazy var contentView: UIView = {
        let view = UIView()
-        view.backgroundColor = UIColor(named: "backgroundColor")
-        view.frame.size = contentSize
+        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
@@ -105,7 +99,7 @@ class DetailViewController: UIViewController {
         description.numberOfLines = 0
         description.font = UIFont.systemFont(ofSize: 15)
         description.textColor = UIColor(named: "descriptionColor")
-        description.textAlignment = .center
+        description.textAlignment = .left
         description.text = """
                         a very
                         thought-provocing
@@ -119,7 +113,6 @@ class DetailViewController: UIViewController {
         let layout = AlignedCollectionViewFlowLayout()
         layout.minimumInteritemSpacing = 4
         layout.minimumLineSpacing = 4
-//        layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
         layout.horizontalAlignment = .left
         return layout
     }()
@@ -150,7 +143,7 @@ class DetailViewController: UIViewController {
     private lazy var viewData: [CollectionViewSection] = makeViewData()
     
     private func makeViewData() -> [CollectionViewSection] {
-        let languages: [CollectionViewItem] = languagesTest.map{CollectionViewItem(title: $0)}
+        let languages: [CollectionViewItem] = languages.map{CollectionViewItem(title: $0)}
         let languagesSection = CollectionViewSection(identifier: CollectionViewSectionIdentifier.languages, items: languages)
         
         let genres: [CollectionViewItem] = genres.map{CollectionViewItem(title: $0)}
@@ -188,7 +181,7 @@ class DetailViewController: UIViewController {
             }
         }
     }
-        
+    
     private func showError(message: String) {
         let ac = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
         ac.addAction(UIAlertAction(title: "OK", style: .default))
@@ -216,6 +209,20 @@ class DetailViewController: UIViewController {
 
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
+        
+        NSLayoutConstraint.activate([
+            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            
+            contentView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
+            contentView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
+            
+            contentView.widthAnchor.constraint(equalTo: view.widthAnchor)
+        ])
         
         let releaseStack = UIStackView()
         releaseStack.translatesAutoresizingMaskIntoConstraints = false
@@ -261,20 +268,35 @@ class DetailViewController: UIViewController {
             collectionView.leftAnchor.constraint(equalTo: releaseStack.leftAnchor),
             collectionView.topAnchor.constraint(equalTo: movieDescriptionLabel.bottomAnchor, constant: 16),
             collectionView.rightAnchor.constraint(equalTo: movieDescriptionLabel.rightAnchor),
-            collectionView.heightAnchor.constraint(equalToConstant: CGFloat(calculateCollectionViewHeight()))
+            collectionView.heightAnchor.constraint(equalToConstant: calculateCollectionViewHeight())
         ])
     }
     
-    private func calculateCollectionViewHeight()-> Float {
-        var languageRows = languagesTest.count / 4
-        languagesTest.count % 4 != 0 ? languageRows += 1 : nil
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        scrollView.contentSize = CGSize(width: view.frame.size.width, height: calculateScrollViewContentSize())
+    }
+    
+    private func calculateCollectionViewHeight()-> CGFloat {
+        var languageRows = languages.count / 4
+        languages.count % 4 != 0 ? languageRows += 1 : nil
         let languageRowsHeight = (languageRows * 27) + ((languageRows - 1) * 4)
         
         var genreRows = genres.count / 4
         genres.count % 4 != 0 ? genreRows += 1 : nil
         let genreRowsHeight = (genreRows * 27) + ((genreRows - 1) * 4)
         
-        return Float(languageRowsHeight + 16 + genreRowsHeight)
+        return CGFloat(languageRowsHeight + 16 + genreRowsHeight)
+    }
+    
+    private func calculateScrollViewContentSize()-> CGFloat {
+        let lastItemOrigin = collectionView.frame.origin.y
+        let lastItemHeight = collectionView.frame.size.height
+        
+        print(lastItemHeight)
+        
+        let scrollViewContentSize = lastItemHeight + lastItemOrigin
+        return scrollViewContentSize
     }
     
     private func configureWithData() {
@@ -292,7 +314,6 @@ class DetailViewController: UIViewController {
         languages = movieDetails.spokenLanguages.map{$0.englishName}
         genres = movieDetails.genres.map{$0.name}
     }
-
 }
 
 extension DetailViewController: UICollectionViewDataSource {
