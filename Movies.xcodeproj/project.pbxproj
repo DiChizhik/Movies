@@ -29,6 +29,7 @@
 		2D259806286C4F5300DD7999 /* IntrinsicallySizedCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D259805286C4F5300DD7999 /* IntrinsicallySizedCollectionView.swift */; };
 		2D259808286C57B700DD7999 /* UIStackView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D259807286C57B700DD7999 /* UIStackView+Extensions.swift */; };
 		2D25980C286C66D400DD7999 /* LeftAlignedCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D25980B286C66D400DD7999 /* LeftAlignedCollectionViewFlowLayout.swift */; };
+		2D25980E286C682100DD7999 /* ConstraintMovieDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D25980D286C682100DD7999 /* ConstraintMovieDetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -55,6 +56,7 @@
 		2D259805286C4F5300DD7999 /* IntrinsicallySizedCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntrinsicallySizedCollectionView.swift; sourceTree = "<group>"; };
 		2D259807286C57B700DD7999 /* UIStackView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+Extensions.swift"; sourceTree = "<group>"; };
 		2D25980B286C66D400DD7999 /* LeftAlignedCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftAlignedCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
+		2D25980D286C682100DD7999 /* ConstraintMovieDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConstraintMovieDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -156,6 +158,7 @@
 				02334D20283E228F0099C92B /* PlayingNowCollectionViewController.swift */,
 				02334D22283E26980099C92B /* MostPopularCollectionViewController.swift */,
 				026D0D36284F8A3C00B5BF8B /* DetailViewController.swift */,
+				2D2597FF286C4B7200DD7999 /* MovieDetail */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -167,6 +170,14 @@
 				2D259807286C57B700DD7999 /* UIStackView+Extensions.swift */,
 			);
 			name = Extensions;
+			sourceTree = "<group>";
+		};
+		2D2597FF286C4B7200DD7999 /* MovieDetail */ = {
+			isa = PBXGroup;
+			children = (
+				2D25980D286C682100DD7999 /* ConstraintMovieDetailView.swift */,
+			);
+			path = MovieDetail;
 			sourceTree = "<group>";
 		};
 		2D259804286C4F4100DD7999 /* Utils */ = {
@@ -260,6 +271,7 @@
 				2D259808286C57B700DD7999 /* UIStackView+Extensions.swift in Sources */,
 				02334D0D283E185E0099C92B /* AppDelegate.swift in Sources */,
 				0277AE572864963D00054D50 /* AlignedCollectionViewFlowLayout.swift in Sources */,
+				2D25980E286C682100DD7999 /* ConstraintMovieDetailView.swift in Sources */,
 				026D0D13284E646F00B5BF8B /* MovieDataService.swift in Sources */,
 				025F059928476BD200FF070D /* MostPopularCollectionViewCell.swift in Sources */,
 				02334D21283E228F0099C92B /* PlayingNowCollectionViewController.swift in Sources */,
