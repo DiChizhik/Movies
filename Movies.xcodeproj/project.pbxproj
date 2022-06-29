@@ -26,6 +26,7 @@
 		0277AE1A2861DF9100054D50 /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0277AE192861DF9100054D50 /* LaunchViewController.swift */; };
 		0277AE5528646E0800054D50 /* DetailCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0277AE5428646E0800054D50 /* DetailCollectionViewCell.swift */; };
 		0277AE572864963D00054D50 /* AlignedCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0277AE562864963D00054D50 /* AlignedCollectionViewFlowLayout.swift */; };
+		2D259808286C57B700DD7999 /* UIStackView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D259807286C57B700DD7999 /* UIStackView+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -49,6 +50,7 @@
 		0277AE192861DF9100054D50 /* LaunchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
 		0277AE5428646E0800054D50 /* DetailCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCollectionViewCell.swift; sourceTree = "<group>"; };
 		0277AE562864963D00054D50 /* AlignedCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlignedCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
+		2D259807286C57B700DD7999 /* UIStackView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -157,6 +159,7 @@
 			isa = PBXGroup;
 			children = (
 				0277AE172861C76700054D50 /* String.swift */,
+				2D259807286C57B700DD7999 /* UIStackView+Extensions.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -240,6 +243,7 @@
 			files = (
 				0277AE1A2861DF9100054D50 /* LaunchViewController.swift in Sources */,
 				02334D23283E26980099C92B /* MostPopularCollectionViewController.swift in Sources */,
+				2D259808286C57B700DD7999 /* UIStackView+Extensions.swift in Sources */,
 				02334D0D283E185E0099C92B /* AppDelegate.swift in Sources */,
 				0277AE572864963D00054D50 /* AlignedCollectionViewFlowLayout.swift in Sources */,
 				026D0D13284E646F00B5BF8B /* MovieDataService.swift in Sources */,
