@@ -20,21 +20,7 @@ class PlayingNowCollectionViewController: UICollectionViewController {
         
         collectionView.register(PlayingNowCollectionViewCell.self, forCellWithReuseIdentifier: PlayingNowCollectionViewCell.reuseIdentifier)
 
-        // Shall I make it a separate method to reuse it in willDisplayCell method?
-        movieDataService.getPlayingNowMoviesList { [weak self] result in
-            guard let self = self else { return }
-            
-            switch result {
-            case .success(let moviesList):
-                self.movies = moviesList
-            case .failure(_):
-                break
-            }
-            
-            DispatchQueue.main.async {
-                self.collectionView.reloadData()
-            }
-        }
+        loadMovieData()
     }
     
     private func setupUI() {
@@ -48,6 +34,23 @@ class PlayingNowCollectionViewController: UICollectionViewController {
         
         navigationController?.navigationBar.backgroundColor = UIColor(named: "backgroundColor")
         navigationController?.navigationBar.barTintColor = UIColor(named: "backgroundColor")
+    }
+    
+    private func loadMovieData() {
+        movieDataService.getPlayingNowMoviesList { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let moviesList):
+                self.movies.append(contentsOf: moviesList)
+            case .failure(_):
+                break
+            }
+            
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+            }
+        }
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -74,11 +77,10 @@ class PlayingNowCollectionViewController: UICollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let id = movies[indexPath.item].id
+        let selectedMovieID = movies[indexPath.item].id
+        let detailViewController = DetailViewController(selectedMovieID: selectedMovieID)
         
-        let detailViewController = DetailViewController()
         let detailViewNavigationController = UINavigationController(rootViewController: detailViewController)
-        detailViewController.selectedMovieId = id
         present(detailViewNavigationController, animated: true)
     }
     
@@ -86,20 +88,7 @@ class PlayingNowCollectionViewController: UICollectionViewController {
         let movieInViewIndex = indexPath.item
         let lastMovieIndex = movies.count - 1
         if movieInViewIndex == lastMovieIndex {
-            movieDataService.getPlayingNowMoviesList{ [weak self] result in
-                guard let self = self else { return }
-                
-                switch result {
-                case .success(let additionalMovies):
-                    self.movies.append(contentsOf: additionalMovies)
-                case .failure(_):
-                    break
-                }
-                
-                DispatchQueue.main.async {
-                    self.collectionView.reloadData()
-                }
-            }
+            loadMovieData()
         }
     }
 }

@@ -43,6 +43,8 @@ class MovieDataService: MovieDataServiceProtocol {
         isPlayingNowRequestCompleted = false
         let request = URLRequest(url: url)
         URLSession.shared.dataTask(with: request) {(data, response, error) in
+            self.isPlayingNowRequestCompleted = true
+            
             if let error = error {
                 print(error.localizedDescription)
                 completion(.failure(.failedToGetResponse))
@@ -53,8 +55,6 @@ class MovieDataService: MovieDataServiceProtocol {
                 completion(.failure(.failedToGetData))
                 return
             }
-             
-            self.isPlayingNowRequestCompleted = true
             
             let jsonDecoder = JSONDecoder()
             guard let moviesData = try? jsonDecoder.decode(Movies.self, from: data) else {
@@ -74,6 +74,8 @@ class MovieDataService: MovieDataServiceProtocol {
         isMostPopularRequestCompleted = false
         let request = URLRequest(url: url)
         URLSession.shared.dataTask(with: request) {(data, response, error) in
+            self.isMostPopularRequestCompleted = true
+            
             if let error = error {
                 print(error.localizedDescription)
                 completion(.failure(.failedToGetResponse))
@@ -84,8 +86,6 @@ class MovieDataService: MovieDataServiceProtocol {
                 completion(.failure(.failedToGetData))
                 return
             }
-            
-            self.isMostPopularRequestCompleted = true
             
             let jsonDecoder = JSONDecoder()
             guard let moviesData = try? jsonDecoder.decode(Movies.self, from: data) else {

@@ -236,9 +236,9 @@ class MostPopularViewController: UIViewController, UICollectionViewDelegate {
     }
     
     @objc func seeMoreTapped(_ sender: UIButton) {
-        let detailViewController = DetailViewController()
+        let selectedMovieId = movies[itemInViewIndex].id
+        let detailViewController = DetailViewController(selectedMovieID: selectedMovieId)
         let detailNavigationController = UINavigationController(rootViewController: detailViewController)
-        detailViewController.selectedMovieId = movies[itemInViewIndex].id
         present(detailNavigationController, animated: true)
     }
 }
