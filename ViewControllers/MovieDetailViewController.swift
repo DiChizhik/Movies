@@ -8,7 +8,7 @@
 import UIKit
 import Kingfisher
 
-class DetailViewController: UIViewController {
+class MovieDetailViewController: UIViewController {
     static var identifier: String{NSStringFromClass(self)}
     
     private var selectedMovieID: Int
@@ -51,6 +51,7 @@ class DetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         loadMovieData()
     }
     
@@ -85,12 +86,8 @@ class DetailViewController: UIViewController {
         contentView.durationLabel.text = movieDetails.runtime
         contentView.movieDescriptionLabel.text = movieDetails.overview
        
-//        let languages = movieDetails.spokenLanguages.map{ CollectionViewItem(title: $0.englishName) }
-//        let genres = movieDetails.genres.map{ CollectionViewItem(title: $0.name) }
-        
-        let languages = languagesTest.map{ CollectionViewItem(title: $0) }
-        let genres = genresTest.map{ CollectionViewItem(title: $0) }
-        
+        let languages = movieDetails.spokenLanguages.map{ CollectionViewItem(title: $0.englishName) }
+        let genres = movieDetails.genres.map{ CollectionViewItem(title: $0.name) }
         
         let languagesSection = CollectionViewSection(identifier: CollectionViewSectionIdentifier.languages, items: languages)
         let genreSection = CollectionViewSection(identifier: .genres, items: genres)
@@ -115,7 +112,7 @@ class DetailViewController: UIViewController {
     }
 }
 
-extension DetailViewController: UICollectionViewDataSource {
+extension MovieDetailViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return languageAndGenreData.count
     }
@@ -140,7 +137,7 @@ extension DetailViewController: UICollectionViewDataSource {
     }
 }
 
-private extension DetailViewController {
+private extension MovieDetailViewController {
     private enum CollectionViewSectionIdentifier {
         case languages, genres
     }

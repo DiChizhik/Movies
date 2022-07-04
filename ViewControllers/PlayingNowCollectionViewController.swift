@@ -13,11 +13,15 @@ class PlayingNowCollectionViewController: UICollectionViewController {
     
     var selectedItemId: Int?
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func loadView() {
+        super.loadView()
         
         setupUI()
-        
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
         collectionView.register(PlayingNowCollectionViewCell.self, forCellWithReuseIdentifier: PlayingNowCollectionViewCell.reuseIdentifier)
 
         loadMovieData()
@@ -27,7 +31,6 @@ class PlayingNowCollectionViewController: UICollectionViewController {
         collectionView.backgroundColor = UIColor(named: "backgroundColor")
         
         navigationItem.title = "Playing Now"
-//        navigationController?.navigationBar.prefersLargeTitles = true
         
         navigationController?.navigationBar.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white, .font: UIFont.systemFont(ofSize: 20, weight: .heavy)]
@@ -57,7 +60,9 @@ class PlayingNowCollectionViewController: UICollectionViewController {
         super.viewWillTransition(to: size, with: coordinator)
         collectionView.collectionViewLayout.invalidateLayout()
     }
+}
 
+extension PlayingNowCollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return movies.count
     }
@@ -75,10 +80,12 @@ class PlayingNowCollectionViewController: UICollectionViewController {
         
         return cell
     }
-    
+}
+
+extension PlayingNowCollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let selectedMovieID = movies[indexPath.item].id
-        let detailViewController = DetailViewController(selectedMovieID: selectedMovieID)
+        let detailViewController = MovieDetailViewController(selectedMovieID: selectedMovieID)
         
         let detailViewNavigationController = UINavigationController(rootViewController: detailViewController)
         present(detailViewNavigationController, animated: true)
