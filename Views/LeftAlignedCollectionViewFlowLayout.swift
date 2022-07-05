@@ -5,10 +5,9 @@
 //  Created by Diana Chizhik on 01/07/2022.
 //
 
-import Foundation
 import UIKit
 
-class LeftAlighedCollectionViewFlowLayout: UICollectionViewFlowLayout {
+class LeftAlignedCollectionViewFlowLayout: UICollectionViewFlowLayout {
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         let attributes = super.layoutAttributesForElements(in: rect)
         

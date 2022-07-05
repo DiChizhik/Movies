@@ -8,7 +8,7 @@
 import UIKit
 import Kingfisher
 
-class MostPopularViewController: UIViewController, UICollectionViewDelegate {
+class MostPopularViewController: UIViewController, MostPopularViewDelegate {
     var movies = [Movie]()
     let movieDataService = MovieDataService()
     var itemInViewIndex: Int = 0
@@ -17,9 +17,14 @@ class MostPopularViewController: UIViewController, UICollectionViewDelegate {
         let view = MostPopularView()
         view.collectionView.dataSource = self
         view.collectionView.delegate = self
-        view.seeMoreButton.addTarget(self, action: #selector(seeMoreTapped), for: .touchUpInside)
+        view.delegate = self
         return view
     }()
+    
+    private enum Fading: Int {
+        case fadeIn = 1
+        case fadeOut = 0
+    }
     
     override func loadView() {
         super.loadView()
@@ -36,11 +41,11 @@ class MostPopularViewController: UIViewController, UICollectionViewDelegate {
         
         loadMovieData()
         
-//        I did it in an attemt to make loadMovieData method reusable in willDisplayCell method. I'm not sure it's right, though.
+//      I did it in an attemt to make loadMovieData method reusable in willDisplayCell method. I'm not sure it's right, though.
         DispatchQueue.main.async {
             self.contentView.collectionView.scrollToItem(at: IndexPath(item: self.itemInViewIndex, section: 0), at: UICollectionView.ScrollPosition.centeredHorizontally, animated: false)
             self.configureWithData(index: self.itemInViewIndex)
-            self.fadeIn()
+            self.fade(Fading.fadeIn)
         }
     }
 
@@ -86,18 +91,48 @@ class MostPopularViewController: UIViewController, UICollectionViewDelegate {
         }
     }
     
-    @objc func seeMoreTapped(_ sender: UIButton) {
+    @objc internal func seeMoreTapped() {
         let selectedMovieId = movies[itemInViewIndex].id
+        
         let detailViewController = MovieDetailViewController(selectedMovieID: selectedMovieId)
         let detailNavigationController = UINavigationController(rootViewController: detailViewController)
         present(detailNavigationController, animated: true)
     }
+    
+    private func fade(_ type: Fading) {
+        let type = CGFloat(type.rawValue)
+        
+        UIView.animate(withDuration: 1,
+                       delay: 0,
+                       options: [],
+                       animations: {
+            self.contentView.name.alpha = type
+            self.contentView.reviewsScore.alpha = type
+            self.contentView.reviewsScoreIndicator.alpha = type
+            self.contentView.movieDescription.alpha = type
+            self.contentView.seeMoreButton.alpha = type
+                    }, completion: nil)
+    }
+}
+    
+extension MostPopularViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return movies.count
+    }
+        
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MostPopularCollectionViewCell.reuseIndentifier, for: indexPath) as? MostPopularCollectionViewCell else { fatalError() }
+            
+        let path = movies[indexPath.item].posterPath
+        cell.configure(imageURL: path)
+        
+        return cell
+    }
 }
 
-// I've put all scroll-related methods here.
-extension MostPopularViewController {
+extension MostPopularViewController: UICollectionViewDelegate {
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        fadeOut()
+        fade(Fading.fadeOut)
     }
 
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
@@ -118,55 +153,9 @@ extension MostPopularViewController {
         contentView.collectionView.scrollToItem(at: IndexPath(item: pageInt, section: 0), at: .centeredHorizontally, animated: true)
         configureWithData(index: pageInt)
         
-        fadeIn()
+        fade(Fading.fadeIn)
     }
     
-    private func fadeIn() {
-        UIView.animate(withDuration: 1,
-                       delay: 0,
-                       options: [],
-                       animations: {
-            self.contentView.name.alpha = 1
-            self.contentView.reviewsScore.alpha = 1
-            self.contentView.reviewsScoreIndicator.alpha = 1
-            self.contentView.movieDescription.alpha = 1
-            self.contentView.seeMoreButton.alpha = 1
-                    }, completion: nil)
-    }
-    
-    private func fadeOut() {
-        UIView.animate(withDuration: 1,
-                       delay: 0,
-                       options: [],
-                       animations: {
-            self.contentView.name.alpha = 0
-            self.contentView.reviewsScore.alpha = 0
-            self.contentView.reviewsScoreIndicator.alpha = 0
-            self.contentView.movieDescription.alpha = 0
-            self.contentView.seeMoreButton.alpha = 0
-            },
-                       completion: nil)
-    }
-    
-}
-    
-extension MostPopularViewController: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return movies.count
-    }
-        
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MostPopularCollectionViewCell.reuseIndentifier, for: indexPath) as? MostPopularCollectionViewCell else { fatalError() }
-            
-        let path = movies[indexPath.item].posterPath
-        cell.configure(imageURL: path)
-        
-        return cell
-    }
-}
-
-// Why is conformance to UICollectionViewDelegate here redundant?
-extension MostPopularViewController {
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         let movieInViewIndex = indexPath.item
         let lastMovieIndex = movies.count - 1

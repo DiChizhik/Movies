@@ -9,8 +9,6 @@ import UIKit
 import Kingfisher
 
 class MovieDetailViewController: UIViewController {
-    static var identifier: String{NSStringFromClass(self)}
-    
     private var selectedMovieID: Int
     private let movieDataService = MovieDataService()
     private  var movieDetails: MovieDetails?
@@ -30,8 +28,7 @@ class MovieDetailViewController: UIViewController {
         
         super.init(nibName: nil, bundle: nil)
     }
-    
-//    what does this line mean?
+
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

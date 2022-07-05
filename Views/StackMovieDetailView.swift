@@ -5,7 +5,6 @@
 //  Created by Diana Chizhik on 01/07/2022.
 //
 
-import Foundation
 import UIKit
 
 class StackMovieDetailView: UIView {
@@ -79,11 +78,11 @@ class StackMovieDetailView: UIView {
     }()
     
     private(set) lazy var collectionViewFlowLayout: UICollectionViewFlowLayout = {
-        let layout = LeftAlighedCollectionViewFlowLayout()
+        let layout = LeftAlignedCollectionViewFlowLayout()
         layout.minimumInteritemSpacing = 4
         layout.minimumLineSpacing = 4
         layout.sectionInset = UIEdgeInsets(top: 4, left: 0, bottom: 0, right: 0)
-//       adjusted
+//       consider this
         layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
         return layout
     }()

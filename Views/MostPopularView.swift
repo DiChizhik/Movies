@@ -5,8 +5,11 @@
 //  Created by Diana Chizhik on 04/07/2022.
 //
 
-import Foundation
 import UIKit
+
+protocol MostPopularViewDelegate: AnyObject {
+    func seeMoreTapped()
+}
 
 class MostPopularView: UIView {
     private(set) lazy var collectionViewFlowLayout: UICollectionViewFlowLayout = {
@@ -14,6 +17,8 @@ class MostPopularView: UIView {
         layout.scrollDirection = .horizontal
         layout.minimumInteritemSpacing = 32
         layout.minimumLineSpacing = 30
+// Can I somehow define it here or doing that in separate methods in the viewController is the only way?
+        
 //        layout.sectionInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
 //        var itemSize: CGSize {
 //            let height = collectionView.bounds.size.height
@@ -73,7 +78,7 @@ class MostPopularView: UIView {
     
     private(set) lazy var seeMoreButton: UIButton = {
         let button = UIButton(type: .system)
-//        button.addTarget(self, action: #selector(seeMoreTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(seeMoreTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("See more", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
@@ -81,6 +86,8 @@ class MostPopularView: UIView {
         button.alpha = 0
         return button
     }()
+    
+    weak var delegate:MostPopularViewDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -128,6 +135,10 @@ class MostPopularView: UIView {
             seeMoreButton.topAnchor.constraint(equalTo: movieDescription.bottomAnchor, constant: 8),
             seeMoreButton.centerXAnchor.constraint(equalTo: name.centerXAnchor)
         ])
+    }
+    
+    @objc private func seeMoreTapped(_ sender: UIButton) {
+        delegate?.seeMoreTapped()
     }
 }
 
