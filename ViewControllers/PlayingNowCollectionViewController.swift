@@ -13,19 +13,39 @@ class PlayingNowCollectionViewController: UICollectionViewController {
     
     var selectedItemId: Int?
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func loadView() {
+        super.loadView()
         
         setupUI()
-        
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
         collectionView.register(PlayingNowCollectionViewCell.self, forCellWithReuseIdentifier: PlayingNowCollectionViewCell.reuseIdentifier)
 
+        loadMovieData()
+    }
+    
+    private func setupUI() {
+        collectionView.backgroundColor = UIColor(named: "backgroundColor")
+        
+        navigationItem.title = "Playing Now"
+        
+        navigationController?.navigationBar.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white, .font: UIFont.systemFont(ofSize: 20, weight: .heavy)]
+        
+        navigationController?.navigationBar.backgroundColor = UIColor(named: "backgroundColor")
+        navigationController?.navigationBar.barTintColor = UIColor(named: "backgroundColor")
+    }
+    
+    private func loadMovieData() {
         movieDataService.getPlayingNowMoviesList { [weak self] result in
             guard let self = self else { return }
             
             switch result {
             case .success(let moviesList):
-                self.movies = moviesList
+                self.movies.append(contentsOf: moviesList)
             case .failure(_):
                 break
             }
@@ -36,24 +56,13 @@ class PlayingNowCollectionViewController: UICollectionViewController {
         }
     }
     
-    private func setupUI() {
-        collectionView.backgroundColor = UIColor(named: "backgroundColor")
-        
-        navigationItem.title = "Playing Now"
-//        navigationController?.navigationBar.prefersLargeTitles = true
-        
-        navigationController?.navigationBar.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white, .font: UIFont.systemFont(ofSize: 20, weight: .heavy)]
-        
-        navigationController?.navigationBar.backgroundColor = UIColor(named: "backgroundColor")
-        navigationController?.navigationBar.barTintColor = UIColor(named: "backgroundColor")
-    }
-    
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         collectionView.collectionViewLayout.invalidateLayout()
     }
+}
 
+extension PlayingNowCollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return movies.count
     }
@@ -71,14 +80,23 @@ class PlayingNowCollectionViewController: UICollectionViewController {
         
         return cell
     }
-    
+}
+
+extension PlayingNowCollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let id = movies[indexPath.item].id
+        let selectedMovieID = movies[indexPath.item].id
+        let detailViewController = MovieDetailViewController(selectedMovieID: selectedMovieID)
         
-        let detailViewController = DetailViewController()
         let detailViewNavigationController = UINavigationController(rootViewController: detailViewController)
-        detailViewController.selectedMovieId = id
         present(detailViewNavigationController, animated: true)
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        let movieInViewIndex = indexPath.item
+        let lastMovieIndex = movies.count - 1
+        if movieInViewIndex == lastMovieIndex {
+            loadMovieData()
+        }
     }
 }
 

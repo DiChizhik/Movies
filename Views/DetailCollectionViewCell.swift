@@ -5,7 +5,6 @@
 //  Created by Diana Chizhik on 23/06/2022.
 //
 
-import Foundation
 import UIKit
 
 class DetailCollectionViewCell: UICollectionViewCell {
