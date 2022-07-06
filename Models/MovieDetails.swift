@@ -12,10 +12,9 @@ struct MovieDetails: Codable {
     let posterPath: URL?
     let spokenLanguages: [Language]
     let genres: [Genre]
-//    Date type
     let releaseDate: String
     let runtime: String?
-    let overview: String
+    let overview: String?
     
     enum CodingKeys: String, CodingKey {
         case title
@@ -41,11 +40,15 @@ struct MovieDetails: Codable {
         spokenLanguages = try values.decode([Language].self, forKey: .spokenLanguages)
         genres = try values.decode([Genre].self, forKey: .genres)
         
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .medium
-        dateFormatter.timeStyle = .none
-        dateFormatter.locale = Locale(identifier: "en_US")
-        releaseDate = dateFormatter.string(from: try values.decode(Date.self, forKey: .releaseDate))
+        if let decodedDate = try? values.decode(Date.self, forKey: .releaseDate) {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateStyle = .medium
+            dateFormatter.timeStyle = .none
+            dateFormatter.locale = Locale(identifier: "en_US")
+            releaseDate = dateFormatter.string(from: decodedDate)
+        } else {
+            releaseDate = "-"
+        }
         
         if let runtimeInt = try values.decodeIfPresent(Int.self, forKey: .runtime) {
             runtime = "\(Int(runtimeInt / 60))h \(runtimeInt % 60)min"
@@ -53,7 +56,7 @@ struct MovieDetails: Codable {
             runtime = nil
         }
         
-        overview = try values.decode(String.self, forKey: .overview)
+        overview = try values.decodeIfPresent(String.self, forKey: .overview)
     }
 }
 
