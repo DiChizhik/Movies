@@ -23,7 +23,7 @@ class MostPopularView: UIView {
     private(set) lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewFlowLayout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.register(MostPopularCollectionViewCell.self, forCellWithReuseIdentifier: MostPopularCollectionViewCell.reuseIndentifier)
+        collectionView.register(MostPopularCollectionViewCell.self)
         collectionView.backgroundColor = UIColor(named: "backgroundColor")
         return collectionView
     }()

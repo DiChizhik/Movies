@@ -22,8 +22,7 @@ class PlayingNowCollectionViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        collectionView.register(PlayingNowCollectionViewCell.self, forCellWithReuseIdentifier: PlayingNowCollectionViewCell.reuseIdentifier)
-
+        collectionView.register(PlayingNowCollectionViewCell.self)
         loadMovieData()
     }
     
@@ -68,14 +67,13 @@ extension PlayingNowCollectionViewController {
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PlayingNowCollectionViewCell.reuseIdentifier, for: indexPath) as? PlayingNowCollectionViewCell else { fatalError() }
+        let cell = collectionView.dequeue(PlayingNowCollectionViewCell.self, for: indexPath)
         
         let movie = movies[indexPath.item]
         let movieName = movie.title
         let reviewsScore = movie.voteAverage
         let popularity = movie.popularity
         let path = movie.posterPath
-        
         cell.configure(imageURL: path, name: movieName, reviewsScore: reviewsScore, popularity: popularity)
         
         return cell
