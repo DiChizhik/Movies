@@ -30,6 +30,7 @@
 		0277AE1A2861DF9100054D50 /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0277AE192861DF9100054D50 /* LaunchViewController.swift */; };
 		0277AE5528646E0800054D50 /* DetailCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0277AE5428646E0800054D50 /* DetailCollectionViewCell.swift */; };
 		02F514E5286B948F006D7843 /* SelfSizingCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F514E4286B948F006D7843 /* SelfSizingCollectionView.swift */; };
+		2D1C9A392875D3CE00959636 /* Reusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1C9A382875D3CE00959636 /* Reusable.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -57,6 +58,7 @@
 		0277AE192861DF9100054D50 /* LaunchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
 		0277AE5428646E0800054D50 /* DetailCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCollectionViewCell.swift; sourceTree = "<group>"; };
 		02F514E4286B948F006D7843 /* SelfSizingCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfSizingCollectionView.swift; sourceTree = "<group>"; };
+		2D1C9A382875D3CE00959636 /* Reusable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reusable.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,6 +135,7 @@
 		02334D00283E185E0099C92B = {
 			isa = PBXGroup;
 			children = (
+				2D1C9A372875D3BF00959636 /* Protocols */,
 				0277AE162861C75500054D50 /* Extensions */,
 				02271138285A7D6C0049BECA /* Application */,
 				02271137285A7AAD0049BECA /* Storyboards */,
@@ -171,6 +174,14 @@
 				023463AF286F24C2001A703C /* UIStackView.swift */,
 			);
 			name = Extensions;
+			sourceTree = "<group>";
+		};
+		2D1C9A372875D3BF00959636 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				2D1C9A382875D3CE00959636 /* Reusable.swift */,
+			);
+			path = Protocols;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -254,6 +265,7 @@
 				023463B0286F24C2001A703C /* UIStackView.swift in Sources */,
 				02334D23283E26980099C92B /* MostPopularViewController.swift in Sources */,
 				02334D0D283E185E0099C92B /* AppDelegate.swift in Sources */,
+				2D1C9A392875D3CE00959636 /* Reusable.swift in Sources */,
 				023463B2286F282A001A703C /* LeftAlignedCollectionViewFlowLayout.swift in Sources */,
 				023463AE286F1F76001A703C /* StackMovieDetailView.swift in Sources */,
 				026D0D13284E646F00B5BF8B /* MovieDataService.swift in Sources */,
