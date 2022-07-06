@@ -9,6 +9,11 @@ import UIKit
 import Kingfisher
 
 class MostPopularViewController: UIViewController, MostPopularViewDelegate {
+    private enum Fading: Int {
+        case fadeIn = 1
+        case fadeOut = 0
+    }
+    
     var movies = [Movie]()
     let movieDataService = MovieDataService()
     var itemInViewIndex: Int = 0
@@ -20,11 +25,6 @@ class MostPopularViewController: UIViewController, MostPopularViewDelegate {
         view.delegate = self
         return view
     }()
-    
-    private enum Fading: Int {
-        case fadeIn = 1
-        case fadeOut = 0
-    }
     
     override func loadView() {
         super.loadView()
@@ -41,11 +41,10 @@ class MostPopularViewController: UIViewController, MostPopularViewDelegate {
         
         loadMovieData()
         
-//      I did it in an attemt to make loadMovieData method reusable in willDisplayCell method. I'm not sure it's right, though.
         DispatchQueue.main.async {
             self.contentView.collectionView.scrollToItem(at: IndexPath(item: self.itemInViewIndex, section: 0), at: UICollectionView.ScrollPosition.centeredHorizontally, animated: false)
             self.configureWithData(index: self.itemInViewIndex)
-            self.fade(Fading.fadeIn)
+            self.fade(.fadeIn)
         }
     }
 
@@ -91,7 +90,7 @@ class MostPopularViewController: UIViewController, MostPopularViewDelegate {
         }
     }
     
-    @objc internal func seeMoreTapped() {
+    func seeMoreTapped() {
         let selectedMovieId = movies[itemInViewIndex].id
         
         let detailViewController = MovieDetailViewController(selectedMovieID: selectedMovieId)
@@ -132,7 +131,7 @@ extension MostPopularViewController: UICollectionViewDataSource {
 
 extension MostPopularViewController: UICollectionViewDelegate {
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        fade(Fading.fadeOut)
+        fade(.fadeOut)
     }
 
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
@@ -153,7 +152,7 @@ extension MostPopularViewController: UICollectionViewDelegate {
         contentView.collectionView.scrollToItem(at: IndexPath(item: pageInt, section: 0), at: .centeredHorizontally, animated: true)
         configureWithData(index: pageInt)
         
-        fade(Fading.fadeIn)
+        fade(.fadeIn)
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {

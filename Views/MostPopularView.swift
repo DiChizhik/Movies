@@ -17,15 +17,6 @@ class MostPopularView: UIView {
         layout.scrollDirection = .horizontal
         layout.minimumInteritemSpacing = 32
         layout.minimumLineSpacing = 30
-// Can I somehow define it here or doing that in separate methods in the viewController is the only way?
-        
-//        layout.sectionInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-//        var itemSize: CGSize {
-//            let height = collectionView.bounds.size.height
-//            let width = height * 0.7
-//            return CGSize(width: width, height: height)
-//        }
-//        layout.itemSize = itemSize
         return layout
     }()
     
