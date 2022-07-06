@@ -14,9 +14,6 @@ class MovieDetailViewController: UIViewController {
     private  var movieDetails: MovieDetails?
     private var languageAndGenreData = [CollectionViewSection]()
     
-    var languagesTest = ["German", "Dutch", "English", "Chinese", "Icelandic", "Russian", "Spanish", "Italian", "Japanese", ]
-    var genresTest = ["thriller", "action", "science finction", "romcom", "adventure"]
-    
     private lazy var contentView: StackMovieDetailView = {
         let view = StackMovieDetailView()
         view.collectionView.dataSource = self
