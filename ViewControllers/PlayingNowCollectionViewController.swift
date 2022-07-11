@@ -32,10 +32,10 @@ class PlayingNowCollectionViewController: UICollectionViewController {
         
         navigationItem.title = "Playing Now"
         
-        navigationController?.navigationBar.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+//        navigationController?.navigationBar.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white, .font: UIFont.systemFont(ofSize: 20, weight: .heavy)]
         
-        navigationController?.navigationBar.backgroundColor = UIColor(named: "backgroundColor")
+//        navigationController?.navigationBar.backgroundColor = UIColor(named: "backgroundColor")
         navigationController?.navigationBar.barTintColor = UIColor(named: "backgroundColor")
     }
     
