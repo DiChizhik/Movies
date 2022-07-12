@@ -90,7 +90,7 @@ class StackMovieDetailView: UIView {
     private(set) lazy var collectionView: SelfSizingCollectionView = {
         let collectionView = SelfSizingCollectionView(frame: .zero, collectionViewLayout: collectionViewFlowLayout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.register(DetailCollectionViewCell.self, forCellWithReuseIdentifier: DetailCollectionViewCell.reuseIdentifier)
+        collectionView.register(DetailCollectionViewCell.self)
         collectionView.backgroundColor = UIColor(named: "backgroundColor")
         collectionView.isScrollEnabled = false
         return collectionView

@@ -7,9 +7,7 @@
 
 import UIKit
 
-class SearchTableViewCell: UITableViewCell {
-    static var reuseIdentifier: String{NSStringFromClass(self)}
-    
+class SearchTableViewCell: UITableViewCell, Reusable {
     private lazy var posterImageView: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false

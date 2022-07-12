@@ -8,9 +8,7 @@
 import UIKit
 import Kingfisher
 
-class MostPopularCollectionViewCell: UICollectionViewCell {
-    static let reuseIndentifier = "MostPopularCollectionViewCell"
-    
+class MostPopularCollectionViewCell: UICollectionViewCell, Reusable {
     private var imageView: UIImageView = {
        let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false

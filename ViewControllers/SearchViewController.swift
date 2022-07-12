@@ -32,7 +32,7 @@ class SearchViewController: UIViewController {
        let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.backgroundColor = UIColor(named: "backgroundColor")
-        tableView.register(SearchTableViewCell.self, forCellReuseIdentifier: SearchTableViewCell.reuseIdentifier)
+        tableView.register(SearchTableViewCell.self)
         tableView.rowHeight = 124
         tableView.dataSource = self
         tableView.delegate = self
@@ -78,7 +78,7 @@ extension SearchViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchTableViewCell.reuseIdentifier, for: indexPath) as? SearchTableViewCell else { fatalError() }
+        let cell = tableView.dequeue(SearchTableViewCell.self, for: indexPath)
         
         let movie = searchResults[indexPath.row]
         cell.configure(imageURL: movie.posterPath, title: movie.title, reviewsScore: movie.voteAverage, popularity: movie.popularity)

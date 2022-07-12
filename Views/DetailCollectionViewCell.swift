@@ -7,9 +7,7 @@
 
 import UIKit
 
-class DetailCollectionViewCell: UICollectionViewCell {
-    static var reuseIdentifier: String { NSStringFromClass(self) }
-    
+class DetailCollectionViewCell: UICollectionViewCell, Reusable {
     private lazy var label: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
