@@ -22,7 +22,7 @@ class PlayingNowCollectionViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        collectionView.register(PlayingNowCollectionViewCell.self, forCellWithReuseIdentifier: PlayingNowCollectionViewCell.reuseIdentifier)
+        collectionView.register(PlayingNowCollectionViewCell.self)
 
         loadMovieData()
     }
@@ -31,11 +31,8 @@ class PlayingNowCollectionViewController: UICollectionViewController {
         collectionView.backgroundColor = UIColor(named: "backgroundColor")
         
         navigationItem.title = "Playing Now"
-        
-        navigationController?.navigationBar.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white, .font: UIFont.systemFont(ofSize: 20, weight: .heavy)]
-        
-        navigationController?.navigationBar.backgroundColor = UIColor(named: "backgroundColor")
         navigationController?.navigationBar.barTintColor = UIColor(named: "backgroundColor")
     }
     
@@ -68,7 +65,7 @@ extension PlayingNowCollectionViewController {
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PlayingNowCollectionViewCell.reuseIdentifier, for: indexPath) as? PlayingNowCollectionViewCell else { fatalError() }
+        let cell = collectionView.dequeue(PlayingNowCollectionViewCell.self, for: indexPath)
         
         let movie = movies[indexPath.item]
         let movieName = movie.title

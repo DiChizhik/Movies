@@ -8,9 +8,7 @@
 import UIKit
 import Kingfisher
 
-class PlayingNowCollectionViewCell: UICollectionViewCell {
-    static let reuseIdentifier = "PlayingNowCollectionViewCell"
-    
+class PlayingNowCollectionViewCell: UICollectionViewCell, Reusable {
     private var imageView: UIImageView = {
        let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
