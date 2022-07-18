@@ -10,7 +10,6 @@ import UIKit
 class SearchViewController: UIViewController, SearchViewDelegate {
     let movieDataService = MovieDataService()
     private var searchResults = [Movie]()
-    private var isSearching = false
     
     private lazy var contentView: SearchView = {
         let view = SearchView()
@@ -40,8 +39,12 @@ class SearchViewController: UIViewController, SearchViewDelegate {
             switch result {
             case .success(let results):
                 self.searchResults = results
-            case .failure(_):
-                break
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    let vc = ErrorViewController(error: error)
+                    vc.modalPresentationStyle = .popover
+                    self.present(vc, animated: true)
+                }
             }
 
             DispatchQueue.main.async {

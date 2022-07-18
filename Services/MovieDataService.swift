@@ -38,7 +38,16 @@ class MovieDataService: MovieDataServiceProtocol {
     
     func getPlayingNowMoviesList(completion: @escaping (Result<[Movie], MovieServiceError>)-> Void) {
         guard isPlayingNowRequestCompleted else { return }
-        guard let url = URL(string: "https://api.themoviedb.org/3/movie/popular?api_key=b2b14caf40262a9c19a366b15e4e3537&language=en-US&page=\(playingNowPage)") else { return }
+        
+        var urlComponents = URLComponents()
+        urlComponents.scheme = "https"
+        urlComponents.host = "api.themoviedb.org"
+        urlComponents.path = "/3/movie/now_playing"
+        urlComponents.queryItems = [
+            URLQueryItem(name: "api_key", value: "b2b14caf40262a9c19a366b15e4e3537"),
+            URLQueryItem(name: "page", value: String(playingNowPage))
+        ]
+        guard let url = urlComponents.url else { return }
         
         isPlayingNowRequestCompleted = false
         let request = URLRequest(url: url)
@@ -69,7 +78,15 @@ class MovieDataService: MovieDataServiceProtocol {
     
     func getMostPopularMoviesList(completion: @escaping (Result<[Movie], MovieServiceError>)-> Void) {
         guard isMostPopularRequestCompleted else { return }
-        guard let url = URL(string: "https://api.themoviedb.org/3/movie/now_playing?api_key=94806a6f0ae52fc236885e625fc54d47&language=en-US&page=\(mostPopularPage)") else { return }
+        var urlComponents = URLComponents()
+        urlComponents.scheme = "https"
+        urlComponents.host = "api.themoviedb.org"
+        urlComponents.path = "/3/movie/popular"
+        urlComponents.queryItems = [
+            URLQueryItem(name: "api_key", value: "b2b14caf40262a9c19a366b15e4e3537"),
+            URLQueryItem(name: "page", value: String(mostPopularPage))
+        ]
+        guard let url = urlComponents.url else { return }
 
         isMostPopularRequestCompleted = false
         let request = URLRequest(url: url)
@@ -97,16 +114,17 @@ class MovieDataService: MovieDataServiceProtocol {
         }.resume()
     }
     
-    private func getMovieDetailsURL(movieId: Int) -> URL? {
-        if let url = URL(string: "https://api.themoviedb.org/3/movie/\(movieId)?api_key=b2b14caf40262a9c19a366b15e4e3537&language=en-US") {
-            return url
-        }
-        return nil
-    }
-    
     func getMovieDetails(movieId: Int, completion: @escaping (Result<MovieDetails, MovieServiceError>)-> Void) {
-        guard let url = getMovieDetailsURL(movieId: movieId) else { return }
 
+        var urlComponents = URLComponents()
+        urlComponents.scheme = "https"
+        urlComponents.host = "api.themoviedb.org"
+        urlComponents.path = "/3/movie/\(movieId)"
+        urlComponents.queryItems = [
+            URLQueryItem(name: "api_key", value: "b2b14caf40262a9c19a366b15e4e3537")
+        ]
+        guard let url = urlComponents.url else { return }
+        
         let request = URLRequest(url: url)
         URLSession.shared.dataTask(with: request) {(data, response, error) in
             if let _ = error {

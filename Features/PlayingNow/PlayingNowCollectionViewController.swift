@@ -43,8 +43,12 @@ class PlayingNowCollectionViewController: UICollectionViewController {
             switch result {
             case .success(let moviesList):
                 self.movies.append(contentsOf: moviesList)
-            case .failure(_):
-                break
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    let vc = ErrorViewController(error: error)
+                    vc.modalPresentationStyle = .popover
+                    self.present(vc, animated: true)
+                }
             }
             
             DispatchQueue.main.async {

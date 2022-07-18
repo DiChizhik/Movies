@@ -41,7 +41,10 @@ class MostPopularViewController: UIViewController, MostPopularViewDelegate {
         
         loadMovieData()
         
+//        The app crashed if there were no movies(Error: Failed to load from server), so I added this check to prevent the crash.
         DispatchQueue.main.async {
+            guard !self.movies.isEmpty else { return }
+            
             self.contentView.collectionView.scrollToItem(at: IndexPath(item: self.itemInViewIndex, section: 0), at: UICollectionView.ScrollPosition.centeredHorizontally, animated: false)
             self.configureWithData(index: self.itemInViewIndex)
             self.fade(.fadeIn)
@@ -55,8 +58,12 @@ class MostPopularViewController: UIViewController, MostPopularViewDelegate {
             switch result {
             case .success(let moviesList):
                 self.movies.append(contentsOf: moviesList)
-            case .failure(_):
-                break
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    let vc = ErrorViewController(error: error)
+                    vc.modalPresentationStyle = .popover
+                    self.present(vc, animated: true)
+                }
             }
             
             DispatchQueue.main.async {

@@ -61,7 +61,9 @@ class MovieDetailViewController: UIViewController {
                 }
             case .failure(let error):
                 DispatchQueue.main.async {
-                    self.showError(message: error.localizedDescription)
+                    let vc = ErrorViewController(error: error)
+                    vc.modalPresentationStyle = .popover
+                    self.present(vc, animated: true)
                 }
             }
         }
