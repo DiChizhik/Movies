@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol ErrorViewDelegate: AnyObject {
+    func dismissController()
+}
+
 class ErrorView: UIView {
     lazy var imageView: UIImageView = {
         let imageView = UIImageView()
@@ -33,6 +37,7 @@ class ErrorView: UIView {
         ]
         let title = NSAttributedString(string: "Dismiss", attributes: attributes)
         button.setAttributedTitle(title, for: .normal)
+        button.addTarget(self, action: #selector(dismissController), for: .touchUpInside)
         return button
     }()
     
@@ -57,6 +62,8 @@ class ErrorView: UIView {
         view.alignment = .trailing
         return view
     }()
+    
+    weak var delegate: ErrorViewDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -92,5 +99,8 @@ class ErrorView: UIView {
         buttonStackView.addArrangedSubview(dismissButton)
     }
 
+    @objc private func dismissController() {
+        delegate?.dismissController()
+    }
 
 }

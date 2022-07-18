@@ -8,11 +8,12 @@
 import UIKit
 
 
-class ErrorViewController: UIViewController {
+class ErrorViewController: UIViewController, ErrorViewDelegate {
     private var error: MovieServiceError
     
     lazy var contentView: ErrorView = {
         let view = ErrorView()
+        view.delegate = self
         return view
     }()
     
@@ -45,11 +46,9 @@ class ErrorViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        contentView.dismissButton.addTarget(self, action: #selector(dismissController), for: .touchUpInside)
     }
     
-    @objc private func dismissController() {
+    @objc func dismissController() {
         dismiss(animated: true)
     }
 
