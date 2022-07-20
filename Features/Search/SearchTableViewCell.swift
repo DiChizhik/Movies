@@ -20,27 +20,14 @@ class SearchTableViewCell: UITableViewCell, Reusable {
         let name = UILabel()
          name.font = UIFont.systemFont(ofSize: 15, weight: .heavy)
          name.textAlignment = .left
-         name.textColor = UIColor(named: "titleColor")
+        name.textColor = .whiteF5
          name.numberOfLines = 1
          return name
     }()
     
-    private lazy var reviewsScore: UILabel = {
-        let reviewsScore = UILabel()
-         reviewsScore.font = UIFont.systemFont(ofSize: 15)
-         reviewsScore.textAlignment = .right
-         reviewsScore.textColor = UIColor(named: "titleColor")
-         reviewsScore.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-         reviewsScore.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
-         return reviewsScore
-     }()
-    
-    private lazy var reviewsScoreIndicator: UIImageView = {
-        let reviewsScoreIndicator = UIImageView()
-        reviewsScoreIndicator.translatesAutoresizingMaskIntoConstraints = false
-        reviewsScoreIndicator.heightAnchor.constraint(equalToConstant: 15).isActive = true
-        reviewsScoreIndicator.widthAnchor.constraint(equalTo: reviewsScoreIndicator.heightAnchor, multiplier: 1.13).isActive = true
-        return reviewsScoreIndicator
+    private lazy var reviewScoreStackView: ReviewScoreStackView = {
+        let view = ReviewScoreStackView()
+        return view
     }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -56,22 +43,16 @@ class SearchTableViewCell: UITableViewCell, Reusable {
     }
     
     private func setupUI() {
-        contentView.backgroundColor = UIColor(named: "backgroundColor")
+        contentView.backgroundColor = .backgroundColor
         
-        let reviewStack = UIStackView(arrangedSubviews: [reviewsScoreIndicator, reviewsScore])
-        reviewStack.axis = .horizontal
-        reviewStack.spacing = 8
-        
-        let textStack = UIStackView(arrangedSubviews: [titleLabel, reviewStack])
+        let textStack = UIStackView(arrangedSubviews: [titleLabel, reviewScoreStackView])
         textStack.translatesAutoresizingMaskIntoConstraints = false
         textStack.axis = .vertical
         textStack.spacing = 8
         textStack.alignment = .leading
         
-        
         contentView.addSubview(posterImageView)
         contentView.addSubview(textStack)
-        
         
         NSLayoutConstraint.activate([
             posterImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
@@ -91,9 +72,7 @@ class SearchTableViewCell: UITableViewCell, Reusable {
         }
         
         titleLabel.text = title
-        self.reviewsScore.text = "\(reviewsScore)%"
-        
-        reviewsScoreIndicator.image = popularity == .high ? UIImage(named: "highReviewsScore") : UIImage(named: "lowReviewsScore")
+        reviewScoreStackView.setValue(reviewsScore)
     }
 
 }

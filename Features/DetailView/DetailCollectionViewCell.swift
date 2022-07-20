@@ -13,8 +13,7 @@ class DetailCollectionViewCell: UICollectionViewCell, Reusable {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 15)
         label.textAlignment = .center
-        label.text = "Gibberish"
-        label.textColor = UIColor(named: "descriptionColor")
+        label.textColor = .pureWhiteFF
         return label
     }()
     

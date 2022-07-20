@@ -18,7 +18,7 @@ class LaunchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = UIColor(named: "backgroundColor")
+        view.backgroundColor = .backgroundColor
         view.addSubview(logoImageView)
     }
     
@@ -80,11 +80,17 @@ class LaunchViewController: UIViewController {
         searchTabNavigationController.tabBarItem.image = UIImage(systemName: "magnifyingglass.circle")
         searchTabNavigationController.tabBarItem.title = "Search"
         
+        let watchListViewController = WatchListViewController()
+        let watchListNavigationController = UINavigationController(rootViewController: watchListViewController)
+        watchListNavigationController.tabBarItem.image = UIImage(named: "ticket")
+        watchListNavigationController.tabBarItem.title = "Watchlist"
+        
         setupTabBar()
 
         tabBarController.viewControllers = [
             playingNowTabNavigationController,
             mostPopularTabNavigationController,
+            watchListNavigationController,
             searchTabNavigationController
         ]
         
@@ -93,11 +99,11 @@ class LaunchViewController: UIViewController {
     }
     
     private func setupTabBar() {
-        UITabBarItem.appearance().setTitleTextAttributes([.foregroundColor: UIColor(named: "nonSelectedTab")!], for: .normal)
-        UITabBarItem.appearance().setTitleTextAttributes([.foregroundColor : UIColor(named: "selectedTab")!], for: .selected)
-        UITabBar.appearance().tintColor = UIColor(named: "selectedTab")
-        UITabBar.appearance().unselectedItemTintColor = UIColor(named: "nonSelectedTab")
-        UITabBar.appearance().barTintColor = UIColor(named: "backgroundColor")
+        UITabBarItem.appearance().setTitleTextAttributes([.foregroundColor: UIColor.lightBlue61], for: .normal)
+        UITabBarItem.appearance().setTitleTextAttributes([.foregroundColor : UIColor.whiteF5], for: .selected)
+        UITabBar.appearance().tintColor = UIColor.whiteF5
+        UITabBar.appearance().unselectedItemTintColor = UIColor.lightBlue61
+        UITabBar.appearance().barTintColor = .backgroundColor
     }
 
 }

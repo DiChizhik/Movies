@@ -42,6 +42,4 @@ class MostPopularCollectionViewCell: UICollectionViewCell, Reusable {
         guard let url = imageURL else { return }
         imageView.kf.setImage(with: url)
     }
-
-
 }
