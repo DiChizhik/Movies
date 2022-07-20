@@ -40,7 +40,7 @@ class MovieDetailViewController: UIViewController {
         exitButton.tintColor = UIColor.white
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: exitButton)
 
-        navigationController?.navigationBar.barTintColor = UIColor(named: "backgroundColor")
+        navigationController?.navigationBar.barTintColor = .backgroundColor
     }
     
     override func viewDidLoad() {
@@ -76,6 +76,7 @@ class MovieDetailViewController: UIViewController {
             contentView.imageView.kf.setImage(with: path)
         }
         
+        contentView.reviewScoreStackView.setValue(movieDetails.voteAverage)
         contentView.releaseDateLabel.text = movieDetails.releaseDate
         contentView.durationLabel.text = movieDetails.runtime
         contentView.movieDescriptionLabel.text = movieDetails.overview
@@ -122,9 +123,9 @@ extension MovieDetailViewController: UICollectionViewDataSource {
         
         switch languageAndGenreData[indexPath.section].identifier {
         case .languages:
-            cell.configure(title: item, backgroundColor: UIColor(named: "languageBackgroundColor")!, borderColor: UIColor(named: "languageBorderColor")!)
+            cell.configure(title: item, backgroundColor: .blue2A, borderColor: .lightBlue61)
         case .genres:
-            cell.configure(title: item, backgroundColor: UIColor(named: "genreBackgroundColor")!, borderColor: UIColor(named: "genreBorderColor")!)
+            cell.configure(title: item, backgroundColor: .lightBlue61, borderColor: .lightBlue61)
         }
         
         return cell

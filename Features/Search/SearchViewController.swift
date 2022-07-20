@@ -14,8 +14,8 @@ class SearchViewController: UIViewController, SearchViewDelegate {
     private lazy var contentView: SearchView = {
         let view = SearchView()
         view.delegate = self
-        view.tableView.dataSource = self
-        view.tableView.delegate = self
+        view.tableViewDelegate = self
+        view.tableViewDataSource = self
         return view
     }()
     
@@ -25,11 +25,11 @@ class SearchViewController: UIViewController, SearchViewDelegate {
         self.view = contentView
         
         title = "Search Movies"
-        navigationController?.navigationBar.barTintColor = UIColor(named: "backgroundColor")
+        navigationController?.navigationBar.barTintColor = .backgroundColor
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white, .font: UIFont.systemFont(ofSize: 20, weight: .heavy)]
         
         navigationItem.searchController = contentView.searchController
-        contentView.searchController.searchBar.searchTextField.textColor = UIColor(named: "titleColor")!
+        contentView.searchController.searchBar.searchTextField.textColor = .whiteF5
     }
     
     func startSearching(_ searchView: SearchView, for text: String) {
@@ -52,6 +52,7 @@ class SearchViewController: UIViewController, SearchViewDelegate {
     }
 }
 
+//MARK: - UITableViewDataSource
 extension SearchViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         searchResults.count
@@ -67,6 +68,7 @@ extension SearchViewController: UITableViewDataSource {
     }
 }
 
+//MARK: - UITableViewDelegate
 extension SearchViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedMovieID = searchResults[indexPath.row].id

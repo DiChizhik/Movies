@@ -15,6 +15,7 @@ struct MovieDetails: Codable {
     let releaseDate: String
     let runtime: String?
     let overview: String?
+    let voteAverage: Int
     
     enum CodingKeys: String, CodingKey {
         case title
@@ -24,6 +25,7 @@ struct MovieDetails: Codable {
         case releaseDate = "release_date"
         case runtime
         case overview
+        case voteAverage = "vote_average"
     }
     
     init(from decoder: Decoder) throws {
@@ -62,6 +64,8 @@ struct MovieDetails: Codable {
         }
         
         overview = try values.decodeIfPresent(String.self, forKey: .overview)
+        
+        voteAverage = Int(try values.decode(Double.self, forKey: .voteAverage) * 10)
     }
 }
 

@@ -1,5 +1,5 @@
 //
-//  MostPopularCollectionViewController.swift
+//  MostPopularCollectionViewControllerswift
 //  Movies
 //
 //  Created by Diana Chizhik on 25/05/2022.
@@ -20,8 +20,8 @@ class MostPopularViewController: UIViewController, MostPopularViewDelegate {
     
     private lazy var contentView: MostPopularView = {
         let view = MostPopularView()
-        view.collectionView.dataSource = self
-        view.collectionView.delegate = self
+        view.collectionViewDelegate = self
+        view.collectionViewDataSource = self
         view.delegate = self
         return view
     }()
@@ -32,8 +32,11 @@ class MostPopularViewController: UIViewController, MostPopularViewDelegate {
         self.view = contentView
         
         title = "Most Popular"
-        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white, .font: UIFont.systemFont(ofSize: 20, weight: .heavy)]
-        navigationController?.navigationBar.backgroundColor = UIColor(named: "backgroundColor")
+        navigationController?.navigationBar.titleTextAttributes = [
+            .foregroundColor: UIColor.white,
+            .font: UIFont.systemFont(ofSize: 20, weight: .heavy)
+        ]
+        navigationController?.navigationBar.backgroundColor = .backgroundColor
     }
     
     override func viewDidLoad() {
@@ -75,25 +78,10 @@ class MostPopularViewController: UIViewController, MostPopularViewDelegate {
         
         if let movie = movie {
             let movieName = movie.title
-            let reviewsScore = "\(movie.voteAverage)%"
+            let reviewsScore = movie.voteAverage
             let movieDescription = movie.overview
-        
-            contentView.name.text = movieName
-            contentView.reviewsScore.text = reviewsScore
-            contentView.movieDescription.text = movieDescription
-        
-            updateReviewScoreIndicator(reviewsScore: reviewsScore)
-        }
-    }
-    
-    private func updateReviewScoreIndicator(reviewsScore: String) {
-        let score = reviewsScore.components(separatedBy: "%")
-        if let scoreInt = Int(score[0]) {
-            if scoreInt > 50 {
-                contentView.reviewsScoreIndicator.image = UIImage(named: "highReviewsScore")
-            } else {
-                contentView.reviewsScoreIndicator.image = UIImage(named: "lowReviewsScore")
-            }
+            
+            contentView.configureWith(name: movieName, score: reviewsScore, description: movieDescription)
         }
     }
     
@@ -112,15 +100,12 @@ class MostPopularViewController: UIViewController, MostPopularViewDelegate {
                        delay: 0,
                        options: [],
                        animations: {
-            self.contentView.name.alpha = type
-            self.contentView.reviewsScore.alpha = type
-            self.contentView.reviewsScoreIndicator.alpha = type
-            self.contentView.movieDescription.alpha = type
-            self.contentView.seeMoreButton.alpha = type
+            self.contentView.changeAlpha(to: type)
                     }, completion: nil)
     }
 }
-    
+ 
+// MARK: - UICollectionViewDataSource
 extension MostPopularViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return movies.count
@@ -136,6 +121,7 @@ extension MostPopularViewController: UICollectionViewDataSource {
     }
 }
 
+// MARK: - UICollectionViewDelegate
 extension MostPopularViewController: UICollectionViewDelegate {
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         fade(.fadeOut)
@@ -171,6 +157,7 @@ extension MostPopularViewController: UICollectionViewDelegate {
     }
 }
 
+// MARK: - UICollectionViewDelegateFlowLayout
 extension MostPopularViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let height = collectionView.bounds.size.height

@@ -17,7 +17,7 @@
 		02271136285A78940049BECA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 02271135285A78940049BECA /* Main.storyboard */; };
 		02334D0D283E185E0099C92B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02334D0C283E185E0099C92B /* AppDelegate.swift */; };
 		02334D0F283E185E0099C92B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02334D0E283E185E0099C92B /* SceneDelegate.swift */; };
-		02334D16283E18600099C92B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 02334D15283E18600099C92B /* Assets.xcassets */; };
+		02334D16283E18600099C92B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 02334D15283E18600099C92B /* Images.xcassets */; };
 		02334D19283E18600099C92B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 02334D17283E18600099C92B /* LaunchScreen.storyboard */; };
 		02334D21283E228F0099C92B /* PlayingNowCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02334D20283E228F0099C92B /* PlayingNowCollectionViewController.swift */; };
 		02334D23283E26980099C92B /* MostPopularViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02334D22283E26980099C92B /* MostPopularViewController.swift */; };
@@ -35,9 +35,15 @@
 		0277AE1A2861DF9100054D50 /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0277AE192861DF9100054D50 /* LaunchViewController.swift */; };
 		0277AE5528646E0800054D50 /* DetailCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0277AE5428646E0800054D50 /* DetailCollectionViewCell.swift */; };
 		02F514E5286B948F006D7843 /* SelfSizingCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F514E4286B948F006D7843 /* SelfSizingCollectionView.swift */; };
-		DD7F7F1628854F0C0097E647 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F7F1528854F0C0097E647 /* ErrorView.swift */; };
-		DD8D6E6928927E6900A62950 /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8D6E6828927E6900A62950 /* Collection.swift */; };
-		DDB17D9D288572AD0018A240 /* ErrorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB17D9C288572AD0018A240 /* ErrorViewController.swift */; };
+		DD8D6E6E2893FD9F00A62950 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8D6E6C2893FD9F00A62950 /* ErrorView.swift */; };
+		DD8D6E6F2893FD9F00A62950 /* ErrorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8D6E6D2893FD9F00A62950 /* ErrorViewController.swift */; };
+		DD8D6E722893FDFB00A62950 /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8D6E712893FDFB00A62950 /* Collection.swift */; };
+		DD922D6D2887EA0600061FF7 /* WatchListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD922D6C2887EA0600061FF7 /* WatchListViewController.swift */; };
+		DD922D6F2887F9EA00061FF7 /* WatchlistButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD922D6E2887F9EA00061FF7 /* WatchlistButton.swift */; };
+		DD922D712887FCFE00061FF7 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD922D702887FCFE00061FF7 /* UIColor.swift */; };
+		DD922D73288800D800061FF7 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DD922D72288800D800061FF7 /* Colors.xcassets */; };
+		DD922D75288817B500061FF7 /* UIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD922D74288817B500061FF7 /* UIButton.swift */; };
+		DD922D7728881A1B00061FF7 /* ReviewScoreStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD922D7628881A1B00061FF7 /* ReviewScoreStackView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,7 +57,7 @@
 		02334D09283E185E0099C92B /* Movies.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Movies.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		02334D0C283E185E0099C92B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		02334D0E283E185E0099C92B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		02334D15283E18600099C92B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		02334D15283E18600099C92B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		02334D18283E18600099C92B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		02334D1A283E18600099C92B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		02334D20283E228F0099C92B /* PlayingNowCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayingNowCollectionViewController.swift; sourceTree = "<group>"; };
@@ -70,9 +76,15 @@
 		0277AE192861DF9100054D50 /* LaunchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
 		0277AE5428646E0800054D50 /* DetailCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCollectionViewCell.swift; sourceTree = "<group>"; };
 		02F514E4286B948F006D7843 /* SelfSizingCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfSizingCollectionView.swift; sourceTree = "<group>"; };
-		DD7F7F1528854F0C0097E647 /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
-		DD8D6E6828927E6900A62950 /* Collection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collection.swift; sourceTree = "<group>"; };
-		DDB17D9C288572AD0018A240 /* ErrorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorViewController.swift; sourceTree = "<group>"; };
+		DD8D6E6C2893FD9F00A62950 /* ErrorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
+		DD8D6E6D2893FD9F00A62950 /* ErrorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorViewController.swift; sourceTree = "<group>"; };
+		DD8D6E712893FDFB00A62950 /* Collection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Collection.swift; sourceTree = "<group>"; };
+		DD922D6C2887EA0600061FF7 /* WatchListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchListViewController.swift; sourceTree = "<group>"; };
+		DD922D6E2887F9EA00061FF7 /* WatchlistButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistButton.swift; sourceTree = "<group>"; };
+		DD922D702887FCFE00061FF7 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
+		DD922D72288800D800061FF7 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
+		DD922D74288817B500061FF7 /* UIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButton.swift; sourceTree = "<group>"; };
+		DD922D7628881A1B00061FF7 /* ReviewScoreStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewScoreStackView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,7 +107,8 @@
 				021C2BA7287DB233004F8113 /* MostPopular */,
 				021C2BAA287DB286004F8113 /* Search */,
 				021C2BA9287DB25D004F8113 /* DetailView */,
-				DD7F7F1428854E990097E647 /* ErrorViews */,
+				DD922D6B2887E97A00061FF7 /* WatchList */,
+				DD8D6E702893FDA800A62950 /* ErrorHandling */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -181,6 +194,8 @@
 				026D0D38284F9CE900B5BF8B /* PaddingLabel.swift */,
 				023463B1286F282A001A703C /* LeftAlignedCollectionViewFlowLayout.swift */,
 				02F514E4286B948F006D7843 /* SelfSizingCollectionView.swift */,
+				DD922D6E2887F9EA00061FF7 /* WatchlistButton.swift */,
+				DD922D7628881A1B00061FF7 /* ReviewScoreStackView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -188,7 +203,8 @@
 		0227113A285A7E180049BECA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				02334D15283E18600099C92B /* Assets.xcassets */,
+				02334D15283E18600099C92B /* Images.xcassets */,
+				DD922D72288800D800061FF7 /* Colors.xcassets */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -219,22 +235,32 @@
 		0277AE162861C75500054D50 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				DD8D6E712893FDFB00A62950 /* Collection.swift */,
 				0277AE172861C76700054D50 /* String.swift */,
 				023463AF286F24C2001A703C /* UIStackView.swift */,
 				021C2B74287D6AC5004F8113 /* UITableView.swift */,
 				021C2B76287D6F55004F8113 /* UICollectionView.swift */,
-				DD8D6E6828927E6900A62950 /* Collection.swift */,
+				DD922D702887FCFE00061FF7 /* UIColor.swift */,
+				DD922D74288817B500061FF7 /* UIButton.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
 		};
-		DD7F7F1428854E990097E647 /* ErrorViews */ = {
+		DD8D6E702893FDA800A62950 /* ErrorHandling */ = {
 			isa = PBXGroup;
 			children = (
-				DD7F7F1528854F0C0097E647 /* ErrorView.swift */,
-				DDB17D9C288572AD0018A240 /* ErrorViewController.swift */,
+				DD8D6E6D2893FD9F00A62950 /* ErrorViewController.swift */,
+				DD8D6E6C2893FD9F00A62950 /* ErrorView.swift */,
 			);
-			path = ErrorViews;
+			path = ErrorHandling;
+			sourceTree = "<group>";
+		};
+		DD922D6B2887E97A00061FF7 /* WatchList */ = {
+			isa = PBXGroup;
+			children = (
+				DD922D6C2887EA0600061FF7 /* WatchListViewController.swift */,
+			);
+			path = WatchList;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -302,8 +328,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				02271136285A78940049BECA /* Main.storyboard in Resources */,
+				DD922D73288800D800061FF7 /* Colors.xcassets in Resources */,
 				02334D19283E18600099C92B /* LaunchScreen.storyboard in Resources */,
-				02334D16283E18600099C92B /* Assets.xcassets in Resources */,
+				02334D16283E18600099C92B /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -314,8 +341,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DD7F7F1628854F0C0097E647 /* ErrorView.swift in Sources */,
 				0277AE1A2861DF9100054D50 /* LaunchViewController.swift in Sources */,
+				DD922D6F2887F9EA00061FF7 /* WatchlistButton.swift in Sources */,
 				023463B0286F24C2001A703C /* UIStackView.swift in Sources */,
 				02334D23283E26980099C92B /* MostPopularViewController.swift in Sources */,
 				02334D0D283E185E0099C92B /* AppDelegate.swift in Sources */,
@@ -324,22 +351,27 @@
 				026D0D13284E646F00B5BF8B /* MovieDataService.swift in Sources */,
 				021C2B75287D6AC5004F8113 /* UITableView.swift in Sources */,
 				025F059928476BD200FF070D /* MostPopularCollectionViewCell.swift in Sources */,
+				DD8D6E6F2893FD9F00A62950 /* ErrorViewController.swift in Sources */,
 				02334D21283E228F0099C92B /* PlayingNowCollectionViewController.swift in Sources */,
+				DD922D75288817B500061FF7 /* UIButton.swift in Sources */,
 				0223A3DE285A739B00E3602D /* MovieDetails.swift in Sources */,
 				021C2B77287D6F55004F8113 /* UICollectionView.swift in Sources */,
 				021C2B6D287C1B53004F8113 /* SearchViewController.swift in Sources */,
 				023463B42872CE28001A703C /* MostPopularView.swift in Sources */,
-				DDB17D9D288572AD0018A240 /* ErrorViewController.swift in Sources */,
 				0277AE5528646E0800054D50 /* DetailCollectionViewCell.swift in Sources */,
 				0277AE182861C76700054D50 /* String.swift in Sources */,
-				DD8D6E6928927E6900A62950 /* Collection.swift in Sources */,
 				021C2B71287C1CE6004F8113 /* SearchTableViewCell.swift in Sources */,
 				021C2BA4287DAE2A004F8113 /* SearchView.swift in Sources */,
 				025F059B284786CF00FF070D /* Movie.swift in Sources */,
 				026D0D37284F8A3C00B5BF8B /* MovieDetailViewController.swift in Sources */,
+				DD8D6E722893FDFB00A62950 /* Collection.swift in Sources */,
 				02334D25283E438F0099C92B /* PlayingNowCollectionViewCell.swift in Sources */,
+				DD922D712887FCFE00061FF7 /* UIColor.swift in Sources */,
 				02334D0F283E185E0099C92B /* SceneDelegate.swift in Sources */,
+				DD8D6E6E2893FD9F00A62950 /* ErrorView.swift in Sources */,
+				DD922D7728881A1B00061FF7 /* ReviewScoreStackView.swift in Sources */,
 				02F514E5286B948F006D7843 /* SelfSizingCollectionView.swift in Sources */,
+				DD922D6D2887EA0600061FF7 /* WatchListViewController.swift in Sources */,
 				026D0D39284F9CE900B5BF8B /* PaddingLabel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
