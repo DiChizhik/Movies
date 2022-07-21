@@ -80,17 +80,17 @@ class LaunchViewController: UIViewController {
         searchTabNavigationController.tabBarItem.image = UIImage(systemName: "magnifyingglass.circle")
         searchTabNavigationController.tabBarItem.title = "Search"
         
-        let watchListViewController = WatchListViewController()
-        let watchListNavigationController = UINavigationController(rootViewController: watchListViewController)
-        watchListNavigationController.tabBarItem.image = UIImage(named: "ticket")
-        watchListNavigationController.tabBarItem.title = "Watchlist"
+        let watchlistViewController = WatchlistViewController()
+        let watchlistNavigationController = UINavigationController(rootViewController: watchlistViewController)
+        watchlistNavigationController.tabBarItem.image = UIImage(named: "ticket")
+        watchlistNavigationController.tabBarItem.title = "Watchlist"
         
         setupTabBar()
 
         tabBarController.viewControllers = [
             playingNowTabNavigationController,
             mostPopularTabNavigationController,
-            watchListNavigationController,
+            watchlistNavigationController,
             searchTabNavigationController
         ]
         

@@ -62,7 +62,7 @@ extension SearchViewController: UITableViewDataSource {
         let cell = tableView.dequeue(SearchTableViewCell.self, for: indexPath)
         
         let movie = searchResults[indexPath.row]
-        cell.configure(imageURL: movie.posterPath, title: movie.title, reviewsScore: movie.voteAverage, popularity: movie.popularity)
+        cell.configure(imageURL: movie.posterPath, title: movie.title, reviewsScore: movie.voteAverage)
         
         return cell
     }

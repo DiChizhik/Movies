@@ -9,6 +9,7 @@ import UIKit
 
 protocol MostPopularViewDelegate: AnyObject {
     func seeMoreTapped(_ mostPopularView: MostPopularView)
+    func watchlistTapped()
 }
 
 final class MostPopularView: UIView {
@@ -63,10 +64,21 @@ final class MostPopularView: UIView {
         return view
     }()
     
-    private lazy var watchListButton: WatchlistButton = {
-        let button = WatchlistButton()
+//    private lazy var watchListButton: WatchlistButton = {
+//        let button = WatchlistButton()
+//        button.translatesAutoresizingMaskIntoConstraints = false
+//        button.alpha = 0
+//        return button
+//    }()
+    
+    private(set) lazy var watchlistButton: UIButton = {
+        let button = UIButton.createWatchlistButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.alpha = 0
+        let action = UIAction { [weak self] _ in
+            self?.delegate?.watchlistTapped()
+        }
+        button.addAction(action, for: .touchUpInside)
         return button
     }()
     
@@ -105,19 +117,30 @@ final class MostPopularView: UIView {
 
 // MARK: - Public functions
 extension MostPopularView {
-    func configureWith(name: String, score: Int, description: String?) {
+    func configureWith(name: String, score: Int, description: String?, status: WatchlistStatus?) {
         self.name.text = name
         reviewScoreStackView.setValue(score)
         
         if let description = description {
             movieDescription.text = description
         }
+        
+        if let status = status {
+            switch status {
+            case .added:
+                watchlistButton.updateWatchlistButton(isOnWatchlist: true)
+            case .notAdded:
+                watchlistButton.updateWatchlistButton(isOnWatchlist: false)
+            }
+        } else {
+            watchlistButton.updateWatchlistButton(isOnWatchlist: false)
+        }
     }
     
     func changeAlpha(to value: CGFloat) {
         name.alpha = value
         reviewScoreStackView.alpha = value
-        watchListButton.alpha = value
+        watchlistButton.alpha = value
         movieDescription.alpha = value
         seeMoreButton.alpha = value
     }
@@ -139,7 +162,7 @@ private extension MostPopularView {
         
         addSubview(name)
         addSubview(reviewScoreStackView)
-        addSubview(watchListButton)
+        addSubview(watchlistButton)
         addSubview(movieDescription)
         addSubview(seeMoreButton)
         
@@ -151,8 +174,8 @@ private extension MostPopularView {
             reviewScoreStackView.topAnchor.constraint(equalTo: name.bottomAnchor, constant: 6),
             reviewScoreStackView.leadingAnchor.constraint(equalTo: name.leadingAnchor),
             
-            watchListButton.trailingAnchor.constraint(equalTo: name.trailingAnchor),
-            watchListButton.centerYAnchor.constraint(equalTo: reviewScoreStackView.centerYAnchor),
+            watchlistButton.trailingAnchor.constraint(equalTo: name.trailingAnchor),
+            watchlistButton.centerYAnchor.constraint(equalTo: reviewScoreStackView.centerYAnchor),
             
             movieDescription.topAnchor.constraint(equalTo: reviewScoreStackView.bottomAnchor, constant: 24),
             movieDescription.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 16),

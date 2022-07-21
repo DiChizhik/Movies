@@ -35,15 +35,18 @@
 		0277AE1A2861DF9100054D50 /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0277AE192861DF9100054D50 /* LaunchViewController.swift */; };
 		0277AE5528646E0800054D50 /* DetailCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0277AE5428646E0800054D50 /* DetailCollectionViewCell.swift */; };
 		02F514E5286B948F006D7843 /* SelfSizingCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F514E4286B948F006D7843 /* SelfSizingCollectionView.swift */; };
-		DD8D6E6E2893FD9F00A62950 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8D6E6C2893FD9F00A62950 /* ErrorView.swift */; };
-		DD8D6E6F2893FD9F00A62950 /* ErrorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8D6E6D2893FD9F00A62950 /* ErrorViewController.swift */; };
-		DD8D6E722893FDFB00A62950 /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8D6E712893FDFB00A62950 /* Collection.swift */; };
-		DD922D6D2887EA0600061FF7 /* WatchListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD922D6C2887EA0600061FF7 /* WatchListViewController.swift */; };
+		DD8D6E752894082900A62950 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8D6E732894082900A62950 /* ErrorView.swift */; };
+		DD8D6E762894082900A62950 /* ErrorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8D6E742894082900A62950 /* ErrorViewController.swift */; };
+		DD922D6D2887EA0600061FF7 /* WatchlistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD922D6C2887EA0600061FF7 /* WatchlistViewController.swift */; };
 		DD922D6F2887F9EA00061FF7 /* WatchlistButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD922D6E2887F9EA00061FF7 /* WatchlistButton.swift */; };
 		DD922D712887FCFE00061FF7 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD922D702887FCFE00061FF7 /* UIColor.swift */; };
 		DD922D73288800D800061FF7 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DD922D72288800D800061FF7 /* Colors.xcassets */; };
 		DD922D75288817B500061FF7 /* UIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD922D74288817B500061FF7 /* UIButton.swift */; };
 		DD922D7728881A1B00061FF7 /* ReviewScoreStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD922D7628881A1B00061FF7 /* ReviewScoreStackView.swift */; };
+		DD922D7928894D9500061FF7 /* WatchlistItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD922D7828894D9500061FF7 /* WatchlistItem.swift */; };
+		DD922D7B2889547B00061FF7 /* WatchlistService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD922D7A2889547B00061FF7 /* WatchlistService.swift */; };
+		DD922D7D288974BA00061FF7 /* WatchlistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD922D7C288974BA00061FF7 /* WatchlistView.swift */; };
+		DD922D7F288975F800061FF7 /* WatchlistTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD922D7E288975F800061FF7 /* WatchlistTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -76,15 +79,18 @@
 		0277AE192861DF9100054D50 /* LaunchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
 		0277AE5428646E0800054D50 /* DetailCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCollectionViewCell.swift; sourceTree = "<group>"; };
 		02F514E4286B948F006D7843 /* SelfSizingCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfSizingCollectionView.swift; sourceTree = "<group>"; };
-		DD8D6E6C2893FD9F00A62950 /* ErrorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
-		DD8D6E6D2893FD9F00A62950 /* ErrorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorViewController.swift; sourceTree = "<group>"; };
-		DD8D6E712893FDFB00A62950 /* Collection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Collection.swift; sourceTree = "<group>"; };
-		DD922D6C2887EA0600061FF7 /* WatchListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchListViewController.swift; sourceTree = "<group>"; };
+		DD8D6E732894082900A62950 /* ErrorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ErrorView.swift; path = ErrorHandling/ErrorView.swift; sourceTree = "<group>"; };
+		DD8D6E742894082900A62950 /* ErrorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ErrorViewController.swift; path = ErrorHandling/ErrorViewController.swift; sourceTree = "<group>"; };
+		DD922D6C2887EA0600061FF7 /* WatchlistViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistViewController.swift; sourceTree = "<group>"; };
 		DD922D6E2887F9EA00061FF7 /* WatchlistButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistButton.swift; sourceTree = "<group>"; };
 		DD922D702887FCFE00061FF7 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		DD922D72288800D800061FF7 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		DD922D74288817B500061FF7 /* UIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButton.swift; sourceTree = "<group>"; };
 		DD922D7628881A1B00061FF7 /* ReviewScoreStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewScoreStackView.swift; sourceTree = "<group>"; };
+		DD922D7828894D9500061FF7 /* WatchlistItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistItem.swift; sourceTree = "<group>"; };
+		DD922D7A2889547B00061FF7 /* WatchlistService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistService.swift; sourceTree = "<group>"; };
+		DD922D7C288974BA00061FF7 /* WatchlistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistView.swift; sourceTree = "<group>"; };
+		DD922D7E288975F800061FF7 /* WatchlistTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,13 +108,14 @@
 		021C2BA5287DB217004F8113 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				DD8D6E732894082900A62950 /* ErrorView.swift */,
+				DD8D6E742894082900A62950 /* ErrorViewController.swift */,
 				0277AE192861DF9100054D50 /* LaunchViewController.swift */,
 				021C2BA8287DB242004F8113 /* PlayingNow */,
 				021C2BA7287DB233004F8113 /* MostPopular */,
 				021C2BAA287DB286004F8113 /* Search */,
 				021C2BA9287DB25D004F8113 /* DetailView */,
 				DD922D6B2887E97A00061FF7 /* WatchList */,
-				DD8D6E702893FDA800A62950 /* ErrorHandling */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -157,6 +164,7 @@
 			children = (
 				025F059A284786CF00FF070D /* Movie.swift */,
 				0223A3DD285A739B00E3602D /* MovieDetails.swift */,
+				DD922D7828894D9500061FF7 /* WatchlistItem.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -165,6 +173,7 @@
 			isa = PBXGroup;
 			children = (
 				026D0D12284E646F00B5BF8B /* MovieDataService.swift */,
+				DD922D7A2889547B00061FF7 /* WatchlistService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -235,7 +244,6 @@
 		0277AE162861C75500054D50 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				DD8D6E712893FDFB00A62950 /* Collection.swift */,
 				0277AE172861C76700054D50 /* String.swift */,
 				023463AF286F24C2001A703C /* UIStackView.swift */,
 				021C2B74287D6AC5004F8113 /* UITableView.swift */,
@@ -246,19 +254,12 @@
 			name = Extensions;
 			sourceTree = "<group>";
 		};
-		DD8D6E702893FDA800A62950 /* ErrorHandling */ = {
-			isa = PBXGroup;
-			children = (
-				DD8D6E6D2893FD9F00A62950 /* ErrorViewController.swift */,
-				DD8D6E6C2893FD9F00A62950 /* ErrorView.swift */,
-			);
-			path = ErrorHandling;
-			sourceTree = "<group>";
-		};
 		DD922D6B2887E97A00061FF7 /* WatchList */ = {
 			isa = PBXGroup;
 			children = (
-				DD922D6C2887EA0600061FF7 /* WatchListViewController.swift */,
+				DD922D7E288975F800061FF7 /* WatchlistTableViewCell.swift */,
+				DD922D7C288974BA00061FF7 /* WatchlistView.swift */,
+				DD922D6C2887EA0600061FF7 /* WatchlistViewController.swift */,
 			);
 			path = WatchList;
 			sourceTree = "<group>";
@@ -344,14 +345,16 @@
 				0277AE1A2861DF9100054D50 /* LaunchViewController.swift in Sources */,
 				DD922D6F2887F9EA00061FF7 /* WatchlistButton.swift in Sources */,
 				023463B0286F24C2001A703C /* UIStackView.swift in Sources */,
+				DD922D7B2889547B00061FF7 /* WatchlistService.swift in Sources */,
+				DD922D7F288975F800061FF7 /* WatchlistTableViewCell.swift in Sources */,
 				02334D23283E26980099C92B /* MostPopularViewController.swift in Sources */,
 				02334D0D283E185E0099C92B /* AppDelegate.swift in Sources */,
+				DD8D6E762894082900A62950 /* ErrorViewController.swift in Sources */,
 				023463B2286F282A001A703C /* LeftAlignedCollectionViewFlowLayout.swift in Sources */,
 				023463AE286F1F76001A703C /* StackMovieDetailView.swift in Sources */,
 				026D0D13284E646F00B5BF8B /* MovieDataService.swift in Sources */,
 				021C2B75287D6AC5004F8113 /* UITableView.swift in Sources */,
 				025F059928476BD200FF070D /* MostPopularCollectionViewCell.swift in Sources */,
-				DD8D6E6F2893FD9F00A62950 /* ErrorViewController.swift in Sources */,
 				02334D21283E228F0099C92B /* PlayingNowCollectionViewController.swift in Sources */,
 				DD922D75288817B500061FF7 /* UIButton.swift in Sources */,
 				0223A3DE285A739B00E3602D /* MovieDetails.swift in Sources */,
@@ -361,17 +364,18 @@
 				0277AE5528646E0800054D50 /* DetailCollectionViewCell.swift in Sources */,
 				0277AE182861C76700054D50 /* String.swift in Sources */,
 				021C2B71287C1CE6004F8113 /* SearchTableViewCell.swift in Sources */,
+				DD8D6E752894082900A62950 /* ErrorView.swift in Sources */,
 				021C2BA4287DAE2A004F8113 /* SearchView.swift in Sources */,
+				DD922D7928894D9500061FF7 /* WatchlistItem.swift in Sources */,
 				025F059B284786CF00FF070D /* Movie.swift in Sources */,
 				026D0D37284F8A3C00B5BF8B /* MovieDetailViewController.swift in Sources */,
-				DD8D6E722893FDFB00A62950 /* Collection.swift in Sources */,
 				02334D25283E438F0099C92B /* PlayingNowCollectionViewCell.swift in Sources */,
 				DD922D712887FCFE00061FF7 /* UIColor.swift in Sources */,
 				02334D0F283E185E0099C92B /* SceneDelegate.swift in Sources */,
-				DD8D6E6E2893FD9F00A62950 /* ErrorView.swift in Sources */,
 				DD922D7728881A1B00061FF7 /* ReviewScoreStackView.swift in Sources */,
+				DD922D7D288974BA00061FF7 /* WatchlistView.swift in Sources */,
 				02F514E5286B948F006D7843 /* SelfSizingCollectionView.swift in Sources */,
-				DD922D6D2887EA0600061FF7 /* WatchListViewController.swift in Sources */,
+				DD922D6D2887EA0600061FF7 /* WatchlistViewController.swift in Sources */,
 				026D0D39284F9CE900B5BF8B /* PaddingLabel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -16,6 +16,7 @@ class MostPopularViewController: UIViewController, MostPopularViewDelegate {
     
     var movies = [Movie]()
     let movieDataService = MovieDataService()
+    let watchlistService = WatchlistService()
     var itemInViewIndex: Int = 0
     
     private lazy var contentView: MostPopularView = {
@@ -80,8 +81,11 @@ class MostPopularViewController: UIViewController, MostPopularViewDelegate {
             let movieName = movie.title
             let reviewsScore = movie.voteAverage
             let movieDescription = movie.overview
+            let movieID = movie.id
             
-            contentView.configureWith(name: movieName, score: reviewsScore, description: movieDescription)
+            let status = watchlistService.getStatus(for: movieID)
+            
+            contentView.configureWith(name: movieName, score: reviewsScore, description: movieDescription, status: status)
         }
     }
     
@@ -91,6 +95,22 @@ class MostPopularViewController: UIViewController, MostPopularViewDelegate {
         let detailViewController = MovieDetailViewController(selectedMovieID: selectedMovieId)
         let detailNavigationController = UINavigationController(rootViewController: detailViewController)
         present(detailNavigationController, animated: true)
+    }
+    
+    func watchlistTapped() {
+        print("watchlist tapped")
+        let movie = movies[itemInViewIndex]
+        let watchlistItem = WatchlistItem(id: movie.id, saveDate: Date.now)
+
+        if let updatedStatus = watchlistService.toggleStatus(for: watchlistItem) {
+            print(updatedStatus)
+            switch updatedStatus {
+            case .added:
+                contentView.watchlistButton.updateWatchlistButton(isOnWatchlist: true)
+            case .notAdded:
+                contentView.watchlistButton.updateWatchlistButton(isOnWatchlist: false)
+            }
+        }
     }
     
     private func fade(_ type: Fading) {
