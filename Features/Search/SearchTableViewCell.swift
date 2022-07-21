@@ -18,11 +18,11 @@ class SearchTableViewCell: UITableViewCell, Reusable {
     
     private lazy var titleLabel: UILabel = {
         let name = UILabel()
-         name.font = UIFont.systemFont(ofSize: 15, weight: .heavy)
-         name.textAlignment = .left
+        name.font = UIFont.systemFont(ofSize: 15, weight: .heavy)
+        name.textAlignment = .left
         name.textColor = .whiteF5
-         name.numberOfLines = 1
-         return name
+        name.numberOfLines = 1
+        return name
     }()
     
     private lazy var reviewScoreStackView: ReviewScoreStackView = {
@@ -66,7 +66,7 @@ class SearchTableViewCell: UITableViewCell, Reusable {
         ])
     }
     
-    func configure(imageURL: URL?, title: String, reviewsScore: Int, popularity: Movie.Popularity) {
+    func configure(imageURL: URL?, title: String, reviewsScore: Int) {
         if let url = imageURL {
             posterImageView.kf.setImage(with: url)
         }
