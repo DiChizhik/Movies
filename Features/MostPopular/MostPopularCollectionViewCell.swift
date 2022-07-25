@@ -26,8 +26,19 @@ class MostPopularCollectionViewCell: UICollectionViewCell, Reusable {
         super.init(coder: coder)
         setupUI()
     }
-    
-    private func setupUI() {
+}
+
+// MARK: - Public functions
+extension MostPopularCollectionViewCell {
+    func configure(imageURL: URL?) {
+        guard let url = imageURL else { return }
+        imageView.kf.setImage(with: url)
+    }
+}
+
+// MARK: - Private functions
+private extension MostPopularCollectionViewCell {
+    func setupUI() {
         contentView.addSubview(imageView)
         
         NSLayoutConstraint.activate([
@@ -36,10 +47,5 @@ class MostPopularCollectionViewCell: UICollectionViewCell, Reusable {
             imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
-    }
-    
-    func configure(imageURL: URL?) {
-        guard let url = imageURL else { return }
-        imageView.kf.setImage(with: url)
     }
 }

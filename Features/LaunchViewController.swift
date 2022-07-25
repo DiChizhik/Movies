@@ -7,6 +7,7 @@
 
 import UIKit
 
+//Shall I create a separate view for this controller to comply with MVC?
 class LaunchViewController: UIViewController {
     private lazy var logoImageView: UIImageView = {
         let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
@@ -18,7 +19,7 @@ class LaunchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = .backgroundColor
+        view.backgroundColor = .darkBlue01
         view.addSubview(logoImageView)
     }
     
@@ -33,8 +34,11 @@ class LaunchViewController: UIViewController {
         
         logoImageView.center = view.center
     }
-    
-    private func animate() {
+}
+
+// MARK: - Private functions
+private extension LaunchViewController {
+    func animate() {
         UIView.animate(withDuration: 1,
                        delay: 0,
                        options: [],
@@ -59,7 +63,7 @@ class LaunchViewController: UIViewController {
                         })
     }
     
-    private func presentViewController() {
+    func presentViewController() {
         let tabBarController = UITabBarController()
 
         let layout = UICollectionViewFlowLayout()
@@ -98,12 +102,12 @@ class LaunchViewController: UIViewController {
         present(tabBarController, animated: true)
     }
     
-    private func setupTabBar() {
+    func setupTabBar() {
         UITabBarItem.appearance().setTitleTextAttributes([.foregroundColor: UIColor.lightBlue61], for: .normal)
         UITabBarItem.appearance().setTitleTextAttributes([.foregroundColor : UIColor.whiteF5], for: .selected)
         UITabBar.appearance().tintColor = UIColor.whiteF5
         UITabBar.appearance().unselectedItemTintColor = UIColor.lightBlue61
-        UITabBar.appearance().barTintColor = .backgroundColor
+        UITabBar.appearance().barTintColor = .darkBlue01
     }
 
 }

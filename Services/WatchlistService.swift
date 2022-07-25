@@ -7,6 +7,12 @@
 
 import UIKit
 
+protocol WatchlistServiceProtocol {
+    func getStatus(for id: Int)-> WatchlistStatus?
+    func toggleStatus(for item: WatchlistItem) -> WatchlistStatus?
+    func getWatchlistItems() -> [WatchlistItem]?
+}
+
 enum WatchlistStatus {
     case added, notAdded
 }

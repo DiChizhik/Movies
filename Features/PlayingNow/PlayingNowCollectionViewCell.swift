@@ -9,7 +9,7 @@ import UIKit
 import Kingfisher
 
 class PlayingNowCollectionViewCell: UICollectionViewCell, Reusable {
-    private var imageView: UIImageView = {
+    private lazy var imageView: UIImageView = {
        let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.layer.cornerRadius = 10
@@ -38,24 +38,39 @@ class PlayingNowCollectionViewCell: UICollectionViewCell, Reusable {
     private lazy var watchlistButton: WatchlistButton = {
         let button = WatchlistButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-//      Need to figure out how to get rid of right inset
+//      Need to figure out how to get rid of the right inset. Might disappear when implemented using UIButton extension method. Maybe create a separate one for the short version of the button?
         button.shortVersion()
         return button
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
         setupUI()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+        
         setupUI()
     }
+}
 
-    
-    private func setupUI() {
-        contentView.backgroundColor = .backgroundColor
+// MARK: - Public functions
+extension PlayingNowCollectionViewCell {
+    func configure(imageURL: URL?, name: String, reviewsScore: Int, popularity: Movie.Popularity) {
+        if let url = imageURL {
+            imageView.kf.setImage(with: url)
+        }
+        self.name.text = name
+        self.reviewScoreStackView.setValue(reviewsScore)
+    }
+}
+
+// MARK: - Private functions
+private extension PlayingNowCollectionViewCell {
+    func setupUI() {
+        contentView.backgroundColor = .darkBlue01
         
         contentView.addSubview(imageView)
         contentView.addSubview(name)
@@ -80,13 +95,5 @@ class PlayingNowCollectionViewCell: UICollectionViewCell, Reusable {
             watchlistButton.heightAnchor.constraint(equalTo: reviewScoreStackView.heightAnchor),
             watchlistButton.centerYAnchor.constraint(equalTo: reviewScoreStackView.centerYAnchor)
         ])
-    }
-    
-    func configure(imageURL: URL?, name: String, reviewsScore: Int, popularity: Movie.Popularity) {
-        if let url = imageURL {
-            imageView.kf.setImage(with: url)
-        }
-        self.name.text = name
-        self.reviewScoreStackView.setValue(reviewsScore)
     }
 }

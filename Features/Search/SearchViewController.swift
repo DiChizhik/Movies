@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SearchViewController: UIViewController, SearchViewDelegate {
+class SearchViewController: UIViewController {
     let movieDataService = MovieDataService()
     private var searchResults = [Movie]()
     private var isSearching = false
@@ -26,13 +26,16 @@ class SearchViewController: UIViewController, SearchViewDelegate {
         self.view = contentView
         
         title = "Search Movies"
-        navigationController?.navigationBar.barTintColor = .backgroundColor
+        navigationController?.navigationBar.barTintColor = .darkBlue01
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white, .font: UIFont.systemFont(ofSize: 20, weight: .heavy)]
         
         navigationItem.searchController = contentView.searchController
         contentView.searchController.searchBar.searchTextField.textColor = .whiteF5
     }
-    
+}
+
+//MARK: - SearchViewDelegate
+extension SearchViewController: SearchViewDelegate {
     func startSearching(for text: String) {
         movieDataService.searchMovies(matching: text) { [weak self] result in
             guard let self = self else { return }

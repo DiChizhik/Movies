@@ -99,7 +99,6 @@ class StackMovieDetailView: UIView {
         layout.minimumInteritemSpacing = 4
         layout.minimumLineSpacing = 4
         layout.sectionInset = UIEdgeInsets(top: 4, left: 0, bottom: 0, right: 0)
-//       consider this
         layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
         return layout
     }()
@@ -108,7 +107,7 @@ class StackMovieDetailView: UIView {
         let collectionView = SelfSizingCollectionView(frame: .zero, collectionViewLayout: collectionViewFlowLayout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.register(DetailCollectionViewCell.self)
-        collectionView.backgroundColor = .backgroundColor
+        collectionView.backgroundColor = .darkBlue01
         collectionView.isScrollEnabled = false
         return collectionView
     }()
@@ -123,7 +122,6 @@ class StackMovieDetailView: UIView {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
-//        consider this
         stackView.layoutMargins = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         stackView.isLayoutMarginsRelativeArrangement = true
         return stackView
@@ -138,9 +136,12 @@ class StackMovieDetailView: UIView {
         super.init(coder: coder)
         setupUI()
     }
-    
-    private func setupUI() {
-        backgroundColor = .backgroundColor
+}
+
+// MARK: - Private functions
+private extension StackMovieDetailView {
+    func setupUI() {
+        backgroundColor = .darkBlue01
         
         addSubview(scrollView)
         NSLayoutConstraint.activate([

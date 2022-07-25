@@ -11,7 +11,7 @@ class WatchlistView: UIView {
     private(set) lazy var tableView: UITableView = {
        let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.backgroundColor = .backgroundColor
+        tableView.backgroundColor = .darkBlue01
         tableView.register(WatchlisttableViewCell.self)
         tableView.rowHeight = 150
         tableView.keyboardDismissMode = .onDrag
@@ -29,9 +29,12 @@ class WatchlistView: UIView {
         
         setupUI()
     }
-    
-    private func setupUI() {
-        backgroundColor = .backgroundColor
+}
+
+// MARK: - Private functions
+private extension WatchlistView {
+    func setupUI() {
+        backgroundColor = .darkBlue01
         
         addSubview(tableView)
         NSLayoutConstraint.activate([

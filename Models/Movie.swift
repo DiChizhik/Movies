@@ -12,6 +12,7 @@ struct Movies: Decodable {
 }
 
 struct Movie: Decodable {
+//    This enum and property below seem redundant.
     enum Popularity {
         case high, low
     }
