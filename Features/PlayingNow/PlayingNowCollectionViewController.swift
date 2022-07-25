@@ -27,16 +27,24 @@ class PlayingNowCollectionViewController: UICollectionViewController {
         loadMovieData()
     }
     
-    private func setupUI() {
-        collectionView.backgroundColor = UIColor(named: "backgroundColor")
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        collectionView.collectionViewLayout.invalidateLayout()
+    }
+}
+
+// MARK: - Private functions
+private extension PlayingNowCollectionViewController {
+    func setupUI() {
+        collectionView.backgroundColor = .darkBlue01
         
         navigationItem.title = "Playing Now"
 
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white, .font: UIFont.systemFont(ofSize: 20, weight: .heavy)]
-        navigationController?.navigationBar.barTintColor = UIColor(named: "backgroundColor")
+        navigationController?.navigationBar.barTintColor = .darkBlue01
     }
     
-    private func loadMovieData() {
+    func loadMovieData() {
         movieDataService.getPlayingNowMoviesList { [weak self] result in
             guard let self = self else { return }
             
@@ -52,13 +60,9 @@ class PlayingNowCollectionViewController: UICollectionViewController {
             }
         }
     }
-    
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
-        collectionView.collectionViewLayout.invalidateLayout()
-    }
 }
 
+// MARK: - UICollectionViewDataSource
 extension PlayingNowCollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return movies.count
@@ -79,6 +83,7 @@ extension PlayingNowCollectionViewController {
     }
 }
 
+// MARK: - UICollectionViewDelegate
 extension PlayingNowCollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let selectedMovieID = movies[indexPath.item].id
@@ -97,6 +102,7 @@ extension PlayingNowCollectionViewController {
     }
 }
 
+// MARK: - UICollectionViewDelegateFlowLayout
 extension PlayingNowCollectionViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = collectionView.bounds.size.width * 0.42

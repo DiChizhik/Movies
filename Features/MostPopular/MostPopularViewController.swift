@@ -16,12 +16,13 @@ class MostPopularViewController: UIViewController, MostPopularViewDelegate {
     
     var movies = [Movie]()
     let movieDataService = MovieDataService()
+    let watchlistService = WatchlistService()
     var itemInViewIndex: Int = 0
     
     private lazy var contentView: MostPopularView = {
         let view = MostPopularView()
-        view.collectionView.dataSource = self
-        view.collectionView.delegate = self
+        view.collectionViewDelegate = self
+        view.collectionViewDataSource = self
         view.delegate = self
         return view
     }()
@@ -32,8 +33,11 @@ class MostPopularViewController: UIViewController, MostPopularViewDelegate {
         self.view = contentView
         
         title = "Most Popular"
-        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white, .font: UIFont.systemFont(ofSize: 20, weight: .heavy)]
-        navigationController?.navigationBar.backgroundColor = UIColor(named: "backgroundColor")
+        navigationController?.navigationBar.titleTextAttributes = [
+            .foregroundColor: UIColor.white,
+            .font: UIFont.systemFont(ofSize: 20, weight: .heavy)
+        ]
+        navigationController?.navigationBar.backgroundColor = .darkBlue01
     }
     
     override func viewDidLoad() {
@@ -47,8 +51,36 @@ class MostPopularViewController: UIViewController, MostPopularViewDelegate {
             self.fade(.fadeIn)
         }
     }
+}
+ 
+// MARK: - Public functions
+extension MostPopularViewController {
+    func seeMoreTapped() {
+        let selectedMovieId = movies[itemInViewIndex].id
+        
+        let detailViewController = MovieDetailViewController(selectedMovieID: selectedMovieId)
+        let detailNavigationController = UINavigationController(rootViewController: detailViewController)
+        present(detailNavigationController, animated: true)
+    }
+    
+    func watchlistTapped() {
+        let movie = movies[itemInViewIndex]
+        let watchlistItem = WatchlistItem(id: movie.id, saveDate: Date.now)
 
-    private func loadMovieData() {
+        if let updatedStatus = watchlistService.toggleStatus(for: watchlistItem) {
+            switch updatedStatus {
+            case .added:
+                contentView.watchlistButton.updateWatchlistButton(isOnWatchlist: true)
+            case .notAdded:
+                contentView.watchlistButton.updateWatchlistButton(isOnWatchlist: false)
+            }
+        }
+    }
+}
+
+// MARK: - Private functions
+private extension MostPopularViewController {
+    func loadMovieData() {
         movieDataService.getPlayingNowMoviesList { [weak self] result in
             guard let self = self else { return }
             
@@ -65,55 +97,32 @@ class MostPopularViewController: UIViewController, MostPopularViewDelegate {
         }
     }
     
-    private func configureWithData(index: Int) {
+    func configureWithData(index: Int) {
         let movie = movies[index]
         
         let movieName = movie.title
-        let reviewsScore = "\(movie.voteAverage)%"
+        let reviewsScore = movie.voteAverage
         let movieDescription = movie.overview
+        let movieID = movie.id
         
-        contentView.name.text = movieName
-        contentView.reviewsScore.text = reviewsScore
-        contentView.movieDescription.text = movieDescription
+        let status = watchlistService.getStatus(for: movieID)
         
-        updateReviewScoreIndicator(reviewsScore: reviewsScore)
+        contentView.configureWith(name: movieName, score: reviewsScore, description: movieDescription, status: status)
     }
     
-    private func updateReviewScoreIndicator(reviewsScore: String) {
-        let score = reviewsScore.components(separatedBy: "%")
-        if let scoreInt = Int(score[0]) {
-            if scoreInt > 50 {
-                contentView.reviewsScoreIndicator.image = UIImage(named: "highReviewsScore")
-            } else {
-                contentView.reviewsScoreIndicator.image = UIImage(named: "lowReviewsScore")
-            }
-        }
-    }
-    
-    func seeMoreTapped() {
-        let selectedMovieId = movies[itemInViewIndex].id
-        
-        let detailViewController = MovieDetailViewController(selectedMovieID: selectedMovieId)
-        let detailNavigationController = UINavigationController(rootViewController: detailViewController)
-        present(detailNavigationController, animated: true)
-    }
-    
-    private func fade(_ type: Fading) {
+    private func fade(_ type: MostPopularViewController.Fading) {
         let type = CGFloat(type.rawValue)
         
         UIView.animate(withDuration: 1,
                        delay: 0,
                        options: [],
                        animations: {
-            self.contentView.name.alpha = type
-            self.contentView.reviewsScore.alpha = type
-            self.contentView.reviewsScoreIndicator.alpha = type
-            self.contentView.movieDescription.alpha = type
-            self.contentView.seeMoreButton.alpha = type
+            self.contentView.changeAlpha(to: type)
                     }, completion: nil)
     }
 }
-    
+
+// MARK: - UICollectionViewDataSource
 extension MostPopularViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return movies.count
@@ -129,6 +138,7 @@ extension MostPopularViewController: UICollectionViewDataSource {
     }
 }
 
+// MARK: - UICollectionViewDelegate
 extension MostPopularViewController: UICollectionViewDelegate {
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         fade(.fadeOut)
@@ -164,6 +174,7 @@ extension MostPopularViewController: UICollectionViewDelegate {
     }
 }
 
+// MARK: - UICollectionViewDelegateFlowLayout
 extension MostPopularViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let height = collectionView.bounds.size.height
