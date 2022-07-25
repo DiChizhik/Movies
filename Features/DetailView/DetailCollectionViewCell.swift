@@ -26,18 +26,10 @@ class DetailCollectionViewCell: UICollectionViewCell, Reusable {
         super.init(coder: coder)
         setupUI()
     }
-    
-    private func setupUI() {
-        contentView.addSubview(label)
-        
-        NSLayoutConstraint.activate([
-            label.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4),
-            label.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
-            label.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
-            label.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4),
-        ])
-    }
-    
+}
+
+// MARK: - Public functions
+extension DetailCollectionViewCell {
     func configure(title: String, backgroundColor: UIColor, borderColor: UIColor) {
         label.text = title
         
@@ -46,5 +38,19 @@ class DetailCollectionViewCell: UICollectionViewCell, Reusable {
         contentView.layer.borderColor = borderColor.cgColor
         contentView.layer.cornerRadius = 4
         contentView.layer.masksToBounds = true
+    }
+}
+
+// MARK: - Private functions
+private extension DetailCollectionViewCell {
+    func setupUI() {
+        contentView.addSubview(label)
+        
+        NSLayoutConstraint.activate([
+            label.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4),
+            label.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
+            label.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
+            label.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4),
+        ])
     }
 }

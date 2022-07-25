@@ -27,15 +27,21 @@ class WatchlistViewController: UIViewController {
             .foregroundColor: UIColor.white,
             .font: UIFont.systemFont(ofSize: 20, weight: .heavy)
         ]
-        navigationController?.navigationBar.barTintColor = .backgroundColor
+        navigationController?.navigationBar.barTintColor = .darkBlue01
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         guard let watchlistItems = watchlistService.getWatchlistItems() else { return }
-        
-        for item in watchlistItems {
+        loadMovieData(for: watchlistItems)
+    }
+}
+
+// MARK: - Private functions
+private extension WatchlistViewController {
+    func loadMovieData(for items: [WatchlistItem]) {
+        for item in items {
             movieDataService.getMovieDetails(movieId: item.id) { [weak self] result in
                 switch result {
                 case .success(let details):
@@ -53,7 +59,6 @@ class WatchlistViewController: UIViewController {
 
 // MARK: - UITableViewDelegate
 extension WatchlistViewController: UITableViewDelegate {
-    
 }
 
 // MARK: - UITableViewDataSource

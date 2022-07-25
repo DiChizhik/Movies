@@ -37,7 +37,7 @@ class MostPopularViewController: UIViewController, MostPopularViewDelegate {
             .foregroundColor: UIColor.white,
             .font: UIFont.systemFont(ofSize: 20, weight: .heavy)
         ]
-        navigationController?.navigationBar.backgroundColor = .backgroundColor
+        navigationController?.navigationBar.backgroundColor = .darkBlue01
     }
     
     override func viewDidLoad() {
@@ -54,8 +54,36 @@ class MostPopularViewController: UIViewController, MostPopularViewDelegate {
             self.fade(.fadeIn)
         }
     }
+}
+ 
+// MARK: - Public functions
+extension MostPopularViewController {
+    func seeMoreTapped() {
+        let selectedMovieId = movies[itemInViewIndex].id
+        
+        let detailViewController = MovieDetailViewController(selectedMovieID: selectedMovieId)
+        let detailNavigationController = UINavigationController(rootViewController: detailViewController)
+        present(detailNavigationController, animated: true)
+    }
+    
+    func watchlistTapped() {
+        let movie = movies[itemInViewIndex]
+        let watchlistItem = WatchlistItem(id: movie.id, saveDate: Date.now)
 
-    private func loadMovieData() {
+        if let updatedStatus = watchlistService.toggleStatus(for: watchlistItem) {
+            switch updatedStatus {
+            case .added:
+                contentView.watchlistButton.updateWatchlistButton(isOnWatchlist: true)
+            case .notAdded:
+                contentView.watchlistButton.updateWatchlistButton(isOnWatchlist: false)
+            }
+        }
+    }
+}
+
+// MARK: - Private functions
+private extension MostPopularViewController {
+    func loadMovieData() {
         movieDataService.getMostPopularMoviesList { [weak self] result in
             guard let self = self else { return }
             
@@ -113,7 +141,7 @@ class MostPopularViewController: UIViewController, MostPopularViewDelegate {
         }
     }
     
-    private func fade(_ type: Fading) {
+    private func fade(_ type: MostPopularViewController.Fading) {
         let type = CGFloat(type.rawValue)
         
         UIView.animate(withDuration: 1,
@@ -124,7 +152,7 @@ class MostPopularViewController: UIViewController, MostPopularViewDelegate {
                     }, completion: nil)
     }
 }
- 
+
 // MARK: - UICollectionViewDataSource
 extension MostPopularViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

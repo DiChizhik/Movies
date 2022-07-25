@@ -22,6 +22,7 @@ final class MostPopularView: UIView {
             collectionView.delegate = newValue
         }
     }
+    
     weak var collectionViewDataSource: UICollectionViewDataSource? {
         get {
             collectionView.dataSource
@@ -43,7 +44,7 @@ final class MostPopularView: UIView {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewFlowLayout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.register(MostPopularCollectionViewCell.self)
-        collectionView.backgroundColor = .backgroundColor
+        collectionView.backgroundColor = .darkBlue01
         return collectionView
     }()
     
@@ -64,13 +65,7 @@ final class MostPopularView: UIView {
         return view
     }()
     
-//    private lazy var watchListButton: WatchlistButton = {
-//        let button = WatchlistButton()
-//        button.translatesAutoresizingMaskIntoConstraints = false
-//        button.alpha = 0
-//        return button
-//    }()
-    
+//    As of now it's the only place where I've tried out UIButton extension method and used WatchlistService.
     private(set) lazy var watchlistButton: UIButton = {
         let button = UIButton.createWatchlistButton()
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -93,6 +88,7 @@ final class MostPopularView: UIView {
         return description
     }()
     
+//    If I use buttonConfiguration in one place, is it critical I use it with all buttons?
     private lazy var seeMoreButton: UIButton = {
         let button = UIButton(type: .system)
         button.addTarget(self, action: #selector(seeMoreTapped), for: .touchUpInside)
@@ -149,7 +145,7 @@ extension MostPopularView {
 // MARK: - Private functions
 private extension MostPopularView {
     func setupUI() {
-        backgroundColor = .backgroundColor
+        backgroundColor = .darkBlue01
         
         addSubview(collectionView)
         

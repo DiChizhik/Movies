@@ -6,8 +6,9 @@
 //
 
 import UIKit
+// I planned to delete this implementation of the button and replace it with methods from the UIButton extension. However, it'd be great to discuss both.
 
-class WatchlistButton: UIButton {
+final class WatchlistButton: UIButton {
     private var attributes: [NSAttributedString.Key : Any] = [
         .foregroundColor : UIColor.whiteF5,
         .font : UIFont.systemFont(ofSize: 15)

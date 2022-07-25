@@ -41,9 +41,24 @@ class SearchTableViewCell: UITableViewCell, Reusable {
         
         setupUI()
     }
-    
-    private func setupUI() {
-        contentView.backgroundColor = .backgroundColor
+}
+
+// MARK: - Public functions
+extension SearchTableViewCell {
+    func configure(imageURL: URL?, title: String, reviewsScore: Int) {
+        if let url = imageURL {
+            posterImageView.kf.setImage(with: url)
+        }
+        
+        titleLabel.text = title
+        reviewScoreStackView.setValue(reviewsScore)
+    }
+}
+
+// MARK: - Private functions
+private extension SearchTableViewCell {
+   func setupUI() {
+        contentView.backgroundColor = .darkBlue01
         
         let textStack = UIStackView(arrangedSubviews: [titleLabel, reviewScoreStackView])
         textStack.translatesAutoresizingMaskIntoConstraints = false
@@ -65,14 +80,4 @@ class SearchTableViewCell: UITableViewCell, Reusable {
             textStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,constant: -20)
         ])
     }
-    
-    func configure(imageURL: URL?, title: String, reviewsScore: Int) {
-        if let url = imageURL {
-            posterImageView.kf.setImage(with: url)
-        }
-        
-        titleLabel.text = title
-        reviewScoreStackView.setValue(reviewsScore)
-    }
-
 }

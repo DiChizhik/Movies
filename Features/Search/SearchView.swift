@@ -12,7 +12,6 @@ protocol SearchViewDelegate: AnyObject {
 }
 
 class SearchView: UIView {
-    
     weak var tableViewDelegate: UITableViewDelegate? {
         get {
             tableView.delegate
@@ -44,7 +43,7 @@ class SearchView: UIView {
     private(set) lazy var tableView: UITableView = {
        let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.backgroundColor = .backgroundColor
+        tableView.backgroundColor = .darkBlue01
         tableView.register(SearchTableViewCell.self)
         tableView.rowHeight = 150
         tableView.keyboardDismissMode = .onDrag
@@ -64,9 +63,12 @@ class SearchView: UIView {
         
         setupUI()
     }
-    
-    private func setupUI() {
-        backgroundColor = .backgroundColor
+}
+
+// MARK: - Private functions
+extension SearchView {
+    func setupUI() {
+        backgroundColor = .darkBlue01
         
         addSubview(tableView)
         NSLayoutConstraint.activate([
@@ -77,11 +79,10 @@ class SearchView: UIView {
         ])
     }
     
-    @objc private func startSearching() {
+    @objc func startSearching() {
         guard let text = searchController.searchBar.text else { return }
         guard !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
         
         delegate?.startSearching(self, for: text)
     }
-    
 }
