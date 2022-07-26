@@ -43,8 +43,10 @@ class PlayingNowCollectionViewController: UICollectionViewController {
             switch result {
             case .success(let moviesList):
                 self.movies.append(contentsOf: moviesList)
-            case .failure(_):
-                break
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    ErrorViewController.handleError(error, presentingViewController: self)
+                }
             }
             
             DispatchQueue.main.async {

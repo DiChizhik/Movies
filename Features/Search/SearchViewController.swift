@@ -10,7 +10,6 @@ import UIKit
 class SearchViewController: UIViewController, SearchViewDelegate {
     let movieDataService = MovieDataService()
     private var searchResults = [Movie]()
-    private var isSearching = false
     
     private lazy var contentView: SearchView = {
         let view = SearchView()
@@ -33,15 +32,17 @@ class SearchViewController: UIViewController, SearchViewDelegate {
         contentView.searchController.searchBar.searchTextField.textColor = UIColor(named: "titleColor")!
     }
     
-    func startSearching(for text: String) {
+    func startSearching(_ searchView: SearchView, for text: String) {
         movieDataService.searchMovies(matching: text) { [weak self] result in
             guard let self = self else { return }
 
             switch result {
             case .success(let results):
                 self.searchResults = results
-            case .failure(_):
-                break
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    ErrorViewController.handleError(error, presentingViewController: self)
+                }
             }
 
             DispatchQueue.main.async {
