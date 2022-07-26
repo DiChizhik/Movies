@@ -9,7 +9,7 @@ import UIKit
 
 
 class ErrorViewController: UIViewController, ErrorViewDelegate {
-    private var error: MovieServiceError
+    private var error: Error
     
     lazy var contentView: ErrorView = {
         let view = ErrorView()
@@ -17,7 +17,7 @@ class ErrorViewController: UIViewController, ErrorViewDelegate {
         return view
     }()
     
-    init(error: MovieServiceError) {
+    required init(error: Error) {
         self.error = error
         
         super.init(nibName: nil, bundle: nil)
@@ -31,25 +31,24 @@ class ErrorViewController: UIViewController, ErrorViewDelegate {
     override func loadView() {
         self.view = contentView
         
-        switch error {
-        case .failedToGetResponse:
-            contentView.imageView.image = UIImage(named: "wifi")
-            contentView.errorLabel.text = "Sherlock didn’t find the internet signal.\nPlease try again later."
-        case .failedToGetData:
-            contentView.imageView.image = UIImage(named: "dizzy")
-            contentView.errorLabel.text = "Houston, we have a problem.\nClose and re-open the app."
-        case .failedToDecode:
-            contentView.imageView.image = UIImage(named: "spy")
-            contentView.errorLabel.text = "Failed to decode data.\nCall the special agents."
+        if let error = error as? MovieServiceError {
+            contentView.imageView.image = error.image
+            contentView.errorLabel.text = error.errorDescription
+        } else {
+//            provide behaviour for other errors
         }
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
     }
     
     @objc func dismissController() {
         dismiss(animated: true)
     }
+}
 
+// MARK: - Static functions
+extension ErrorViewController {
+    static func handleError(_ error: Error, presentingViewController: UIViewController) {
+        let vc = self.init(error: error)
+        vc.modalPresentationStyle = .pageSheet
+        presentingViewController.present(vc, animated: true)
+    }
 }

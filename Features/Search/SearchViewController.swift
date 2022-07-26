@@ -41,9 +41,7 @@ class SearchViewController: UIViewController, SearchViewDelegate {
                 self.searchResults = results
             case .failure(let error):
                 DispatchQueue.main.async {
-                    let vc = ErrorViewController(error: error)
-                    vc.modalPresentationStyle = .popover
-                    self.present(vc, animated: true)
+                    ErrorViewController.handleError(error, presentingViewController: self)
                 }
             }
 

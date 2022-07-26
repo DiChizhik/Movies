@@ -60,9 +60,7 @@ class MostPopularViewController: UIViewController, MostPopularViewDelegate {
                 self.movies.append(contentsOf: moviesList)
             case .failure(let error):
                 DispatchQueue.main.async {
-                    let vc = ErrorViewController(error: error)
-                    vc.modalPresentationStyle = .popover
-                    self.present(vc, animated: true)
+                    ErrorViewController.handleError(error, presentingViewController: self)
                 }
             }
             

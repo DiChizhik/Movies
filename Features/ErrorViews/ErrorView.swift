@@ -15,6 +15,7 @@ class ErrorView: UIView {
     lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .center
         imageView.heightAnchor.constraint(equalToConstant: 28).isActive = true
         return imageView
     }()
@@ -41,12 +42,17 @@ class ErrorView: UIView {
         return button
     }()
     
+    lazy var spacer: UIView = {
+        let spacer = UIView()
+        return spacer
+    }()
+    
     lazy var stackView: UIStackView = {
         let view = UIStackView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.axis = .vertical
         view.spacing = 24
-        view.alignment = .center
+        view.alignment = .fill
         view.layoutMargins = UIEdgeInsets(top: 24, left: 32, bottom: 16, right: 32)
         view.isLayoutMarginsRelativeArrangement = true
         view.backgroundColor = UIColor(named: "errorViewBackgroundColor")
@@ -58,8 +64,8 @@ class ErrorView: UIView {
     lazy var buttonStackView: UIStackView = {
         let view = UIStackView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.axis = .vertical
-        view.alignment = .trailing
+        view.axis = .horizontal
+        view.alignment = .fill
         return view
     }()
     
@@ -92,10 +98,8 @@ class ErrorView: UIView {
         stackView.addArrangedSubview(imageView)
         stackView.addArrangedSubview(errorLabel)
         stackView.addArrangedSubview(buttonStackView)
-        NSLayoutConstraint.activate([
-            buttonStackView.trailingAnchor.constraint(equalTo: stackView.layoutMarginsGuide.trailingAnchor)
-        ])
         
+        buttonStackView.addArrangedSubview(spacer)
         buttonStackView.addArrangedSubview(dismissButton)
     }
 
