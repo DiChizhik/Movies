@@ -28,7 +28,7 @@ class WatchlistService {
         }
     }
     
-    func toggleStatus(for item: WatchlistItem) -> WatchlistStatus? {
+    func toggleStatus(for item: WatchlistItem)-> WatchlistStatus? {
         if var watchlist = getWatchlist() {
             let currentStatus: WatchlistStatus = watchlist[item.id] != nil ? .added : .notAdded
             switch currentStatus {
