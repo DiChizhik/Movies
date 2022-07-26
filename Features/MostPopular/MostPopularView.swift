@@ -8,7 +8,7 @@
 import UIKit
 
 protocol MostPopularViewDelegate: AnyObject {
-    func seeMoreTapped()
+    func seeMoreTapped(_ mostPopularView: MostPopularView)
 }
 
 class MostPopularView: UIView {
@@ -129,7 +129,7 @@ class MostPopularView: UIView {
     }
     
     @objc private func seeMoreTapped(_ sender: UIButton) {
-        delegate?.seeMoreTapped()
+        delegate?.seeMoreTapped(self)
     }
 }
 

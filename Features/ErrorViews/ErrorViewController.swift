@@ -39,7 +39,7 @@ class ErrorViewController: UIViewController, ErrorViewDelegate {
         }
     }
     
-    @objc func dismissController() {
+    @objc func dismissController(_ errorView: ErrorView) {
         dismiss(animated: true)
     }
 }

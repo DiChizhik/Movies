@@ -32,7 +32,7 @@ class SearchViewController: UIViewController, SearchViewDelegate {
         contentView.searchController.searchBar.searchTextField.textColor = UIColor(named: "titleColor")!
     }
     
-    func startSearching(for text: String) {
+    func startSearching(_ searchView: SearchView, for text: String) {
         movieDataService.searchMovies(matching: text) { [weak self] result in
             guard let self = self else { return }
 

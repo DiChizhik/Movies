@@ -95,7 +95,7 @@ class MostPopularViewController: UIViewController, MostPopularViewDelegate {
         }
     }
     
-    func seeMoreTapped() {
+    func seeMoreTapped(_ mostPopularView: MostPopularView) {
         let selectedMovieId = movies[itemInViewIndex].id
         
         let detailViewController = MovieDetailViewController(selectedMovieID: selectedMovieId)

@@ -8,7 +8,7 @@
 import UIKit
 
 protocol ErrorViewDelegate: AnyObject {
-    func dismissController()
+    func dismissController(_ errorView: ErrorView)
 }
 
 class ErrorView: UIView {
@@ -104,7 +104,7 @@ class ErrorView: UIView {
     }
 
     @objc private func dismissController() {
-        delegate?.dismissController()
+        delegate?.dismissController(self)
     }
 
 }

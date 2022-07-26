@@ -35,7 +35,7 @@ struct MovieDetails: Codable {
             var urlComponents = URLComponents()
             urlComponents.scheme = "https"
             urlComponents.host = "image.tmdb.org"
-            urlComponents.path = "t/p/w500\(posterPathString)"
+            urlComponents.path = "/t/p/w500\(posterPathString)"
             
             posterPath = urlComponents.url
         } else {
