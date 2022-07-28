@@ -9,7 +9,7 @@ import UIKit
 
 
 class ErrorViewController: UIViewController, ErrorViewDelegate {
-    private var error: Error
+    private var error: ErrorViewHandleable
     
     lazy var contentView: ErrorView = {
         let view = ErrorView()
@@ -17,7 +17,7 @@ class ErrorViewController: UIViewController, ErrorViewDelegate {
         return view
     }()
     
-    required init(error: Error) {
+    required init(error: ErrorViewHandleable) {
         self.error = error
         
         super.init(nibName: nil, bundle: nil)
@@ -31,12 +31,8 @@ class ErrorViewController: UIViewController, ErrorViewDelegate {
     override func loadView() {
         self.view = contentView
         
-        if let error = error as? MovieServiceError {
-            contentView.imageView.image = error.image
-            contentView.errorLabel.text = error.errorDescription
-        } else {
-//            provide behaviour for other errors
-        }
+        contentView.imageView.image = error.errorImage
+        contentView.errorLabel.text = error.errorTitle
     }
     
     @objc func dismissController(_ errorView: ErrorView) {
@@ -46,9 +42,9 @@ class ErrorViewController: UIViewController, ErrorViewDelegate {
 
 // MARK: - Static functions
 extension ErrorViewController {
-    static func handleError(_ error: Error, presentingViewController: UIViewController) {
+    static func handleError(_ error: ErrorViewHandleable, presentingViewController: UIViewController) {
         let vc = self.init(error: error)
-        vc.modalPresentationStyle = .pageSheet
+        vc.modalPresentationStyle = .overFullScreen
         presentingViewController.present(vc, animated: true)
     }
 }

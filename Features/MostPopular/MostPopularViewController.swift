@@ -52,7 +52,7 @@ class MostPopularViewController: UIViewController, MostPopularViewDelegate {
     }
 
     private func loadMovieData() {
-        movieDataService.getPlayingNowMoviesList { [weak self] result in
+        movieDataService.getMostPopularMoviesList { [weak self] result in
             guard let self = self else { return }
             
             switch result {
@@ -71,17 +71,19 @@ class MostPopularViewController: UIViewController, MostPopularViewDelegate {
     }
     
     private func configureWithData(index: Int) {
-        let movie = movies[index]
+        let movie = movies[safe: index]
         
-        let movieName = movie.title
-        let reviewsScore = "\(movie.voteAverage)%"
-        let movieDescription = movie.overview
+        if let movie = movie {
+            let movieName = movie.title
+            let reviewsScore = "\(movie.voteAverage)%"
+            let movieDescription = movie.overview
         
-        contentView.name.text = movieName
-        contentView.reviewsScore.text = reviewsScore
-        contentView.movieDescription.text = movieDescription
+            contentView.name.text = movieName
+            contentView.reviewsScore.text = reviewsScore
+            contentView.movieDescription.text = movieDescription
         
-        updateReviewScoreIndicator(reviewsScore: reviewsScore)
+            updateReviewScoreIndicator(reviewsScore: reviewsScore)
+        }
     }
     
     private func updateReviewScoreIndicator(reviewsScore: String) {

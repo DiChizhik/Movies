@@ -61,6 +61,7 @@ class SearchView: UIView {
     
     @objc private func startSearching() {
         guard let text = searchController.searchBar.text else { return }
+        guard !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
         
         delegate?.startSearching(self, for: text)
     }

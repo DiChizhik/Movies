@@ -13,12 +13,17 @@ protocol MovieDataServiceProtocol {
     func getMostPopularMoviesList(completion: @escaping (Result<[Movie], MovieServiceError>)-> Void)
 }
 
-enum MovieServiceError: Error, LocalizedError {
+protocol ErrorViewHandleable {
+    var errorImage: UIImage? { get }
+    var errorTitle: String { get }
+}
+
+enum MovieServiceError: Error, LocalizedError, ErrorViewHandleable {
     case failedToGetResponse
     case failedToGetData
     case failedToDecode
     
-    var errorDescription: String? {
+    var errorTitle: String {
         switch self {
         case .failedToDecode:
             return "Failed to decode data.\nCall the special agents."
@@ -29,7 +34,7 @@ enum MovieServiceError: Error, LocalizedError {
         }
     }
     
-    var image: UIImage? {
+    var errorImage: UIImage? {
         switch self {
         case .failedToGetData:
             return UIImage(named: "dizzy")

@@ -36,6 +36,7 @@
 		0277AE5528646E0800054D50 /* DetailCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0277AE5428646E0800054D50 /* DetailCollectionViewCell.swift */; };
 		02F514E5286B948F006D7843 /* SelfSizingCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F514E4286B948F006D7843 /* SelfSizingCollectionView.swift */; };
 		DD7F7F1628854F0C0097E647 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F7F1528854F0C0097E647 /* ErrorView.swift */; };
+		DD8D6E6928927E6900A62950 /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8D6E6828927E6900A62950 /* Collection.swift */; };
 		DDB17D9D288572AD0018A240 /* ErrorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB17D9C288572AD0018A240 /* ErrorViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -70,6 +71,7 @@
 		0277AE5428646E0800054D50 /* DetailCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCollectionViewCell.swift; sourceTree = "<group>"; };
 		02F514E4286B948F006D7843 /* SelfSizingCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfSizingCollectionView.swift; sourceTree = "<group>"; };
 		DD7F7F1528854F0C0097E647 /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
+		DD8D6E6828927E6900A62950 /* Collection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collection.swift; sourceTree = "<group>"; };
 		DDB17D9C288572AD0018A240 /* ErrorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -221,6 +223,7 @@
 				023463AF286F24C2001A703C /* UIStackView.swift */,
 				021C2B74287D6AC5004F8113 /* UITableView.swift */,
 				021C2B76287D6F55004F8113 /* UICollectionView.swift */,
+				DD8D6E6828927E6900A62950 /* Collection.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -329,6 +332,7 @@
 				DDB17D9D288572AD0018A240 /* ErrorViewController.swift in Sources */,
 				0277AE5528646E0800054D50 /* DetailCollectionViewCell.swift in Sources */,
 				0277AE182861C76700054D50 /* String.swift in Sources */,
+				DD8D6E6928927E6900A62950 /* Collection.swift in Sources */,
 				021C2B71287C1CE6004F8113 /* SearchTableViewCell.swift in Sources */,
 				021C2BA4287DAE2A004F8113 /* SearchView.swift in Sources */,
 				025F059B284786CF00FF070D /* Movie.swift in Sources */,

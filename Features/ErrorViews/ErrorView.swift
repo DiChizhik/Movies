@@ -84,7 +84,6 @@ class ErrorView: UIView {
     }
     
     private func setupUI() {
-//        At this point I'd talk to the designer about how cruial the background with 0.6 opacity is.
         backgroundColor = UIColor.clear
         
         addSubview(stackView)
