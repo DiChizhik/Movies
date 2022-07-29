@@ -10,6 +10,7 @@ import UIKit
 class PlayingNowCollectionViewController: UICollectionViewController {
     private var movies = [Movie]()
     private let movieDataService = MovieDataService()
+    private let watchlistService = WatchlistService()
     
     var selectedItemId: Int?
     
@@ -64,6 +65,25 @@ private extension PlayingNowCollectionViewController {
     }
 }
 
+// MARK: - WatchlistButtonDelegate
+extension PlayingNowCollectionViewController: WatchlistButtonDelegate {
+    func watchlistTapped(_ view: WatchlistHandleable) {
+        print("Entered watchlistTapped method")
+        guard let cell = view as? UICollectionViewCell else { return }
+        
+        if let indexPath = collectionView.indexPath(for: cell) {
+            print("Identified indexPath: \(indexPath)")
+            let movie = movies[indexPath.item]
+            let watchlistItem = WatchlistItem(id: movie.id, saveDate: Date.now)
+            
+            let updatedStatus = watchlistService.toggleStatus(for: watchlistItem)
+            print("Toggled status")
+            view.watchlistButton.updateWithStatus(updatedStatus, isShortVariant: true)
+            
+        }
+    }
+}
+
 // MARK: - UICollectionViewDataSource
 extension PlayingNowCollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -72,14 +92,17 @@ extension PlayingNowCollectionViewController {
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeue(PlayingNowCollectionViewCell.self, for: indexPath)
+        cell.watchlistButtonDelegate = self
         
         let movie = movies[indexPath.item]
         let movieName = movie.title
         let reviewsScore = movie.voteAverage
-        let popularity = movie.popularity
         let path = movie.posterPath
+        let movieID = movie.id
         
-        cell.configure(imageURL: path, name: movieName, reviewsScore: reviewsScore, popularity: popularity)
+        let status = watchlistService.getStatus(for: movieID)
+        
+        cell.configure(imageURL: path, name: movieName, reviewsScore: reviewsScore, status: status)
         
         return cell
     }

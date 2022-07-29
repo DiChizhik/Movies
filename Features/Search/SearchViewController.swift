@@ -9,6 +9,7 @@ import UIKit
 
 class SearchViewController: UIViewController {
     let movieDataService = MovieDataService()
+    let watchlistService = WatchlistService()
     private var searchResults = [Movie]()
     
     private lazy var contentView: SearchView = {
@@ -31,6 +32,26 @@ class SearchViewController: UIViewController {
         navigationItem.searchController = contentView.searchController
         contentView.searchController.searchBar.searchTextField.textColor = .whiteF5
     }
+
+// MARK: - WatchlistButtonDelegate
+extension SearchViewController: WatchlistButtonDelegate {
+    func watchlistTapped(_ view: WatchlistHandleable) {
+        print("Entered watchlistTapped method")
+        guard let cell = view as? UITableViewCell else { return }
+        
+        if let indexPath = contentView.tableView.indexPath(for: cell) {
+            print("Identified indexPath: \(indexPath)")
+            let movie = searchResults[indexPath.row]
+            let watchlistItem = WatchlistItem(id: movie.id, saveDate: Date.now)
+            
+            let updatedStatus = watchlistService.toggleStatus(for: watchlistItem)
+            print("Toggled status")
+            view.watchlistButton.updateWithStatus(updatedStatus, isShortVariant: true)
+        }
+    }
+    
+    
+}
 
 //MARK: - SearchViewDelegate
 extension SearchViewController: SearchViewDelegate {
@@ -62,9 +83,11 @@ extension SearchViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeue(SearchTableViewCell.self, for: indexPath)
+        cell.watchlistButtonDelegate = self
         
         let movie = searchResults[indexPath.row]
-        cell.configure(imageURL: movie.posterPath, title: movie.title, reviewsScore: movie.voteAverage)
+        let status = watchlistService.getStatus(for: movie.id)
+        cell.configure(imageURL: movie.posterPath, title: movie.title, reviewsScore: movie.voteAverage, status: status)
         
         return cell
     }

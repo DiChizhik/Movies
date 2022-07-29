@@ -8,7 +8,9 @@
 import UIKit
 import Kingfisher
 
-class PlayingNowCollectionViewCell: UICollectionViewCell, Reusable {
+class PlayingNowCollectionViewCell: UICollectionViewCell, Reusable, WatchlistHandleable {
+    weak var watchlistButtonDelegate: WatchlistButtonDelegate?
+    
     private lazy var imageView: UIImageView = {
        let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -35,11 +37,16 @@ class PlayingNowCollectionViewCell: UICollectionViewCell, Reusable {
         return view
     }()
     
-    private lazy var watchlistButton: WatchlistButton = {
+    lazy var watchlistButton: WatchlistButton = {
         let button = WatchlistButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-//      Need to figure out how to get rid of the right inset. Might disappear when implemented using UIButton extension method. Maybe create a separate one for the short version of the button?
-        button.shortVersion()
+        button.short()
+        let action = UIAction { [weak self] _ in
+            guard let self = self else { return }
+            
+            self.watchlistButtonDelegate?.watchlistTapped(self)
+        }
+        button.addAction(action, for: .touchUpInside)
         return button
     }()
     
@@ -58,12 +65,16 @@ class PlayingNowCollectionViewCell: UICollectionViewCell, Reusable {
 
 // MARK: - Public functions
 extension PlayingNowCollectionViewCell {
-    func configure(imageURL: URL?, name: String, reviewsScore: Int, popularity: Movie.Popularity) {
+    func configure(imageURL: URL?, name: String, reviewsScore: Int, status: WatchlistStatus?) {
         if let url = imageURL {
             imageView.kf.setImage(with: url)
         }
         self.name.text = name
         self.reviewScoreStackView.setValue(reviewsScore)
+        
+        if let status = status {
+            self.watchlistButton.updateWithStatus(status, isShortVariant: true)
+        }
     }
 }
 

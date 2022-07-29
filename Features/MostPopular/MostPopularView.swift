@@ -12,8 +12,9 @@ protocol MostPopularViewDelegate: AnyObject {
     func watchlistTapped()
 }
 
-final class MostPopularView: UIView {
+final class MostPopularView: UIView, WatchlistHandleable {
     weak var delegate: MostPopularViewDelegate?
+    weak var watchlistButtonDelegate: WatchlistButtonDelegate?
     weak var collectionViewDelegate: UICollectionViewDelegate? {
         get {
             collectionView.delegate
@@ -65,13 +66,14 @@ final class MostPopularView: UIView {
         return view
     }()
     
-//    As of now it's the only place where I've tried out UIButton extension method and used WatchlistService.
-    private(set) lazy var watchlistButton: UIButton = {
-        let button = UIButton.createWatchlistButton()
+    lazy var watchlistButton: WatchlistButton = {
+        let button = WatchlistButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.alpha = 0
         let action = UIAction { [weak self] _ in
-            self?.delegate?.watchlistTapped()
+            guard let self = self else { return }
+            
+            self.watchlistButtonDelegate?.watchlistTapped(self)
         }
         button.addAction(action, for: .touchUpInside)
         return button
@@ -88,15 +90,19 @@ final class MostPopularView: UIView {
         return description
     }()
     
-//    If I use buttonConfiguration in one place, is it critical I use it with all buttons?
     private lazy var seeMoreButton: UIButton = {
         let button = UIButton(type: .system)
-        button.addTarget(self, action: #selector(seeMoreTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("See more", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
         button.tintColor = .whiteF5
         button.alpha = 0
+        let action = UIAction { [weak self] _ in
+            guard let self = self else { return }
+            
+            self.delegate?.seeMoreTapped(self)
+        }
+        button.addAction(action, for: .touchUpInside)
         return button
     }()
     
@@ -122,14 +128,7 @@ extension MostPopularView {
         }
         
         if let status = status {
-            switch status {
-            case .added:
-                watchlistButton.updateWatchlistButton(isOnWatchlist: true)
-            case .notAdded:
-                watchlistButton.updateWatchlistButton(isOnWatchlist: false)
-            }
-        } else {
-            watchlistButton.updateWatchlistButton(isOnWatchlist: false)
+            watchlistButton.updateWithStatus(status, isShortVariant: false)
         }
     }
     
@@ -139,6 +138,11 @@ extension MostPopularView {
         watchlistButton.alpha = value
         movieDescription.alpha = value
         seeMoreButton.alpha = value
+    }
+    
+//    I've added this function so that we don't need to access the watchlistButton itself to call its updateWithStatus function. However, due to the Handleable protocol I can't make the button private. In this case does this function make sense here?
+    func updateWatchlistButtonWithStatus(_ status: WatchlistStatus, isShortVariant: Bool) {
+        watchlistButton.updateWithStatus(status, isShortVariant: isShortVariant)
     }
 }
 
@@ -180,9 +184,5 @@ private extension MostPopularView {
             seeMoreButton.topAnchor.constraint(equalTo: movieDescription.bottomAnchor, constant: 8),
             seeMoreButton.centerXAnchor.constraint(equalTo: name.centerXAnchor)
         ])
-    }
-    
-    @objc private func seeMoreTapped(_ sender: UIButton) {
-        delegate?.seeMoreTapped(self)
     }
 }

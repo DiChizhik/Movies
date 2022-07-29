@@ -7,7 +7,9 @@
 
 import UIKit
 
-class SearchTableViewCell: UITableViewCell, Reusable {
+class SearchTableViewCell: UITableViewCell, Reusable, WatchlistHandleable {
+    weak var watchlistButtonDelegate: WatchlistButtonDelegate?
+    
     private lazy var posterImageView: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
@@ -30,6 +32,18 @@ class SearchTableViewCell: UITableViewCell, Reusable {
         return view
     }()
     
+    lazy var watchlistButton: WatchlistButton = {
+        let button = WatchlistButton()
+        button.configuration?.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+        let action = UIAction { [weak self] _ in
+            guard let self = self else { return }
+            
+            self.watchlistButtonDelegate?.watchlistTapped(self)
+        }
+        button.addAction(action, for: .touchUpInside)
+        return button
+    }()
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -45,13 +59,17 @@ class SearchTableViewCell: UITableViewCell, Reusable {
 
 // MARK: - Public functions
 extension SearchTableViewCell {
-    func configure(imageURL: URL?, title: String, reviewsScore: Int) {
+    func configure(imageURL: URL?, title: String, reviewsScore: Int, status: WatchlistStatus?) {
         if let url = imageURL {
             posterImageView.kf.setImage(with: url)
         }
         
         titleLabel.text = title
         reviewScoreStackView.setValue(reviewsScore)
+        
+        if let status = status {
+            watchlistButton.updateWithStatus(status, isShortVariant: false)
+        }
     }
 }
 
@@ -61,6 +79,7 @@ private extension SearchTableViewCell {
         contentView.backgroundColor = .darkBlue01
         
         let textStack = UIStackView(arrangedSubviews: [titleLabel, reviewScoreStackView])
+        textStack.addArrangedSubview(watchlistButton, spaceBefore: 16)
         textStack.translatesAutoresizingMaskIntoConstraints = false
         textStack.axis = .vertical
         textStack.spacing = 8

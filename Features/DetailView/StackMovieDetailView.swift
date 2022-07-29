@@ -7,7 +7,9 @@
 
 import UIKit
 
-class StackMovieDetailView: UIView {
+class StackMovieDetailView: UIView, WatchlistHandleable {
+    weak var watchlistButtonDelegate: WatchlistButtonDelegate?
+    
     private(set) lazy var titleLabel: UILabel = {
        let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -39,8 +41,14 @@ class StackMovieDetailView: UIView {
         return view
     }()
     
-    private(set) lazy var watchlistButton: WatchlistButton = {
+    lazy var watchlistButton: WatchlistButton = {
         let button = WatchlistButton()
+        let action = UIAction { [weak self] _ in
+            guard let self = self else { return }
+    
+            self.watchlistButtonDelegate?.watchlistTapped(self)
+        }
+        button.addAction(action, for: .touchUpInside)
         return button
     }()
     

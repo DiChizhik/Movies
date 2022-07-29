@@ -71,7 +71,8 @@ extension WatchlistViewController: UITableViewDataSource {
         let cell = tableView.dequeue(WatchlisttableViewCell.self, for: indexPath)
 
         let item = movies[indexPath.row]
-        cell.configure(imageURL: item.posterPath, title: item.title, reviewsScore: item.voteAverage)
+        let status = watchlistService.getStatus(for: item.id)
+        cell.configure(imageURL: item.posterPath, title: item.title, reviewsScore: item.voteAverage, status: status)
         return cell
     }
 }

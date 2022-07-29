@@ -6,62 +6,75 @@
 //
 
 import UIKit
-// I planned to delete this implementation of the button and replace it with methods from the UIButton extension. However, it'd be great to discuss both.
+
+protocol WatchlistButtonDelegate: AnyObject {
+    func watchlistTapped(_ view: WatchlistHandleable)
+}
+
+protocol WatchlistHandleable: AnyObject {
+    var watchlistButtonDelegate: WatchlistButtonDelegate? { get set }
+    var watchlistButton: WatchlistButton { get }
+}
 
 final class WatchlistButton: UIButton {
-    private var attributes: [NSAttributedString.Key : Any] = [
-        .foregroundColor : UIColor.whiteF5,
-        .font : UIFont.systemFont(ofSize: 15)
-    ]
     private var selectedText: String? = "On Watchlist"
     private var nonSelectedText: String? = "To Watchlist"
     
-//    var selectedImage = UIImage(named: "ticket")?.withTintColor(.lightBlue)
     private var image = #imageLiteral(resourceName: "ticket")
+    private var selectedColor: UIColor = .green
+    private var nonSelectedColor: UIColor = .lightBlue61
     
-    var isActive: Bool = false
-    
-    override func draw(_ rect: CGRect) {
-        if isActive {
-            setSelected()
-        } else {
-            setNonSelected()
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        var config = UIButton.Configuration.plain()
+        
+        config.title = nonSelectedText
+        config.titleTextAttributesTransformer =
+          UIConfigurationTextAttributesTransformer { incoming in
+            var outgoing = incoming
+            outgoing.font = UIFont.systemFont(ofSize: 15)
+            outgoing.foregroundColor = .whiteF5
+            return outgoing
         }
         
-        setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 8)
+        config.image = #imageLiteral(resourceName: "ticket")
+        config.imagePlacement = .leading
+        config.imagePadding = 8
+        config.imageColorTransformer = UIConfigurationColorTransformer { incoming in
+            var outgoing = incoming
+            outgoing = .lightBlue61
+            return outgoing
+        }
+
+        self.configuration = config
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func updateWithStatus(_ status: WatchlistStatus, isShortVariant: Bool) {
+        var config = self.configuration
         
-        addTarget(self, action: #selector(tapped), for: .touchUpInside)
-    }
-    
-    private func setSelected() {
-        setImage(image, for: .normal)
-        imageView?.tintColor = .green
-        if let selectedText = selectedText {
-            setAttributedTitle(NSAttributedString(string: selectedText, attributes: attributes), for: .normal)
+        if isShortVariant == false {
+            config?.title = status == .added ? selectedText : nonSelectedText
         }
-    }
-    
-    private func setNonSelected() {
-        setImage(image, for: .normal)
-        imageView?.tintColor = .lightBlue61
-        if let nonSelectedText = nonSelectedText {
-            setAttributedTitle(NSAttributedString(string: nonSelectedText, attributes: attributes), for: .normal)
-        }
-    }
-    
-    @objc func tapped() {
-        isActive = !isActive
         
-        if isActive {
-            setSelected()
-        } else {
-            setNonSelected()
+        config?.imageColorTransformer = UIConfigurationColorTransformer { incoming in
+            var outgoing = incoming
+            outgoing = status == .added ? .green : .lightBlue61
+            return outgoing
         }
+        self.configuration = config
     }
     
-    func shortVersion() {
-        selectedText = nil
-        nonSelectedText = nil
-        setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0)
+    func short() {
+        var config = self.configuration
+        
+        config?.title = nil
+        config?.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+        
+        self.configuration = config
     }
 }

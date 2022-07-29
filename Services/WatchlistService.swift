@@ -8,8 +8,8 @@
 import UIKit
 
 protocol WatchlistServiceProtocol {
-    func getStatus(for id: Int)-> WatchlistStatus?
-    func toggleStatus(for item: WatchlistItem) -> WatchlistStatus?
+    func getStatus(for id: Int)-> WatchlistStatus
+    func toggleStatus(for item: WatchlistItem) -> WatchlistStatus
     func getWatchlistItems() -> [WatchlistItem]?
 }
 
@@ -20,28 +20,28 @@ enum WatchlistStatus {
 class WatchlistService {
     typealias Watchlist = [Int : WatchlistItem]
     
-    func getStatus(for id: Int)-> WatchlistStatus? {
+    func getStatus(for id: Int)-> WatchlistStatus {
         if let watchlist = getWatchlist() {
             return watchlist[id] != nil ? .added : .notAdded
         } else {
-            return nil
+            return .notAdded
         }
     }
     
-    func toggleStatus(for item: WatchlistItem)-> WatchlistStatus? {
+    func toggleStatus(for item: WatchlistItem)-> WatchlistStatus {
         if var watchlist = getWatchlist() {
             let currentStatus: WatchlistStatus = watchlist[item.id] != nil ? .added : .notAdded
             switch currentStatus {
             case .added:
                 watchlist.removeValue(forKey: item.id)
-                return saveWatchlist(watchlist) ? .notAdded : nil
+                return saveWatchlist(watchlist) ? .notAdded : .added
             case .notAdded:
                 watchlist[item.id] = item
-                return saveWatchlist(watchlist) ? .added : nil
+                return saveWatchlist(watchlist) ? .added : .notAdded
             }
         } else {
             let watchlist: Watchlist = [item.id : item]
-            return saveWatchlist(watchlist) ? .added : nil
+            return saveWatchlist(watchlist) ? .added : .notAdded
         }
     }
     

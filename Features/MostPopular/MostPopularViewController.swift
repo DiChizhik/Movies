@@ -8,7 +8,7 @@
 import UIKit
 import Kingfisher
 
-class MostPopularViewController: UIViewController, MostPopularViewDelegate {
+class MostPopularViewController: UIViewController {
     private enum Fading: Int {
         case fadeIn = 1
         case fadeOut = 0
@@ -24,6 +24,7 @@ class MostPopularViewController: UIViewController, MostPopularViewDelegate {
         view.collectionViewDelegate = self
         view.collectionViewDataSource = self
         view.delegate = self
+        view.watchlistButtonDelegate = self
         return view
     }()
     
@@ -45,9 +46,9 @@ class MostPopularViewController: UIViewController, MostPopularViewDelegate {
         
         loadMovieData()
         
-//        The app crashed if there were no movies(Error: Failed to load from server), so I added this check to prevent the crash.
-        DispatchQueue.main.async {
-            guard !self.movies.isEmpty else { return }
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            guard self.movies.count > self.itemInViewIndex else { return }
             
             self.contentView.collectionView.scrollToItem(at: IndexPath(item: self.itemInViewIndex, section: 0), at: UICollectionView.ScrollPosition.centeredHorizontally, animated: false)
             self.configureWithData(index: self.itemInViewIndex)
@@ -57,27 +58,21 @@ class MostPopularViewController: UIViewController, MostPopularViewDelegate {
 }
  
 // MARK: - Public functions
-extension MostPopularViewController {
+extension MostPopularViewController: MostPopularViewDelegate, WatchlistButtonDelegate {
+    func watchlistTapped(_ view: WatchlistHandleable) {
+        let movie = movies[itemInViewIndex]
+        let watchlistItem = WatchlistItem(id: movie.id, saveDate: Date.now)
+
+        let updatedStatus = watchlistService.toggleStatus(for: watchlistItem)
+        contentView.updateWatchlistButtonWithStatus(updatedStatus, isShortVariant: false)
+    }
+    
     func seeMoreTapped() {
         let selectedMovieId = movies[itemInViewIndex].id
         
         let detailViewController = MovieDetailViewController(selectedMovieID: selectedMovieId)
         let detailNavigationController = UINavigationController(rootViewController: detailViewController)
         present(detailNavigationController, animated: true)
-    }
-    
-    func watchlistTapped() {
-        let movie = movies[itemInViewIndex]
-        let watchlistItem = WatchlistItem(id: movie.id, saveDate: Date.now)
-
-        if let updatedStatus = watchlistService.toggleStatus(for: watchlistItem) {
-            switch updatedStatus {
-            case .added:
-                contentView.watchlistButton.updateWatchlistButton(isOnWatchlist: true)
-            case .notAdded:
-                contentView.watchlistButton.updateWatchlistButton(isOnWatchlist: false)
-            }
-        }
     }
 }
 

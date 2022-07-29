@@ -11,12 +11,15 @@ import Kingfisher
 class MovieDetailViewController: UIViewController {
     private var selectedMovieID: Int
     private let movieDataService = MovieDataService()
+    private let watchlistService = WatchlistService()
+    
     private  var movieDetails: MovieDetails?
     private var languageAndGenreData = [CollectionViewSection]()
     
     private lazy var contentView: StackMovieDetailView = {
         let view = StackMovieDetailView()
         view.collectionView.dataSource = self
+        view.watchlistButtonDelegate = self
         return view
     }()
 
@@ -85,6 +88,9 @@ private extension MovieDetailViewController {
             contentView.imageView.kf.setImage(with: path)
         }
         
+        let status = watchlistService.getStatus(for: selectedMovieID)
+        contentView.watchlistButton.updateWithStatus(status, isShortVariant: false)
+        
         contentView.reviewScoreStackView.setValue(movieDetails.voteAverage)
         contentView.releaseDateLabel.text = movieDetails.releaseDate
         contentView.durationLabel.text = movieDetails.runtime
@@ -108,6 +114,16 @@ private extension MovieDetailViewController {
     @objc func dismissView(_ sender: UIButton) {
         dismiss(animated: true)
     }
+}
+
+// MARK: - WatchlistButtonDelegate
+extension MovieDetailViewController: WatchlistButtonDelegate {
+    func watchlistTapped(_ view: WatchlistHandleable) {
+        let watchlistItem = WatchlistItem(id: selectedMovieID, saveDate: Date.now)
+
+        let updatedStatus = watchlistService.toggleStatus(for: watchlistItem)
+        contentView.watchlistButton.updateWithStatus(updatedStatus, isShortVariant: false)
+    }   
 }
 
 // MARK: - UICollectionViewDataSource
