@@ -8,7 +8,7 @@
 import UIKit
 
 protocol SearchViewDelegate: AnyObject {
-    func startSearching(for text: String)
+    func startSearching(_ searchView: SearchView, for text: String)
 }
 
 class SearchView: UIView {
@@ -61,8 +61,9 @@ class SearchView: UIView {
     
     @objc private func startSearching() {
         guard let text = searchController.searchBar.text else { return }
+        guard !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
         
-        delegate?.startSearching(for: text)
+        delegate?.startSearching(self, for: text)
     }
     
 }

@@ -32,7 +32,12 @@ struct MovieDetails: Codable {
         title = try values.decode(String.self, forKey: .title)
         
         if let posterPathString = try values.decodeIfPresent(String.self, forKey: .posterPath) {
-            posterPath = URL(string: "https://image.tmdb.org/t/p/w500" + posterPathString)
+            var urlComponents = URLComponents()
+            urlComponents.scheme = "https"
+            urlComponents.host = "image.tmdb.org"
+            urlComponents.path = "/t/p/w500\(posterPathString)"
+            
+            posterPath = urlComponents.url
         } else {
             posterPath = nil
         }

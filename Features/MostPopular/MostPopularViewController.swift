@@ -41,7 +41,10 @@ class MostPopularViewController: UIViewController, MostPopularViewDelegate {
         
         loadMovieData()
         
+//        The app crashed if there were no movies(Error: Failed to load from server), so I added this check to prevent the crash.
         DispatchQueue.main.async {
+            guard !self.movies.isEmpty else { return }
+            
             self.contentView.collectionView.scrollToItem(at: IndexPath(item: self.itemInViewIndex, section: 0), at: UICollectionView.ScrollPosition.centeredHorizontally, animated: false)
             self.configureWithData(index: self.itemInViewIndex)
             self.fade(.fadeIn)
@@ -49,14 +52,16 @@ class MostPopularViewController: UIViewController, MostPopularViewDelegate {
     }
 
     private func loadMovieData() {
-        movieDataService.getPlayingNowMoviesList { [weak self] result in
+        movieDataService.getMostPopularMoviesList { [weak self] result in
             guard let self = self else { return }
             
             switch result {
             case .success(let moviesList):
                 self.movies.append(contentsOf: moviesList)
-            case .failure(_):
-                break
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    ErrorViewController.handleError(error, presentingViewController: self)
+                }
             }
             
             DispatchQueue.main.async {
@@ -66,17 +71,19 @@ class MostPopularViewController: UIViewController, MostPopularViewDelegate {
     }
     
     private func configureWithData(index: Int) {
-        let movie = movies[index]
+        let movie = movies[safe: index]
         
-        let movieName = movie.title
-        let reviewsScore = "\(movie.voteAverage)%"
-        let movieDescription = movie.overview
+        if let movie = movie {
+            let movieName = movie.title
+            let reviewsScore = "\(movie.voteAverage)%"
+            let movieDescription = movie.overview
         
-        contentView.name.text = movieName
-        contentView.reviewsScore.text = reviewsScore
-        contentView.movieDescription.text = movieDescription
+            contentView.name.text = movieName
+            contentView.reviewsScore.text = reviewsScore
+            contentView.movieDescription.text = movieDescription
         
-        updateReviewScoreIndicator(reviewsScore: reviewsScore)
+            updateReviewScoreIndicator(reviewsScore: reviewsScore)
+        }
     }
     
     private func updateReviewScoreIndicator(reviewsScore: String) {
@@ -90,7 +97,7 @@ class MostPopularViewController: UIViewController, MostPopularViewDelegate {
         }
     }
     
-    func seeMoreTapped() {
+    func seeMoreTapped(_ mostPopularView: MostPopularView) {
         let selectedMovieId = movies[itemInViewIndex].id
         
         let detailViewController = MovieDetailViewController(selectedMovieID: selectedMovieId)
