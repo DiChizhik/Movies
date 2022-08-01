@@ -29,10 +29,11 @@ class WatchlistViewController: UIViewController {
         ]
         navigationController?.navigationBar.barTintColor = .darkBlue01
     }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
+   
+//    I've replaced viewDidLoad with viewDidAppear to ensure watchlist is up-to-date with the changes I make in other tabs. I guess I'll have to do the same for other screen so that watchlistButton appearance is up-to-date too.
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
         guard let watchlistItems = watchlistService.getWatchlistItems() else { return }
         loadMovieData(for: watchlistItems)
     }
@@ -41,20 +42,44 @@ class WatchlistViewController: UIViewController {
 // MARK: - Private functions
 private extension WatchlistViewController {
     func loadMovieData(for items: [WatchlistItem]) {
+        movies.removeAll()
+        
         for item in items {
             movieDataService.getMovieDetails(movieId: item.id) { [weak self] result in
+                guard let self = self else { return }
+                
                 switch result {
                 case .success(let details):
-                    self?.movies.append(details)
-                    DispatchQueue.main.async { [weak self] in
-                        self?.contentView.tableView.reloadData()
+                    self.movies.append(details)
+                    DispatchQueue.main.async {
+                        self.contentView.tableView.reloadData()
                     }
-                case .failure(_):
-                    break
+                case .failure(let error):
+                    DispatchQueue.main.async {
+                        ErrorViewController.handleError(error, presentingViewController: self)
+                    }
                 }
             }
         }
     }
+}
+
+// MARK: - WatchlistButtonDelegate
+extension WatchlistViewController: WatchlistButtonDelegate {
+//    It might make sense to add slightly different logic to this function. Like immediately deleting the row where the button was tapped.
+    func watchlistTapped(_ view: WatchlistHandleable) {
+        guard let cell = view as? UITableViewCell else { return }
+        
+        if let indexPath = contentView.tableView.indexPath(for: cell) {
+            let movie = movies[indexPath.row]
+            let watchlistItem = WatchlistItem(id: movie.id, saveDate: Date.now)
+            
+            let updatedStatus = watchlistService.toggleStatus(for: watchlistItem)
+            view.watchlistButton.updateWithStatus(updatedStatus, isShortVariant: false)
+        }
+    }
+    
+    
 }
 
 // MARK: - UITableViewDelegate
@@ -68,7 +93,8 @@ extension WatchlistViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeue(WatchlisttableViewCell.self, for: indexPath)
+        let cell = tableView.dequeue(WatchlistTableViewCell.self, for: indexPath)
+        cell.watchlistButtonDelegate = self
 
         let item = movies[indexPath.row]
         let status = watchlistService.getStatus(for: item.id)

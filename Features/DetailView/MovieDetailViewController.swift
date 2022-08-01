@@ -105,12 +105,6 @@ private extension MovieDetailViewController {
         contentView.collectionView.reloadData()
     }
     
-    func showError(message: String) {
-        let ac = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
-        ac.addAction(UIAlertAction(title: "OK", style: .default))
-        self.present(ac, animated: true)
-    }
-    
     @objc func dismissView(_ sender: UIButton) {
         dismiss(animated: true)
     }

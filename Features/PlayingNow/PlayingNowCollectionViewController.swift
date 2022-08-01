@@ -68,16 +68,13 @@ private extension PlayingNowCollectionViewController {
 // MARK: - WatchlistButtonDelegate
 extension PlayingNowCollectionViewController: WatchlistButtonDelegate {
     func watchlistTapped(_ view: WatchlistHandleable) {
-        print("Entered watchlistTapped method")
         guard let cell = view as? UICollectionViewCell else { return }
         
         if let indexPath = collectionView.indexPath(for: cell) {
-            print("Identified indexPath: \(indexPath)")
             let movie = movies[indexPath.item]
             let watchlistItem = WatchlistItem(id: movie.id, saveDate: Date.now)
             
             let updatedStatus = watchlistService.toggleStatus(for: watchlistItem)
-            print("Toggled status")
             view.watchlistButton.updateWithStatus(updatedStatus, isShortVariant: true)
             
         }

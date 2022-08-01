@@ -9,7 +9,7 @@ import UIKit
 
 protocol MostPopularViewDelegate: AnyObject {
     func seeMoreTapped(_ mostPopularView: MostPopularView)
-    func watchlistTapped()
+    func watchlistTapped(_ view: WatchlistHandleable)
 }
 
 final class MostPopularView: UIView, WatchlistHandleable {

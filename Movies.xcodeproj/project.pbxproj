@@ -37,6 +37,9 @@
 		02F514E5286B948F006D7843 /* SelfSizingCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F514E4286B948F006D7843 /* SelfSizingCollectionView.swift */; };
 		DD8D6E752894082900A62950 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8D6E732894082900A62950 /* ErrorView.swift */; };
 		DD8D6E762894082900A62950 /* ErrorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8D6E742894082900A62950 /* ErrorViewController.swift */; };
+		DD8D6E7928940D2F00A62950 /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8D6E7828940D2F00A62950 /* Collection.swift */; };
+		DD8D6E7C28983B8F00A62950 /* MovieListTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8D6E7B28983B8F00A62950 /* MovieListTableCell.swift */; };
+		DD8D6E7E289845FA00A62950 /* NSLayoutConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8D6E7D289845FA00A62950 /* NSLayoutConstraint.swift */; };
 		DD922D6D2887EA0600061FF7 /* WatchlistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD922D6C2887EA0600061FF7 /* WatchlistViewController.swift */; };
 		DD922D6F2887F9EA00061FF7 /* WatchlistButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD922D6E2887F9EA00061FF7 /* WatchlistButton.swift */; };
 		DD922D712887FCFE00061FF7 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD922D702887FCFE00061FF7 /* UIColor.swift */; };
@@ -78,8 +81,11 @@
 		0277AE192861DF9100054D50 /* LaunchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
 		0277AE5428646E0800054D50 /* DetailCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCollectionViewCell.swift; sourceTree = "<group>"; };
 		02F514E4286B948F006D7843 /* SelfSizingCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfSizingCollectionView.swift; sourceTree = "<group>"; };
-		DD8D6E732894082900A62950 /* ErrorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ErrorView.swift; path = ErrorHandling/ErrorView.swift; sourceTree = "<group>"; };
-		DD8D6E742894082900A62950 /* ErrorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ErrorViewController.swift; path = ErrorHandling/ErrorViewController.swift; sourceTree = "<group>"; };
+		DD8D6E732894082900A62950 /* ErrorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
+		DD8D6E742894082900A62950 /* ErrorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorViewController.swift; sourceTree = "<group>"; };
+		DD8D6E7828940D2F00A62950 /* Collection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Collection.swift; sourceTree = "<group>"; };
+		DD8D6E7B28983B8F00A62950 /* MovieListTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieListTableCell.swift; sourceTree = "<group>"; };
+		DD8D6E7D289845FA00A62950 /* NSLayoutConstraint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLayoutConstraint.swift; sourceTree = "<group>"; };
 		DD922D6C2887EA0600061FF7 /* WatchlistViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistViewController.swift; sourceTree = "<group>"; };
 		DD922D6E2887F9EA00061FF7 /* WatchlistButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistButton.swift; sourceTree = "<group>"; };
 		DD922D702887FCFE00061FF7 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
@@ -106,14 +112,13 @@
 		021C2BA5287DB217004F8113 /* Features */ = {
 			isa = PBXGroup;
 			children = (
-				DD8D6E732894082900A62950 /* ErrorView.swift */,
-				DD8D6E742894082900A62950 /* ErrorViewController.swift */,
 				0277AE192861DF9100054D50 /* LaunchViewController.swift */,
 				021C2BA8287DB242004F8113 /* PlayingNow */,
 				021C2BA7287DB233004F8113 /* MostPopular */,
 				021C2BAA287DB286004F8113 /* Search */,
 				021C2BA9287DB25D004F8113 /* DetailView */,
 				DD922D6B2887E97A00061FF7 /* WatchList */,
+				DD8D6E7A289833E100A62950 /* Error */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -203,6 +208,7 @@
 				02F514E4286B948F006D7843 /* SelfSizingCollectionView.swift */,
 				DD922D6E2887F9EA00061FF7 /* WatchlistButton.swift */,
 				DD922D7628881A1B00061FF7 /* ReviewScoreStackView.swift */,
+				DD8D6E7B28983B8F00A62950 /* MovieListTableCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -242,13 +248,24 @@
 		0277AE162861C75500054D50 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				DD8D6E7828940D2F00A62950 /* Collection.swift */,
 				0277AE172861C76700054D50 /* String.swift */,
 				023463AF286F24C2001A703C /* UIStackView.swift */,
 				021C2B74287D6AC5004F8113 /* UITableView.swift */,
 				021C2B76287D6F55004F8113 /* UICollectionView.swift */,
 				DD922D702887FCFE00061FF7 /* UIColor.swift */,
+				DD8D6E7D289845FA00A62950 /* NSLayoutConstraint.swift */,
 			);
 			name = Extensions;
+			sourceTree = "<group>";
+		};
+		DD8D6E7A289833E100A62950 /* Error */ = {
+			isa = PBXGroup;
+			children = (
+				DD8D6E732894082900A62950 /* ErrorView.swift */,
+				DD8D6E742894082900A62950 /* ErrorViewController.swift */,
+			);
+			path = Error;
 			sourceTree = "<group>";
 		};
 		DD922D6B2887E97A00061FF7 /* WatchList */ = {
@@ -350,6 +367,7 @@
 				023463B2286F282A001A703C /* LeftAlignedCollectionViewFlowLayout.swift in Sources */,
 				023463AE286F1F76001A703C /* StackMovieDetailView.swift in Sources */,
 				026D0D13284E646F00B5BF8B /* MovieDataService.swift in Sources */,
+				DD8D6E7C28983B8F00A62950 /* MovieListTableCell.swift in Sources */,
 				021C2B75287D6AC5004F8113 /* UITableView.swift in Sources */,
 				025F059928476BD200FF070D /* MostPopularCollectionViewCell.swift in Sources */,
 				02334D21283E228F0099C92B /* PlayingNowCollectionViewController.swift in Sources */,
@@ -357,6 +375,7 @@
 				021C2B77287D6F55004F8113 /* UICollectionView.swift in Sources */,
 				021C2B6D287C1B53004F8113 /* SearchViewController.swift in Sources */,
 				023463B42872CE28001A703C /* MostPopularView.swift in Sources */,
+				DD8D6E7E289845FA00A62950 /* NSLayoutConstraint.swift in Sources */,
 				0277AE5528646E0800054D50 /* DetailCollectionViewCell.swift in Sources */,
 				0277AE182861C76700054D50 /* String.swift in Sources */,
 				021C2B71287C1CE6004F8113 /* SearchTableViewCell.swift in Sources */,
@@ -365,6 +384,7 @@
 				DD922D7928894D9500061FF7 /* WatchlistItem.swift in Sources */,
 				025F059B284786CF00FF070D /* Movie.swift in Sources */,
 				026D0D37284F8A3C00B5BF8B /* MovieDetailViewController.swift in Sources */,
+				DD8D6E7928940D2F00A62950 /* Collection.swift in Sources */,
 				02334D25283E438F0099C92B /* PlayingNowCollectionViewCell.swift in Sources */,
 				DD922D712887FCFE00061FF7 /* UIColor.swift in Sources */,
 				02334D0F283E185E0099C92B /* SceneDelegate.swift in Sources */,

@@ -24,7 +24,7 @@ class ErrorView: UIView {
        let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 15)
-        label.textColor = UIColor(named: "errorTextColor")
+        label.textColor = UIColor.darkGrey43
         label.textAlignment = .center
         label.numberOfLines = 0
         return label
@@ -33,7 +33,7 @@ class ErrorView: UIView {
     lazy var dismissButton: UIButton = {
        let button = UIButton()
         let attributes: [NSAttributedString.Key : Any] = [
-            .foregroundColor : UIColor(named: "dismissButtonColor")!,
+            .foregroundColor : UIColor.darkBlue01,
             .font : UIFont.systemFont(ofSize: 15)
         ]
         let title = NSAttributedString(string: "Dismiss", attributes: attributes)
@@ -55,7 +55,7 @@ class ErrorView: UIView {
         view.alignment = .fill
         view.layoutMargins = UIEdgeInsets(top: 24, left: 32, bottom: 16, right: 32)
         view.isLayoutMarginsRelativeArrangement = true
-        view.backgroundColor = UIColor(named: "errorViewBackgroundColor")
+        view.backgroundColor = UIColor.lightGreyB8
         view.layer.cornerRadius = 5
         view.layer.masksToBounds = true
         return view

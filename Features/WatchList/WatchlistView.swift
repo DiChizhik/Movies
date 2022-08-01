@@ -12,9 +12,8 @@ class WatchlistView: UIView {
        let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.backgroundColor = .darkBlue01
-        tableView.register(WatchlisttableViewCell.self)
+        tableView.register(WatchlistTableViewCell.self)
         tableView.rowHeight = 150
-        tableView.keyboardDismissMode = .onDrag
         return tableView
     }()
     

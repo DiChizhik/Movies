@@ -46,11 +46,7 @@ private extension DetailCollectionViewCell {
     func setupUI() {
         contentView.addSubview(label)
         
-        NSLayoutConstraint.activate([
-            label.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4),
-            label.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
-            label.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
-            label.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4),
-        ])
+//        I've applied this method only here for starters in case it's not what you meant. I'll roll it out to other views as soon as it's verified.
+        NSLayoutConstraint.pin(label, to: contentView, withInsets: UIEdgeInsets(top: 4, left: 15, bottom: 4, right: 15))
     }
 }

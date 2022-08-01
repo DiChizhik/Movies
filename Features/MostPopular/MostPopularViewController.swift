@@ -50,7 +50,9 @@ class MostPopularViewController: UIViewController {
             guard let self = self else { return }
             guard self.movies.count > self.itemInViewIndex else { return }
             
-            self.contentView.collectionView.scrollToItem(at: IndexPath(item: self.itemInViewIndex, section: 0), at: UICollectionView.ScrollPosition.centeredHorizontally, animated: false)
+            self.contentView.collectionView.scrollToItem(at: IndexPath(item: self.itemInViewIndex, section: 0),
+                                                         at: .centeredHorizontally,
+                                                         animated: false)
             self.configureWithData(index: self.itemInViewIndex)
             self.fade(.fadeIn)
         }
@@ -60,17 +62,18 @@ class MostPopularViewController: UIViewController {
 // MARK: - Public functions
 extension MostPopularViewController: MostPopularViewDelegate, WatchlistButtonDelegate {
     func watchlistTapped(_ view: WatchlistHandleable) {
-        let movie = movies[itemInViewIndex]
+        guard let movie = movies[safe: itemInViewIndex] else { return }
+        
         let watchlistItem = WatchlistItem(id: movie.id, saveDate: Date.now)
 
         let updatedStatus = watchlistService.toggleStatus(for: watchlistItem)
         contentView.updateWatchlistButtonWithStatus(updatedStatus, isShortVariant: false)
     }
     
-    func seeMoreTapped() {
-        let selectedMovieId = movies[itemInViewIndex].id
+    func seeMoreTapped(_ mostPopularView: MostPopularView) {
+        guard let selectedMovie = movies[safe: itemInViewIndex] else { return }
         
-        let detailViewController = MovieDetailViewController(selectedMovieID: selectedMovieId)
+        let detailViewController = MovieDetailViewController(selectedMovieID: selectedMovie.id)
         let detailNavigationController = UINavigationController(rootViewController: detailViewController)
         present(detailNavigationController, animated: true)
     }
@@ -112,38 +115,14 @@ private extension MostPopularViewController {
         }
     }
     
-    func seeMoreTapped(_ mostPopularView: MostPopularView) {
-        let selectedMovieId = movies[itemInViewIndex].id
-        
-        let detailViewController = MovieDetailViewController(selectedMovieID: selectedMovieId)
-        let detailNavigationController = UINavigationController(rootViewController: detailViewController)
-        present(detailNavigationController, animated: true)
-    }
-    
-    func watchlistTapped() {
-        print("watchlist tapped")
-        let movie = movies[itemInViewIndex]
-        let watchlistItem = WatchlistItem(id: movie.id, saveDate: Date.now)
-
-        if let updatedStatus = watchlistService.toggleStatus(for: watchlistItem) {
-            print(updatedStatus)
-            switch updatedStatus {
-            case .added:
-                contentView.watchlistButton.updateWatchlistButton(isOnWatchlist: true)
-            case .notAdded:
-                contentView.watchlistButton.updateWatchlistButton(isOnWatchlist: false)
-            }
-        }
-    }
-    
     private func fade(_ type: MostPopularViewController.Fading) {
-        let type = CGFloat(type.rawValue)
+        let alpha = CGFloat(type.rawValue)
         
         UIView.animate(withDuration: 1,
                        delay: 0,
                        options: [],
                        animations: {
-            self.contentView.changeAlpha(to: type)
+            self.contentView.changeAlpha(to: alpha)
                     }, completion: nil)
     }
 }

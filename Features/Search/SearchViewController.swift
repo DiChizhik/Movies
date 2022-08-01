@@ -32,21 +32,19 @@ class SearchViewController: UIViewController {
         navigationItem.searchController = contentView.searchController
         contentView.searchController.searchBar.searchTextField.textColor = .whiteF5
     }
+}
 
 // MARK: - WatchlistButtonDelegate
 extension SearchViewController: WatchlistButtonDelegate {
     func watchlistTapped(_ view: WatchlistHandleable) {
-        print("Entered watchlistTapped method")
         guard let cell = view as? UITableViewCell else { return }
         
         if let indexPath = contentView.tableView.indexPath(for: cell) {
-            print("Identified indexPath: \(indexPath)")
             let movie = searchResults[indexPath.row]
             let watchlistItem = WatchlistItem(id: movie.id, saveDate: Date.now)
             
             let updatedStatus = watchlistService.toggleStatus(for: watchlistItem)
-            print("Toggled status")
-            view.watchlistButton.updateWithStatus(updatedStatus, isShortVariant: true)
+            view.watchlistButton.updateWithStatus(updatedStatus, isShortVariant: false)
         }
     }
     

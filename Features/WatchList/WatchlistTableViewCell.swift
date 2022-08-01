@@ -7,6 +7,6 @@
 
 import UIKit
 
-class WatchlisttableViewCell: SearchTableViewCell {
+final class WatchlistTableViewCell: MovieListTableCell {
     
 }

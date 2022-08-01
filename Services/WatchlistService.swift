@@ -19,6 +19,7 @@ enum WatchlistStatus {
 
 class WatchlistService {
     typealias Watchlist = [Int : WatchlistItem]
+    static var watchlistKey: String = "watchlist"
     
     func getStatus(for id: Int)-> WatchlistStatus {
         if let watchlist = getWatchlist() {
@@ -59,12 +60,11 @@ class WatchlistService {
     private func getWatchlist() -> Watchlist? {
         let defaults = UserDefaults.standard
         
-        if let watchlistData = defaults.object(forKey: "watchlist") as? Data {
+        if let watchlistData = defaults.object(forKey: WatchlistService.watchlistKey) as? Data {
             let decoder = JSONDecoder()
             if let watchlist = try? decoder.decode(Watchlist.self, from: watchlistData) {
                 return watchlist
             } else {
-                print("Failed to decode data")
                 return nil
             }
         } else {
@@ -77,7 +77,7 @@ class WatchlistService {
         
         if let watchlistData = try? encoder.encode(list) {
             let defaults = UserDefaults.standard
-            defaults.set(watchlistData, forKey: "watchlist")
+            defaults.set(watchlistData, forKey: WatchlistService.watchlistKey)
             return true
         } else {
             return false
