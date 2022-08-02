@@ -7,32 +7,22 @@
 
 import UIKit
 
-//Shall I create a separate view for this controller to comply with MVC?
 class LaunchViewController: UIViewController {
-    private lazy var logoImageView: UIImageView = {
-        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = UIImage(named: "logo")
-        return imageView
+    private lazy var contentView: LaunchView = {
+        let view = LaunchView()
+        return view
     }()
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        view.backgroundColor = .darkBlue01
-        view.addSubview(logoImageView)
+    override func loadView() {
+        super.loadView()
+        
+        self.view = contentView
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         animate()
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        logoImageView.center = view.center
     }
 }
 
@@ -43,14 +33,14 @@ private extension LaunchViewController {
                        delay: 0,
                        options: [],
                        animations: {
-                            self.logoImageView.transform = CGAffineTransform(scaleX: 286, y: 286)
+            self.contentView.logoImageView.transform = CGAffineTransform(scaleX: 286, y: 286)
                         },
                        completion: { done in
                             if done {
                                 UIView.animate(withDuration: 1,
                                                animations: {
-                                                    self.logoImageView.alpha = 0.5
-                                                    self.logoImageView.transform = CGAffineTransform(scaleX: 83, y: 83)
+                                                    self.contentView.logoImageView.alpha = 0.5
+                                                    self.contentView.logoImageView.transform = CGAffineTransform(scaleX: 83, y: 83)
                                                 },
                                                completion: { done in
                                                     if done {

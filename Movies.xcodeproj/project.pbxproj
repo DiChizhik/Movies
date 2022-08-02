@@ -40,6 +40,7 @@
 		DD8D6E7928940D2F00A62950 /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8D6E7828940D2F00A62950 /* Collection.swift */; };
 		DD8D6E7C28983B8F00A62950 /* MovieListTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8D6E7B28983B8F00A62950 /* MovieListTableCell.swift */; };
 		DD8D6E7E289845FA00A62950 /* NSLayoutConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8D6E7D289845FA00A62950 /* NSLayoutConstraint.swift */; };
+		DD8D6E8128996D8900A62950 /* LaunchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8D6E8028996D8900A62950 /* LaunchView.swift */; };
 		DD922D6D2887EA0600061FF7 /* WatchlistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD922D6C2887EA0600061FF7 /* WatchlistViewController.swift */; };
 		DD922D6F2887F9EA00061FF7 /* WatchlistButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD922D6E2887F9EA00061FF7 /* WatchlistButton.swift */; };
 		DD922D712887FCFE00061FF7 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD922D702887FCFE00061FF7 /* UIColor.swift */; };
@@ -86,6 +87,7 @@
 		DD8D6E7828940D2F00A62950 /* Collection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Collection.swift; sourceTree = "<group>"; };
 		DD8D6E7B28983B8F00A62950 /* MovieListTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieListTableCell.swift; sourceTree = "<group>"; };
 		DD8D6E7D289845FA00A62950 /* NSLayoutConstraint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLayoutConstraint.swift; sourceTree = "<group>"; };
+		DD8D6E8028996D8900A62950 /* LaunchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchView.swift; sourceTree = "<group>"; };
 		DD922D6C2887EA0600061FF7 /* WatchlistViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistViewController.swift; sourceTree = "<group>"; };
 		DD922D6E2887F9EA00061FF7 /* WatchlistButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistButton.swift; sourceTree = "<group>"; };
 		DD922D702887FCFE00061FF7 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
@@ -112,7 +114,7 @@
 		021C2BA5287DB217004F8113 /* Features */ = {
 			isa = PBXGroup;
 			children = (
-				0277AE192861DF9100054D50 /* LaunchViewController.swift */,
+				DD8D6E7F28996D5900A62950 /* SplashScreen */,
 				021C2BA8287DB242004F8113 /* PlayingNow */,
 				021C2BA7287DB233004F8113 /* MostPopular */,
 				021C2BAA287DB286004F8113 /* Search */,
@@ -268,6 +270,15 @@
 			path = Error;
 			sourceTree = "<group>";
 		};
+		DD8D6E7F28996D5900A62950 /* SplashScreen */ = {
+			isa = PBXGroup;
+			children = (
+				DD8D6E8028996D8900A62950 /* LaunchView.swift */,
+				0277AE192861DF9100054D50 /* LaunchViewController.swift */,
+			);
+			path = SplashScreen;
+			sourceTree = "<group>";
+		};
 		DD922D6B2887E97A00061FF7 /* WatchList */ = {
 			isa = PBXGroup;
 			children = (
@@ -363,6 +374,7 @@
 				DD922D7F288975F800061FF7 /* WatchlistTableViewCell.swift in Sources */,
 				02334D23283E26980099C92B /* MostPopularViewController.swift in Sources */,
 				02334D0D283E185E0099C92B /* AppDelegate.swift in Sources */,
+				DD8D6E8128996D8900A62950 /* LaunchView.swift in Sources */,
 				DD8D6E762894082900A62950 /* ErrorViewController.swift in Sources */,
 				023463B2286F282A001A703C /* LeftAlignedCollectionViewFlowLayout.swift in Sources */,
 				023463AE286F1F76001A703C /* StackMovieDetailView.swift in Sources */,
