@@ -50,9 +50,6 @@ class MostPopularViewController: UIViewController {
             guard let self = self else { return }
             guard self.movies.count > self.itemInViewIndex else { return }
             
-            self.contentView.collectionView.scrollToItem(at: IndexPath(item: self.itemInViewIndex, section: 0),
-                                                         at: .centeredHorizontally,
-                                                         animated: false)
             self.configureWithData(index: self.itemInViewIndex)
             self.fade(.fadeIn)
         }
