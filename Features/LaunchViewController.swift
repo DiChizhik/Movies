@@ -74,12 +74,18 @@ class LaunchViewController: UIViewController {
         let mostPopularTabNavigationController = UINavigationController(rootViewController: mostPopularViewController)
         mostPopularTabNavigationController.tabBarItem.image = UIImage(named: "mostRecentIcon")
         mostPopularTabNavigationController.tabBarItem.title = "Most popular"
-
+        
+        let searchViewController = SearchViewController()
+        let searchTabNavigationController = UINavigationController(rootViewController: searchViewController)
+        searchTabNavigationController.tabBarItem.image = UIImage(systemName: "magnifyingglass.circle")
+        searchTabNavigationController.tabBarItem.title = "Search"
+        
         setupTabBar()
 
         tabBarController.viewControllers = [
             playingNowTabNavigationController,
-            mostPopularTabNavigationController
+            mostPopularTabNavigationController,
+            searchTabNavigationController
         ]
         
         tabBarController.modalPresentationStyle = .fullScreen

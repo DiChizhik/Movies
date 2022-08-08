@@ -61,7 +61,7 @@ class MovieDetailViewController: UIViewController {
                 }
             case .failure(let error):
                 DispatchQueue.main.async {
-                    self.showError(message: error.localizedDescription)
+                    ErrorViewController.handleError(error, presentingViewController: self)
                 }
             }
         }
@@ -117,7 +117,7 @@ extension MovieDetailViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailCollectionViewCell.reuseIdentifier, for: indexPath) as? DetailCollectionViewCell else { fatalError() }
+        let cell = collectionView.dequeue(DetailCollectionViewCell.self, for: indexPath)
         let item = languageAndGenreData[indexPath.section].items[indexPath.item].title.lowercased().capitalizingFirstLetter()
         
         switch languageAndGenreData[indexPath.section].identifier {
