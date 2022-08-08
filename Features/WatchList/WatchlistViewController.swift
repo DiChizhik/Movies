@@ -30,9 +30,10 @@ class WatchlistViewController: UIViewController {
         navigationController?.navigationBar.barTintColor = .darkBlue01
     }
    
-//    I've replaced viewDidLoad with viewDidAppear to ensure watchlist is up-to-date with the changes I make in other tabs. I guess I'll have to do the same for other screen so that watchlistButton appearance is up-to-date too.
+//    I've replaced viewDidLoad with viewDidAppear to ensure watchlist is up-to-date with the changes I make in other tabs. I guess I'll have to do the same for other controllers so that watchlistButton appearance is up-to-date too. Is that the right solution to this issue?
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        print("viewWillAppear")
         
         guard let watchlistItems = watchlistService.getWatchlistItems() else { return }
         loadMovieData(for: watchlistItems)
@@ -84,6 +85,13 @@ extension WatchlistViewController: WatchlistButtonDelegate {
 
 // MARK: - UITableViewDelegate
 extension WatchlistViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedMovieID = movies[indexPath.row].id
+        
+        let detailViewController = MovieDetailViewController(selectedMovieID: selectedMovieID)
+        let detailNavigationController = UINavigationController(rootViewController: detailViewController)
+        present(detailNavigationController, animated: true)
+    }
 }
 
 // MARK: - UITableViewDataSource

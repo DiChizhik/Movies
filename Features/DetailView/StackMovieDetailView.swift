@@ -98,7 +98,7 @@ class StackMovieDetailView: UIView, WatchlistHandleable {
         description.numberOfLines = 0
         description.font = UIFont.systemFont(ofSize: 15)
         description.textColor = .pureWhiteFF
-        description.textAlignment = .left
+        description.textAlignment = .natural
         return description
     }()
     

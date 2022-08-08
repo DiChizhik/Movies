@@ -19,7 +19,7 @@ enum WatchlistStatus {
 
 class WatchlistService {
     typealias Watchlist = [Int : WatchlistItem]
-    static var watchlistKey: String = "watchlist"
+    static let watchlistKey: String = "watchlist"
     
     func getStatus(for id: Int)-> WatchlistStatus {
         if let watchlist = getWatchlist() {

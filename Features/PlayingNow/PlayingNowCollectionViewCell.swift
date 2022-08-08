@@ -89,7 +89,7 @@ private extension PlayingNowCollectionViewCell {
         contentView.addSubview(watchlistButton)
         
         NSLayoutConstraint.activate([
-            imageView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             imageView.widthAnchor.constraint(equalTo: contentView.widthAnchor),
             imageView.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.83),
@@ -98,7 +98,7 @@ private extension PlayingNowCollectionViewCell {
             name.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             name.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8),
             
-            reviewScoreStackView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            reviewScoreStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             reviewScoreStackView.topAnchor.constraint(equalTo: name.bottomAnchor, constant: 4),
             reviewScoreStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             
