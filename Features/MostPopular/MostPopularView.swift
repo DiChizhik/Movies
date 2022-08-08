@@ -15,7 +15,7 @@ protocol MostPopularViewDelegate: AnyObject {
 final class MostPopularView: UIView, WatchlistHandleable {
     weak var delegate: MostPopularViewDelegate?
     weak var watchlistButtonDelegate: WatchlistButtonDelegate?
-    weak var collectionViewDelegate: UICollectionViewDelegate? {
+    var collectionViewDelegate: UICollectionViewDelegate? {
         get {
             collectionView.delegate
         }
@@ -24,7 +24,7 @@ final class MostPopularView: UIView, WatchlistHandleable {
         }
     }
     
-    weak var collectionViewDataSource: UICollectionViewDataSource? {
+    var collectionViewDataSource: UICollectionViewDataSource? {
         get {
             collectionView.dataSource
         }

@@ -12,7 +12,7 @@ protocol SearchViewDelegate: AnyObject {
 }
 
 class SearchView: UIView {
-    weak var tableViewDelegate: UITableViewDelegate? {
+    var tableViewDelegate: UITableViewDelegate? {
         get {
             tableView.delegate
         }
@@ -20,7 +20,7 @@ class SearchView: UIView {
             tableView.delegate = newValue
         }
     }
-    weak var tableViewDataSource: UITableViewDataSource? {
+    var tableViewDataSource: UITableViewDataSource? {
         get {
             tableView.dataSource
         }

@@ -25,7 +25,7 @@ class SearchViewController: UIViewController {
         
         self.view = contentView
         
-        title = "Search Movies"
+        title = MovieTabBarItem.search.title
         navigationController?.navigationBar.barTintColor = .darkBlue01
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white, .font: UIFont.systemFont(ofSize: 20, weight: .heavy)]
         
@@ -41,7 +41,11 @@ extension SearchViewController: WatchlistButtonDelegate {
         
         if let indexPath = contentView.tableView.indexPath(for: cell) {
             let movie = searchResults[indexPath.row]
-            let watchlistItem = WatchlistItem(id: movie.id, saveDate: Date.now)
+            let watchlistItem = WatchlistItem(id: movie.id,
+                                              saveDate: Date.now,
+                                              title: movie.title,
+                                              voteAverage: movie.voteAverage,
+                                              posterPath: movie.posterPath)
             
             let updatedStatus = watchlistService.toggleStatus(for: watchlistItem)
             view.watchlistButton.updateWithStatus(updatedStatus, isShortVariant: false)

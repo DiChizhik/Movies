@@ -46,7 +46,6 @@ class MovieTabBarController: UITabBarController {
         }
         
         viewControllers = controllers
-        assert(viewControllers != nil)
         
         setupMovieTabBarAppearance()
     }
@@ -58,5 +57,4 @@ class MovieTabBarController: UITabBarController {
         UITabBar.appearance().unselectedItemTintColor = UIColor.lightBlue61
         UITabBar.appearance().barTintColor = .darkBlue01
     }
-
 }

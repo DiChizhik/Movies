@@ -37,7 +37,9 @@ enum MovieTabBarItem: String, CaseIterable {
             let layout = UICollectionViewFlowLayout()
             layout.minimumLineSpacing = 24
             layout.minimumInteritemSpacing = 16
-            return PlayingNowCollectionViewController(collectionViewLayout: layout)
+            return PlayingNowCollectionViewController(movieDataService: MovieDataService(),
+                                                      watchlistService: WatchlistService(),
+                                                      collectionViewLayout: layout)
         case .mostPopular:
             return MostPopularViewController()
         case .watchlist:

@@ -10,44 +10,39 @@ import UIKit
 protocol WatchlistServiceProtocol {
     func getStatus(for id: Int)-> WatchlistStatus
     func toggleStatus(for item: WatchlistItem) -> WatchlistStatus
-    func getWatchlistItems() -> [WatchlistItem]?
+    func getWatchlistItems() -> [WatchlistItem]
 }
 
 enum WatchlistStatus {
     case added, notAdded
 }
 
-class WatchlistService {
+class WatchlistService: WatchlistServiceProtocol {
     typealias Watchlist = [Int : WatchlistItem]
-    static let watchlistKey: String = "watchlist"
+    private static let watchlistKey: String = "watchlist"
     
     func getStatus(for id: Int)-> WatchlistStatus {
-        if let watchlist = getWatchlist() {
-            return watchlist[id] != nil ? .added : .notAdded
-        } else {
-            return .notAdded
-        }
+        let watchlist = getWatchlist()
+        
+        return watchlist[id] != nil ? .added : .notAdded
     }
     
     func toggleStatus(for item: WatchlistItem)-> WatchlistStatus {
-        if var watchlist = getWatchlist() {
-            let currentStatus: WatchlistStatus = watchlist[item.id] != nil ? .added : .notAdded
-            switch currentStatus {
-            case .added:
-                watchlist.removeValue(forKey: item.id)
-                return saveWatchlist(watchlist) ? .notAdded : .added
-            case .notAdded:
-                watchlist[item.id] = item
-                return saveWatchlist(watchlist) ? .added : .notAdded
-            }
-        } else {
-            let watchlist: Watchlist = [item.id : item]
+        var watchlist = getWatchlist()
+        
+        let currentStatus: WatchlistStatus = watchlist[item.id] != nil ? .added : .notAdded
+        switch currentStatus {
+        case .added:
+            watchlist.removeValue(forKey: item.id)
+            return saveWatchlist(watchlist) ? .notAdded : .added
+        case .notAdded:
+            watchlist[item.id] = item
             return saveWatchlist(watchlist) ? .added : .notAdded
         }
     }
     
-    func getWatchlistItems() -> [WatchlistItem]? {
-        guard let watchlist = getWatchlist() else { return nil }
+    func getWatchlistItems() -> [WatchlistItem] {
+        let watchlist = getWatchlist()
         
         var items = [WatchlistItem]()
         for value in watchlist.values {
@@ -57,7 +52,7 @@ class WatchlistService {
         return items
     }
     
-    private func getWatchlist() -> Watchlist? {
+    private func getWatchlist() -> Watchlist {
         let defaults = UserDefaults.standard
         
         if let watchlistData = defaults.object(forKey: WatchlistService.watchlistKey) as? Data {
@@ -65,10 +60,10 @@ class WatchlistService {
             if let watchlist = try? decoder.decode(Watchlist.self, from: watchlistData) {
                 return watchlist
             } else {
-                return nil
+                return Watchlist()
             }
         } else {
-            return nil
+            return Watchlist()
         }
     }
     

@@ -8,11 +8,27 @@
 import UIKit
 
 class PlayingNowCollectionViewController: UICollectionViewController {
-    private var movies = [Movie]()
-    private let movieDataService = MovieDataService()
-    private let watchlistService = WatchlistService()
+    private var movieDataService: MovieDataServiceProtocol
+    private var watchlistService: WatchlistServiceProtocol
     
+    private var movies = [Movie]()
     var selectedItemId: Int?
+    
+//    Did I get you right when you talked about replacing services with protocols?
+//    I've made changes only on PlayingNoewVC so far.
+    init(movieDataService: MovieDataServiceProtocol,
+         watchlistService: WatchlistServiceProtocol,
+         collectionViewLayout: UICollectionViewLayout) {
+        self.movieDataService = movieDataService
+        self.watchlistService = watchlistService
+        
+        super.init(collectionViewLayout: collectionViewLayout)
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func loadView() {
         super.loadView()
@@ -39,7 +55,7 @@ private extension PlayingNowCollectionViewController {
     func setupUI() {
         collectionView.backgroundColor = .darkBlue01
         
-        navigationItem.title = "Playing Now"
+        navigationItem.title = MovieTabBarItem.playingNow.title
 
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white, .font: UIFont.systemFont(ofSize: 20, weight: .heavy)]
         navigationController?.navigationBar.barTintColor = .darkBlue01
@@ -72,7 +88,11 @@ extension PlayingNowCollectionViewController: WatchlistButtonDelegate {
         
         if let indexPath = collectionView.indexPath(for: cell) {
             let movie = movies[indexPath.item]
-            let watchlistItem = WatchlistItem(id: movie.id, saveDate: Date.now)
+            let watchlistItem = WatchlistItem(id: movie.id,
+                                              saveDate: Date.now,
+                                              title: movie.title,
+                                              voteAverage: movie.voteAverage,
+                                              posterPath: movie.posterPath)
             
             let updatedStatus = watchlistService.toggleStatus(for: watchlistItem)
             view.watchlistButton.updateWithStatus(updatedStatus, isShortVariant: true)

@@ -10,7 +10,7 @@ import UIKit
 class WatchlistViewController: UIViewController {
     let watchlistService = WatchlistService()
     let movieDataService = MovieDataService()
-    var movies = [MovieDetails]()
+    var movies = [WatchlistItem]()
     
     private lazy var contentView: WatchlistView = {
         let view = WatchlistView()
@@ -22,7 +22,7 @@ class WatchlistViewController: UIViewController {
     override func loadView() {
         self.view = contentView
         
-        title = "Watchlist"
+        title = MovieTabBarItem.watchlist.title
         navigationController?.navigationBar.titleTextAttributes = [
             .foregroundColor: UIColor.white,
             .font: UIFont.systemFont(ofSize: 20, weight: .heavy)
@@ -30,65 +30,48 @@ class WatchlistViewController: UIViewController {
         navigationController?.navigationBar.barTintColor = .darkBlue01
     }
    
-//    I've replaced viewDidLoad with viewDidAppear to ensure watchlist is up-to-date with the changes I make in other tabs. I guess I'll have to do the same for other controllers so that watchlistButton appearance is up-to-date too. Is that the right solution to this issue?
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print("viewWillAppear")
         
-        guard let watchlistItems = watchlistService.getWatchlistItems() else { return }
-        loadMovieData(for: watchlistItems)
+        loadWatchlist()
     }
 }
 
 // MARK: - Private functions
 private extension WatchlistViewController {
-    func loadMovieData(for items: [WatchlistItem]) {
+    func loadWatchlist() {
         movies.removeAll()
+        movies = watchlistService.getWatchlistItems()
         
-        for item in items {
-            movieDataService.getMovieDetails(movieId: item.id) { [weak self] result in
-                guard let self = self else { return }
-                
-                switch result {
-                case .success(let details):
-                    self.movies.append(details)
-                    DispatchQueue.main.async {
-                        self.contentView.tableView.reloadData()
-                    }
-                case .failure(let error):
-                    DispatchQueue.main.async {
-                        ErrorViewController.handleError(error, presentingViewController: self)
-                    }
-                }
-            }
-        }
+        contentView.tableView.reloadData()
     }
 }
 
 // MARK: - WatchlistButtonDelegate
 extension WatchlistViewController: WatchlistButtonDelegate {
-//    It might make sense to add slightly different logic to this function. Like immediately deleting the row where the button was tapped.
     func watchlistTapped(_ view: WatchlistHandleable) {
         guard let cell = view as? UITableViewCell else { return }
+        guard let indexPath = contentView.tableView.indexPath(for: cell) else { return }
         
-        if let indexPath = contentView.tableView.indexPath(for: cell) {
-            let movie = movies[indexPath.row]
-            let watchlistItem = WatchlistItem(id: movie.id, saveDate: Date.now)
+        if let movie = movies[safe: indexPath.row] {
+            let watchlistItem = WatchlistItem(id: movie.id,
+                                              saveDate: Date.now,
+                                              title: movie.title,
+                                              voteAverage: movie.voteAverage,
+                                              posterPath: movie.posterPath)
+            let _ = watchlistService.toggleStatus(for: watchlistItem)
             
-            let updatedStatus = watchlistService.toggleStatus(for: watchlistItem)
-            view.watchlistButton.updateWithStatus(updatedStatus, isShortVariant: false)
+            loadWatchlist()
         }
     }
-    
-    
 }
 
 // MARK: - UITableViewDelegate
 extension WatchlistViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectedMovieID = movies[indexPath.row].id
+        guard let movie = movies[safe: indexPath.row] else { return }
         
-        let detailViewController = MovieDetailViewController(selectedMovieID: selectedMovieID)
+        let detailViewController = MovieDetailViewController(selectedMovieID: movie.id)
         let detailNavigationController = UINavigationController(rootViewController: detailViewController)
         present(detailNavigationController, animated: true)
     }

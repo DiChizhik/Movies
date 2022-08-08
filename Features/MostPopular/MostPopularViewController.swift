@@ -33,7 +33,7 @@ class MostPopularViewController: UIViewController {
         
         self.view = contentView
         
-        title = "Most Popular"
+        title = MovieTabBarItem.mostPopular.title
         navigationController?.navigationBar.titleTextAttributes = [
             .foregroundColor: UIColor.white,
             .font: UIFont.systemFont(ofSize: 20, weight: .heavy)
@@ -61,7 +61,11 @@ extension MostPopularViewController: MostPopularViewDelegate, WatchlistButtonDel
     func watchlistTapped(_ view: WatchlistHandleable) {
         guard let movie = movies[safe: itemInViewIndex] else { return }
         
-        let watchlistItem = WatchlistItem(id: movie.id, saveDate: Date.now)
+        let watchlistItem = WatchlistItem(id: movie.id,
+                                          saveDate: Date.now,
+                                          title: movie.title,
+                                          voteAverage: movie.voteAverage,
+                                          posterPath: movie.posterPath)
 
         let updatedStatus = watchlistService.toggleStatus(for: watchlistItem)
         contentView.updateWatchlistButtonWithStatus(updatedStatus, isShortVariant: false)

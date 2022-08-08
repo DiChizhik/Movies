@@ -13,7 +13,7 @@ class MovieDetailViewController: UIViewController {
     private let movieDataService = MovieDataService()
     private let watchlistService = WatchlistService()
     
-    private  var movieDetails: MovieDetails?
+    private var movieDetails: MovieDetails?
     private var languageAndGenreData = [CollectionViewSection]()
     
     private lazy var contentView: StackMovieDetailView = {
@@ -113,7 +113,13 @@ private extension MovieDetailViewController {
 // MARK: - WatchlistButtonDelegate
 extension MovieDetailViewController: WatchlistButtonDelegate {
     func watchlistTapped(_ view: WatchlistHandleable) {
-        let watchlistItem = WatchlistItem(id: selectedMovieID, saveDate: Date.now)
+        guard let movieDetails = movieDetails else { return }
+        
+        let watchlistItem = WatchlistItem(id: selectedMovieID,
+                                          saveDate: Date.now,
+                                          title: movieDetails.title,
+                                          voteAverage: movieDetails.voteAverage,
+                                          posterPath: movieDetails.posterPath)
 
         let updatedStatus = watchlistService.toggleStatus(for: watchlistItem)
         contentView.watchlistButton.updateWithStatus(updatedStatus, isShortVariant: false)

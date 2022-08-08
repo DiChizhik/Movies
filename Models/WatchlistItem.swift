@@ -10,4 +10,7 @@ import Foundation
 struct WatchlistItem: Codable {
     var id: Int
     var saveDate: Date
+    let title: String
+    let voteAverage: Int
+    let posterPath: URL?
 }

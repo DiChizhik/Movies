@@ -47,6 +47,8 @@ private extension DetailCollectionViewCell {
         contentView.addSubview(label)
         
 //        I've applied this method only here for starters in case it's not what you meant. I'll roll it out to other views as soon as it's verified.
-        NSLayoutConstraint.pin(label, to: contentView, withInsets: UIEdgeInsets(top: 4, left: 15, bottom: 4, right: 15))
+        NSLayoutConstraint.pin(label,
+                               to: NSLayoutConstraint.SuperviewCorners(topLeft: true, topRight: true, bottomLeft: true, bottomRight: true),
+                               withInsets: UIEdgeInsets(top: 4, left: 15, bottom: 4, right: 15))
     }
 }
