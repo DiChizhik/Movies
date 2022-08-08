@@ -12,13 +12,30 @@ protocol SearchViewDelegate: AnyObject {
 }
 
 class SearchView: UIView {
+    var tableViewDelegate: UITableViewDelegate? {
+        get {
+            tableView.delegate
+        }
+        set {
+            tableView.delegate = newValue
+        }
+    }
+    var tableViewDataSource: UITableViewDataSource? {
+        get {
+            tableView.dataSource
+        }
+        set {
+            tableView.dataSource = newValue
+        }
+    }
+    
     private(set) lazy var searchController: UISearchController = {
        let search = UISearchController(searchResultsController: nil)
         search.obscuresBackgroundDuringPresentation = false
         search.automaticallyShowsCancelButton = true
         search.hidesNavigationBarDuringPresentation = false
         search.searchBar.placeholder = "Type movie name"
-        search.searchBar.tintColor = UIColor(named: "titleColor")
+        search.searchBar.tintColor = .whiteF5
         search.searchBar.searchTextField.addTarget(self, action: #selector(startSearching), for: .editingDidEnd)
         return search
     }()
@@ -26,7 +43,7 @@ class SearchView: UIView {
     private(set) lazy var tableView: UITableView = {
        let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.backgroundColor = UIColor(named: "backgroundColor")
+        tableView.backgroundColor = .darkBlue01
         tableView.register(SearchTableViewCell.self)
         tableView.rowHeight = 150
         tableView.keyboardDismissMode = .onDrag
@@ -46,9 +63,12 @@ class SearchView: UIView {
         
         setupUI()
     }
-    
-    private func setupUI() {
-        backgroundColor = UIColor(named: "backgroundColor")
+}
+
+// MARK: - Private functions
+extension SearchView {
+    func setupUI() {
+        backgroundColor = .darkBlue01
         
         addSubview(tableView)
         NSLayoutConstraint.activate([
@@ -59,11 +79,10 @@ class SearchView: UIView {
         ])
     }
     
-    @objc private func startSearching() {
-        guard let text = searchController.searchBar.text else { return }
-        guard !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
+    @objc func startSearching() {
+        guard let text = searchController.searchBar.text,
+              !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
         
         delegate?.startSearching(self, for: text)
     }
-    
 }

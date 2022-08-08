@@ -7,15 +7,16 @@
 
 import UIKit
 
-class SearchViewController: UIViewController, SearchViewDelegate {
+class SearchViewController: UIViewController {
     let movieDataService = MovieDataService()
+    let watchlistService = WatchlistService()
     private var searchResults = [Movie]()
     
     private lazy var contentView: SearchView = {
         let view = SearchView()
         view.delegate = self
-        view.tableView.dataSource = self
-        view.tableView.delegate = self
+        view.tableViewDelegate = self
+        view.tableViewDataSource = self
         return view
     }()
     
@@ -24,14 +25,38 @@ class SearchViewController: UIViewController, SearchViewDelegate {
         
         self.view = contentView
         
-        title = "Search Movies"
-        navigationController?.navigationBar.barTintColor = UIColor(named: "backgroundColor")
+        title = MovieTabBarItem.search.title
+        navigationController?.navigationBar.barTintColor = .darkBlue01
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white, .font: UIFont.systemFont(ofSize: 20, weight: .heavy)]
         
         navigationItem.searchController = contentView.searchController
-        contentView.searchController.searchBar.searchTextField.textColor = UIColor(named: "titleColor")!
+        contentView.searchController.searchBar.searchTextField.textColor = .whiteF5
+    }
+}
+
+// MARK: - WatchlistButtonDelegate
+extension SearchViewController: WatchlistButtonDelegate {
+    func watchlistTapped(_ view: WatchlistHandleable) {
+        guard let cell = view as? UITableViewCell else { return }
+        
+        if let indexPath = contentView.tableView.indexPath(for: cell) {
+            let movie = searchResults[indexPath.row]
+            let watchlistItem = WatchlistItem(id: movie.id,
+                                              saveDate: Date.now,
+                                              title: movie.title,
+                                              voteAverage: movie.voteAverage,
+                                              posterPath: movie.posterPath)
+            
+            let updatedStatus = watchlistService.toggleStatus(for: watchlistItem)
+            view.watchlistButton.updateWithStatus(updatedStatus, isShortVariant: false)
+        }
     }
     
+    
+}
+
+//MARK: - SearchViewDelegate
+extension SearchViewController: SearchViewDelegate {
     func startSearching(_ searchView: SearchView, for text: String) {
         movieDataService.searchMovies(matching: text) { [weak self] result in
             guard let self = self else { return }
@@ -52,6 +77,7 @@ class SearchViewController: UIViewController, SearchViewDelegate {
     }
 }
 
+//MARK: - UITableViewDataSource
 extension SearchViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         searchResults.count
@@ -59,14 +85,17 @@ extension SearchViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeue(SearchTableViewCell.self, for: indexPath)
+        cell.watchlistButtonDelegate = self
         
         let movie = searchResults[indexPath.row]
-        cell.configure(imageURL: movie.posterPath, title: movie.title, reviewsScore: movie.voteAverage, popularity: movie.popularity)
+        let status = watchlistService.getStatus(for: movie.id)
+        cell.configure(imageURL: movie.posterPath, title: movie.title, reviewsScore: movie.voteAverage, status: status)
         
         return cell
     }
 }
 
+//MARK: - UITableViewDelegate
 extension SearchViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedMovieID = searchResults[indexPath.row].id

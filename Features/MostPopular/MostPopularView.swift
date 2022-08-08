@@ -9,10 +9,31 @@ import UIKit
 
 protocol MostPopularViewDelegate: AnyObject {
     func seeMoreTapped(_ mostPopularView: MostPopularView)
+    func watchlistTapped(_ view: WatchlistHandleable)
 }
 
-class MostPopularView: UIView {
-    private(set) lazy var collectionViewFlowLayout: UICollectionViewFlowLayout = {
+final class MostPopularView: UIView, WatchlistHandleable {
+    weak var delegate: MostPopularViewDelegate?
+    weak var watchlistButtonDelegate: WatchlistButtonDelegate?
+    var collectionViewDelegate: UICollectionViewDelegate? {
+        get {
+            collectionView.delegate
+        }
+        set {
+            collectionView.delegate = newValue
+        }
+    }
+    
+    var collectionViewDataSource: UICollectionViewDataSource? {
+        get {
+            collectionView.dataSource
+        }
+        set {
+            collectionView.dataSource = newValue
+        }
+    }
+    
+    private lazy var collectionViewFlowLayout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumInteritemSpacing = 32
@@ -24,61 +45,66 @@ class MostPopularView: UIView {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewFlowLayout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.register(MostPopularCollectionViewCell.self)
-        collectionView.backgroundColor = UIColor(named: "backgroundColor")
+        collectionView.backgroundColor = .darkBlue01
         return collectionView
     }()
     
-    private(set) var name: UILabel = {
+    private lazy var name: UILabel = {
        let name = UILabel()
         name.translatesAutoresizingMaskIntoConstraints = false
         name.textAlignment = .center
         name.font = UIFont.systemFont(ofSize: 15, weight: .heavy)
-        name.textColor = UIColor(named: "titleColor")
+        name.textColor = UIColor.whiteF5
         name.alpha = 0
         return name
     }()
     
-    private(set) var reviewsScore: UILabel = {
-       let reviewsScore = UILabel()
-        reviewsScore.translatesAutoresizingMaskIntoConstraints = false
-        reviewsScore.font = UIFont.systemFont(ofSize: 15)
-        reviewsScore.textColor = UIColor(named: "titleColor")
-        reviewsScore.alpha = 0
-        return reviewsScore
+    private lazy var reviewScoreStackView: ReviewScoreStackView = {
+        let view = ReviewScoreStackView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.alpha = 0
+        return view
     }()
     
-    private(set) lazy var reviewsScoreIndicator: UIImageView = {
-        let reviewsScoreIndicator = UIImageView()
-        reviewsScoreIndicator.translatesAutoresizingMaskIntoConstraints = false
-        reviewsScoreIndicator.heightAnchor.constraint(equalToConstant: 15).isActive = true
-        reviewsScoreIndicator.widthAnchor.constraint(equalTo: reviewsScoreIndicator.heightAnchor, multiplier: 1.13).isActive = true
-        reviewsScoreIndicator.alpha = 0
-        return reviewsScoreIndicator
+    lazy var watchlistButton: WatchlistButton = {
+        let button = WatchlistButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.alpha = 0
+        let action = UIAction { [weak self] _ in
+            guard let self = self else { return }
+            
+            self.watchlistButtonDelegate?.watchlistTapped(self)
+        }
+        button.addAction(action, for: .touchUpInside)
+        return button
     }()
     
-    private(set) lazy var movieDescription: UILabel = {
+    private lazy var movieDescription: UILabel = {
         let description = UILabel()
         description.translatesAutoresizingMaskIntoConstraints = false
         description.numberOfLines = 3
         description.font = UIFont.systemFont(ofSize: 15)
-        description.textColor = UIColor(named: "descriptionColor")
+        description.textColor = .pureWhiteFF
         description.textAlignment = .center
         description.alpha = 0
         return description
     }()
     
-    private(set) lazy var seeMoreButton: UIButton = {
+    private lazy var seeMoreButton: UIButton = {
         let button = UIButton(type: .system)
-        button.addTarget(self, action: #selector(seeMoreTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("See more", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
-        button.tintColor = UIColor(named: "titleColor")
+        button.tintColor = .whiteF5
         button.alpha = 0
+        let action = UIAction { [weak self] _ in
+            guard let self = self else { return }
+            
+            self.delegate?.seeMoreTapped(self)
+        }
+        button.addAction(action, for: .touchUpInside)
         return button
     }()
-    
-    weak var delegate:MostPopularViewDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -89,9 +115,41 @@ class MostPopularView: UIView {
         super.init(coder: coder)
         setupUI()
     }
- 
-    private func setupUI() {
-        backgroundColor = UIColor(named: "backgroundColor")
+}
+
+// MARK: - Public functions
+extension MostPopularView {
+    func configureWith(name: String, score: Int, description: String?, status: WatchlistStatus?) {
+        self.name.text = name
+        reviewScoreStackView.setValue(score)
+        
+        if let description = description {
+            movieDescription.text = description
+        }
+        
+        if let status = status {
+            watchlistButton.updateWithStatus(status, isShortVariant: false)
+        }
+    }
+    
+    func changeAlpha(to value: CGFloat) {
+        name.alpha = value
+        reviewScoreStackView.alpha = value
+        watchlistButton.alpha = value
+        movieDescription.alpha = value
+        seeMoreButton.alpha = value
+    }
+    
+//    I've added this function so that we don't need to access the watchlistButton itself to call its updateWithStatus function. However, due to the Handleable protocol I can't make the button private. In this case does this function make sense here?
+    func updateWatchlistButtonWithStatus(_ status: WatchlistStatus, isShortVariant: Bool) {
+        watchlistButton.updateWithStatus(status, isShortVariant: isShortVariant)
+    }
+}
+
+// MARK: - Private functions
+private extension MostPopularView {
+    func setupUI() {
+        backgroundColor = .darkBlue01
         
         addSubview(collectionView)
         
@@ -103,8 +161,8 @@ class MostPopularView: UIView {
         ])
         
         addSubview(name)
-        addSubview(reviewsScore)
-        addSubview(reviewsScoreIndicator)
+        addSubview(reviewScoreStackView)
+        addSubview(watchlistButton)
         addSubview(movieDescription)
         addSubview(seeMoreButton)
         
@@ -113,13 +171,13 @@ class MostPopularView: UIView {
             name.centerXAnchor.constraint(equalTo: safeAreaLayoutGuide.centerXAnchor),
             name.widthAnchor.constraint(equalTo: collectionView.heightAnchor, multiplier: 0.7),
             
-            reviewsScore.topAnchor.constraint(equalTo: name.bottomAnchor, constant: 6),
-            reviewsScore.centerXAnchor.constraint(equalTo: name.centerXAnchor, constant: 12),
+            reviewScoreStackView.topAnchor.constraint(equalTo: name.bottomAnchor, constant: 6),
+            reviewScoreStackView.leadingAnchor.constraint(equalTo: name.leadingAnchor),
             
-            reviewsScoreIndicator.centerYAnchor.constraint(equalTo: reviewsScore.centerYAnchor),
-            reviewsScoreIndicator.trailingAnchor.constraint(equalTo: reviewsScore.leadingAnchor, constant: -8),
+            watchlistButton.trailingAnchor.constraint(equalTo: name.trailingAnchor),
+            watchlistButton.centerYAnchor.constraint(equalTo: reviewScoreStackView.centerYAnchor),
             
-            movieDescription.topAnchor.constraint(equalTo: reviewsScore.bottomAnchor, constant: 24),
+            movieDescription.topAnchor.constraint(equalTo: reviewScoreStackView.bottomAnchor, constant: 24),
             movieDescription.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 16),
             movieDescription.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16),
             
@@ -127,10 +185,4 @@ class MostPopularView: UIView {
             seeMoreButton.centerXAnchor.constraint(equalTo: name.centerXAnchor)
         ])
     }
-    
-    @objc private func seeMoreTapped(_ sender: UIButton) {
-        delegate?.seeMoreTapped(self)
-    }
 }
-
-

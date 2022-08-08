@@ -1,5 +1,5 @@
 //
-//  MostPopularCollectionViewController.swift
+//  MostPopularCollectionViewControllerswift
 //  Movies
 //
 //  Created by Diana Chizhik on 25/05/2022.
@@ -8,7 +8,7 @@
 import UIKit
 import Kingfisher
 
-class MostPopularViewController: UIViewController, MostPopularViewDelegate {
+class MostPopularViewController: UIViewController {
     private enum Fading: Int {
         case fadeIn = 1
         case fadeOut = 0
@@ -16,13 +16,15 @@ class MostPopularViewController: UIViewController, MostPopularViewDelegate {
     
     var movies = [Movie]()
     let movieDataService = MovieDataService()
+    let watchlistService = WatchlistService()
     var itemInViewIndex: Int = 0
     
     private lazy var contentView: MostPopularView = {
         let view = MostPopularView()
-        view.collectionView.dataSource = self
-        view.collectionView.delegate = self
+        view.collectionViewDelegate = self
+        view.collectionViewDataSource = self
         view.delegate = self
+        view.watchlistButtonDelegate = self
         return view
     }()
     
@@ -31,9 +33,12 @@ class MostPopularViewController: UIViewController, MostPopularViewDelegate {
         
         self.view = contentView
         
-        title = "Most Popular"
-        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white, .font: UIFont.systemFont(ofSize: 20, weight: .heavy)]
-        navigationController?.navigationBar.backgroundColor = UIColor(named: "backgroundColor")
+        title = MovieTabBarItem.mostPopular.title
+        navigationController?.navigationBar.titleTextAttributes = [
+            .foregroundColor: UIColor.white,
+            .font: UIFont.systemFont(ofSize: 20, weight: .heavy)
+        ]
+        navigationController?.navigationBar.backgroundColor = .darkBlue01
     }
     
     override func viewDidLoad() {
@@ -41,17 +46,43 @@ class MostPopularViewController: UIViewController, MostPopularViewDelegate {
         
         loadMovieData()
         
-//        The app crashed if there were no movies(Error: Failed to load from server), so I added this check to prevent the crash.
-        DispatchQueue.main.async {
-            guard !self.movies.isEmpty else { return }
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            guard self.movies.count > self.itemInViewIndex else { return }
             
-            self.contentView.collectionView.scrollToItem(at: IndexPath(item: self.itemInViewIndex, section: 0), at: UICollectionView.ScrollPosition.centeredHorizontally, animated: false)
             self.configureWithData(index: self.itemInViewIndex)
             self.fade(.fadeIn)
         }
     }
+}
+ 
+// MARK: - Public functions
+extension MostPopularViewController: MostPopularViewDelegate, WatchlistButtonDelegate {
+    func watchlistTapped(_ view: WatchlistHandleable) {
+        guard let movie = movies[safe: itemInViewIndex] else { return }
+        
+        let watchlistItem = WatchlistItem(id: movie.id,
+                                          saveDate: Date.now,
+                                          title: movie.title,
+                                          voteAverage: movie.voteAverage,
+                                          posterPath: movie.posterPath)
 
-    private func loadMovieData() {
+        let updatedStatus = watchlistService.toggleStatus(for: watchlistItem)
+        contentView.updateWatchlistButtonWithStatus(updatedStatus, isShortVariant: false)
+    }
+    
+    func seeMoreTapped(_ mostPopularView: MostPopularView) {
+        guard let selectedMovie = movies[safe: itemInViewIndex] else { return }
+        
+        let detailViewController = MovieDetailViewController(selectedMovieID: selectedMovie.id)
+        let detailNavigationController = UINavigationController(rootViewController: detailViewController)
+        present(detailNavigationController, animated: true)
+    }
+}
+
+// MARK: - Private functions
+private extension MostPopularViewController {
+    func loadMovieData() {
         movieDataService.getMostPopularMoviesList { [weak self] result in
             guard let self = self else { return }
             
@@ -75,52 +106,29 @@ class MostPopularViewController: UIViewController, MostPopularViewDelegate {
         
         if let movie = movie {
             let movieName = movie.title
-            let reviewsScore = "\(movie.voteAverage)%"
+            let reviewsScore = movie.voteAverage
             let movieDescription = movie.overview
-        
-            contentView.name.text = movieName
-            contentView.reviewsScore.text = reviewsScore
-            contentView.movieDescription.text = movieDescription
-        
-            updateReviewScoreIndicator(reviewsScore: reviewsScore)
+            let movieID = movie.id
+            
+            let status = watchlistService.getStatus(for: movieID)
+            
+            contentView.configureWith(name: movieName, score: reviewsScore, description: movieDescription, status: status)
         }
     }
     
-    private func updateReviewScoreIndicator(reviewsScore: String) {
-        let score = reviewsScore.components(separatedBy: "%")
-        if let scoreInt = Int(score[0]) {
-            if scoreInt > 50 {
-                contentView.reviewsScoreIndicator.image = UIImage(named: "highReviewsScore")
-            } else {
-                contentView.reviewsScoreIndicator.image = UIImage(named: "lowReviewsScore")
-            }
-        }
-    }
-    
-    func seeMoreTapped(_ mostPopularView: MostPopularView) {
-        let selectedMovieId = movies[itemInViewIndex].id
-        
-        let detailViewController = MovieDetailViewController(selectedMovieID: selectedMovieId)
-        let detailNavigationController = UINavigationController(rootViewController: detailViewController)
-        present(detailNavigationController, animated: true)
-    }
-    
-    private func fade(_ type: Fading) {
-        let type = CGFloat(type.rawValue)
+    private func fade(_ type: MostPopularViewController.Fading) {
+        let alpha = CGFloat(type.rawValue)
         
         UIView.animate(withDuration: 1,
                        delay: 0,
                        options: [],
                        animations: {
-            self.contentView.name.alpha = type
-            self.contentView.reviewsScore.alpha = type
-            self.contentView.reviewsScoreIndicator.alpha = type
-            self.contentView.movieDescription.alpha = type
-            self.contentView.seeMoreButton.alpha = type
+            self.contentView.changeAlpha(to: alpha)
                     }, completion: nil)
     }
 }
-    
+
+// MARK: - UICollectionViewDataSource
 extension MostPopularViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return movies.count
@@ -136,6 +144,7 @@ extension MostPopularViewController: UICollectionViewDataSource {
     }
 }
 
+// MARK: - UICollectionViewDelegate
 extension MostPopularViewController: UICollectionViewDelegate {
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         fade(.fadeOut)
@@ -171,6 +180,7 @@ extension MostPopularViewController: UICollectionViewDelegate {
     }
 }
 
+// MARK: - UICollectionViewDelegateFlowLayout
 extension MostPopularViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let height = collectionView.bounds.size.height

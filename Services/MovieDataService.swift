@@ -11,6 +11,8 @@ import UIKit
 protocol MovieDataServiceProtocol {
     func getPlayingNowMoviesList(completion: @escaping (Result<[Movie], MovieServiceError>)-> Void)
     func getMostPopularMoviesList(completion: @escaping (Result<[Movie], MovieServiceError>)-> Void)
+    func getMovieDetails(movieId: Int, completion: @escaping (Result<MovieDetails, MovieServiceError>)-> Void)
+    func searchMovies(matching query: String, completion: @escaping (Result<[Movie], MovieServiceError>)-> Void)
 }
 
 protocol ErrorViewHandleable {
@@ -201,7 +203,7 @@ class MovieDataService: MovieDataServiceProtocol {
                 
                 completion(.success(moviesData.results))
             }.resume()
-        }
+    }
 }
 
 
