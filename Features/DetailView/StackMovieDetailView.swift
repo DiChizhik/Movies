@@ -7,13 +7,15 @@
 
 import UIKit
 
-class StackMovieDetailView: UIView {
+class StackMovieDetailView: UIView, WatchlistHandleable {
+    weak var watchlistButtonDelegate: WatchlistButtonDelegate?
+    
     private(set) lazy var titleLabel: UILabel = {
        let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
         label.textAlignment = .center
-        label.textColor = UIColor(named: "titleColor")
+        label.textColor = .whiteF5
         label.numberOfLines = 0
         return label
     }()
@@ -27,11 +29,34 @@ class StackMovieDetailView: UIView {
         return imageView
     }()
     
+    private(set) lazy var reviewScoreStackView: ReviewScoreStackView = {
+        let view = ReviewScoreStackView()
+        return view
+    }()
+    
+    private lazy var spacer: UIView = {
+        let view = UIView()
+        view.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        view.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        return view
+    }()
+    
+    lazy var watchlistButton: WatchlistButton = {
+        let button = WatchlistButton()
+        let action = UIAction { [weak self] _ in
+            guard let self = self else { return }
+    
+            self.watchlistButtonDelegate?.watchlistTapped(self)
+        }
+        button.addAction(action, for: .touchUpInside)
+        return button
+    }()
+    
     private(set) lazy var releasedOnLabel: UILabel = {
        let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 15)
-        label.textColor = UIColor(named: "staticTextColor")
+        label.textColor = .lightBlueDB
         label.text = "Released on"
         label.textAlignment = .left
         label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
@@ -42,7 +67,7 @@ class StackMovieDetailView: UIView {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 15)
-        label.textColor = UIColor(named: "descriptionColor")
+        label.textColor = .pureWhiteFF
         label.textAlignment = .left
         return label
     }()
@@ -51,7 +76,7 @@ class StackMovieDetailView: UIView {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 15)
-        label.textColor = UIColor(named: "staticTextColor")
+        label.textColor = .lightBlueDB
         label.text = "Lasts"
         label.textAlignment = .left
         label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
@@ -62,7 +87,7 @@ class StackMovieDetailView: UIView {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 15)
-        label.textColor = UIColor(named: "descriptionColor")
+        label.textColor = .pureWhiteFF
         label.textAlignment = .left
         return label
     }()
@@ -72,8 +97,8 @@ class StackMovieDetailView: UIView {
         description.translatesAutoresizingMaskIntoConstraints = false
         description.numberOfLines = 0
         description.font = UIFont.systemFont(ofSize: 15)
-        description.textColor = UIColor(named: "descriptionColor")
-        description.textAlignment = .left
+        description.textColor = .pureWhiteFF
+        description.textAlignment = .natural
         return description
     }()
     
@@ -82,7 +107,6 @@ class StackMovieDetailView: UIView {
         layout.minimumInteritemSpacing = 4
         layout.minimumLineSpacing = 4
         layout.sectionInset = UIEdgeInsets(top: 4, left: 0, bottom: 0, right: 0)
-//       consider this
         layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
         return layout
     }()
@@ -91,7 +115,7 @@ class StackMovieDetailView: UIView {
         let collectionView = SelfSizingCollectionView(frame: .zero, collectionViewLayout: collectionViewFlowLayout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.register(DetailCollectionViewCell.self)
-        collectionView.backgroundColor = UIColor(named: "backgroundColor")
+        collectionView.backgroundColor = .darkBlue01
         collectionView.isScrollEnabled = false
         return collectionView
     }()
@@ -102,11 +126,10 @@ class StackMovieDetailView: UIView {
         return scroll
     }()
     
-    private(set) lazy var scrollContentStack:UIStackView = {
+    private(set) lazy var scrollContentStack: UIStackView = {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
-//        consider this
         stackView.layoutMargins = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         stackView.isLayoutMarginsRelativeArrangement = true
         return stackView
@@ -121,9 +144,12 @@ class StackMovieDetailView: UIView {
         super.init(coder: coder)
         setupUI()
     }
-    
-    private func setupUI() {
-        backgroundColor = UIColor(named: "backgroundColor")
+}
+
+// MARK: - Private functions
+private extension StackMovieDetailView {
+    func setupUI() {
+        backgroundColor = .darkBlue01
         
         addSubview(scrollView)
         NSLayoutConstraint.activate([
@@ -143,23 +169,27 @@ class StackMovieDetailView: UIView {
             scrollContentStack.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
         ])
         
+        let reviewAndWatchlistStack = UIStackView(arrangedSubviews: [reviewScoreStackView, spacer, watchlistButton])
+        reviewAndWatchlistStack.translatesAutoresizingMaskIntoConstraints = false
+        reviewAndWatchlistStack.axis = .horizontal
+        
         let centerAlignedStack = UIStackView()
         centerAlignedStack.translatesAutoresizingMaskIntoConstraints = false
         centerAlignedStack.axis = .vertical
         centerAlignedStack.alignment = .center
         centerAlignedStack.addArrangedSubview(titleLabel)
         centerAlignedStack.addArrangedSubview(imageView, spaceBefore: 16)
+        centerAlignedStack.addArrangedSubview(reviewAndWatchlistStack, spaceBefore: 19)
         
         let releaseStack = UIStackView(arrangedSubviews: [releasedOnLabel, releaseDateLabel])
-        releaseStack.translatesAutoresizingMaskIntoConstraints = false
         releaseStack.axis = .horizontal
-        releaseStack.alignment = .leading
+//        Why do we need .leading here if its description says "a layout for vertical stacks where the stack view aligns the leading edge of its arranged views along its leading edge. This is equivalent to the top alignment for horizontal stacks."
+//        releaseStack.alignment = .leading
         releaseStack.spacing = 4
         
         let durationStack = UIStackView(arrangedSubviews: [lastsLabel, durationLabel])
-        durationStack.translatesAutoresizingMaskIntoConstraints = false
         durationStack.axis = .horizontal
-        durationStack.alignment = .leading
+//        durationStack.alignment = .leading
         durationStack.spacing = 4
         
         scrollContentStack.addArrangedSubview(centerAlignedStack)
@@ -170,7 +200,9 @@ class StackMovieDetailView: UIView {
         
         NSLayoutConstraint.activate([
             imageView.widthAnchor.constraint(equalTo: scrollContentStack.widthAnchor, multiplier: 0.61),
-            imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: 1.41)
+            imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: 1.41),
+            
+            reviewAndWatchlistStack.widthAnchor.constraint(equalTo: imageView.widthAnchor)
         ])
     }
 }

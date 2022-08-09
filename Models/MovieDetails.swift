@@ -8,6 +8,7 @@
 import Foundation
 
 struct MovieDetails: Codable {
+    let id: Int
     let title: String
     let posterPath: URL?
     let spokenLanguages: [Language]
@@ -15,8 +16,10 @@ struct MovieDetails: Codable {
     let releaseDate: String
     let runtime: String?
     let overview: String?
+    let voteAverage: Int
     
     enum CodingKeys: String, CodingKey {
+        case id
         case title
         case posterPath = "poster_path"
         case spokenLanguages = "spoken_languages"
@@ -24,11 +27,13 @@ struct MovieDetails: Codable {
         case releaseDate = "release_date"
         case runtime
         case overview
+        case voteAverage = "vote_average"
     }
     
     init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         
+        id = try values.decode(Int.self, forKey: .id)
         title = try values.decode(String.self, forKey: .title)
         
         if let posterPathString = try values.decodeIfPresent(String.self, forKey: .posterPath) {
@@ -62,6 +67,8 @@ struct MovieDetails: Codable {
         }
         
         overview = try values.decodeIfPresent(String.self, forKey: .overview)
+        
+        voteAverage = Int(try values.decode(Double.self, forKey: .voteAverage) * 10)
     }
 }
 

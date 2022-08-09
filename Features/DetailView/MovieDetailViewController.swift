@@ -11,12 +11,15 @@ import Kingfisher
 class MovieDetailViewController: UIViewController {
     private var selectedMovieID: Int
     private let movieDataService = MovieDataService()
-    private  var movieDetails: MovieDetails?
+    private let watchlistService = WatchlistService()
+    
+    private var movieDetails: MovieDetails?
     private var languageAndGenreData = [CollectionViewSection]()
     
     private lazy var contentView: StackMovieDetailView = {
         let view = StackMovieDetailView()
         view.collectionView.dataSource = self
+        view.watchlistButtonDelegate = self
         return view
     }()
 
@@ -40,7 +43,7 @@ class MovieDetailViewController: UIViewController {
         exitButton.tintColor = UIColor.white
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: exitButton)
 
-        navigationController?.navigationBar.barTintColor = UIColor(named: "backgroundColor")
+        navigationController?.navigationBar.barTintColor = .darkBlue01
     }
     
     override func viewDidLoad() {
@@ -49,7 +52,16 @@ class MovieDetailViewController: UIViewController {
         loadMovieData()
     }
     
-    private func loadMovieData() {
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+
+        contentView.collectionView.collectionViewLayout.invalidateLayout()
+    }
+}
+
+// MARK: - Private functions
+private extension MovieDetailViewController {
+    func loadMovieData() {
         movieDataService.getMovieDetails(movieId: selectedMovieID) { [weak self] result in
             guard let self = self else {return}
                 
@@ -67,7 +79,7 @@ class MovieDetailViewController: UIViewController {
         }
     }
     
-    private func configureWithData() {
+    func configureWithData() {
         guard let movieDetails = movieDetails else { return }
 
         contentView.titleLabel.text = movieDetails.title
@@ -76,6 +88,10 @@ class MovieDetailViewController: UIViewController {
             contentView.imageView.kf.setImage(with: path)
         }
         
+        let status = watchlistService.getStatus(for: selectedMovieID)
+        contentView.watchlistButton.updateWithStatus(status, isShortVariant: false)
+        
+        contentView.reviewScoreStackView.setValue(movieDetails.voteAverage)
         contentView.releaseDateLabel.text = movieDetails.releaseDate
         contentView.durationLabel.text = movieDetails.runtime
         contentView.movieDescriptionLabel.text = movieDetails.overview
@@ -89,23 +105,28 @@ class MovieDetailViewController: UIViewController {
         contentView.collectionView.reloadData()
     }
     
-    private func showError(message: String) {
-        let ac = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
-        ac.addAction(UIAlertAction(title: "OK", style: .default))
-        self.present(ac, animated: true)
-    }
-    
     @objc func dismissView(_ sender: UIButton) {
         dismiss(animated: true)
     }
-    
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
-
-        contentView.collectionView.collectionViewLayout.invalidateLayout()
-    }
 }
 
+// MARK: - WatchlistButtonDelegate
+extension MovieDetailViewController: WatchlistButtonDelegate {
+    func watchlistTapped(_ view: WatchlistHandleable) {
+        guard let movieDetails = movieDetails else { return }
+        
+        let watchlistItem = WatchlistItem(id: selectedMovieID,
+                                          saveDate: Date.now,
+                                          title: movieDetails.title,
+                                          voteAverage: movieDetails.voteAverage,
+                                          posterPath: movieDetails.posterPath)
+
+        let updatedStatus = watchlistService.toggleStatus(for: watchlistItem)
+        contentView.watchlistButton.updateWithStatus(updatedStatus, isShortVariant: false)
+    }   
+}
+
+// MARK: - UICollectionViewDataSource
 extension MovieDetailViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return languageAndGenreData.count
@@ -122,9 +143,9 @@ extension MovieDetailViewController: UICollectionViewDataSource {
         
         switch languageAndGenreData[indexPath.section].identifier {
         case .languages:
-            cell.configure(title: item, backgroundColor: UIColor(named: "languageBackgroundColor")!, borderColor: UIColor(named: "languageBorderColor")!)
+            cell.configure(title: item, backgroundColor: .blue2A, borderColor: .lightBlue61)
         case .genres:
-            cell.configure(title: item, backgroundColor: UIColor(named: "genreBackgroundColor")!, borderColor: UIColor(named: "genreBorderColor")!)
+            cell.configure(title: item, backgroundColor: .lightBlue61, borderColor: .lightBlue61)
         }
         
         return cell
@@ -132,15 +153,15 @@ extension MovieDetailViewController: UICollectionViewDataSource {
 }
 
 private extension MovieDetailViewController {
-    private enum CollectionViewSectionIdentifier {
+    enum CollectionViewSectionIdentifier {
         case languages, genres
     }
     
-    private struct CollectionViewItem {
+    struct CollectionViewItem {
         let title: String
     }
     
-    private struct CollectionViewSection {
+    struct CollectionViewSection {
         let identifier: CollectionViewSectionIdentifier
         let items: [CollectionViewItem]
     }

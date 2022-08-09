@@ -13,8 +13,7 @@ class DetailCollectionViewCell: UICollectionViewCell, Reusable {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 15)
         label.textAlignment = .center
-        label.text = "Gibberish"
-        label.textColor = UIColor(named: "descriptionColor")
+        label.textColor = .pureWhiteFF
         return label
     }()
     
@@ -27,18 +26,10 @@ class DetailCollectionViewCell: UICollectionViewCell, Reusable {
         super.init(coder: coder)
         setupUI()
     }
-    
-    private func setupUI() {
-        contentView.addSubview(label)
-        
-        NSLayoutConstraint.activate([
-            label.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4),
-            label.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
-            label.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
-            label.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4),
-        ])
-    }
-    
+}
+
+// MARK: - Public functions
+extension DetailCollectionViewCell {
     func configure(title: String, backgroundColor: UIColor, borderColor: UIColor) {
         label.text = title
         
@@ -47,5 +38,17 @@ class DetailCollectionViewCell: UICollectionViewCell, Reusable {
         contentView.layer.borderColor = borderColor.cgColor
         contentView.layer.cornerRadius = 4
         contentView.layer.masksToBounds = true
+    }
+}
+
+// MARK: - Private functions
+private extension DetailCollectionViewCell {
+    func setupUI() {
+        contentView.addSubview(label)
+        
+//        I've applied this method only here for starters in case it's not what you meant. I'll roll it out to other views as soon as it's verified.
+        NSLayoutConstraint.pin(label,
+                               to: NSLayoutConstraint.SuperviewCorners(topLeft: true, topRight: true, bottomLeft: true, bottomRight: true),
+                               withInsets: UIEdgeInsets(top: 4, left: 15, bottom: 4, right: 15))
     }
 }
