@@ -14,10 +14,11 @@ class MostPopularViewController: UIViewController {
         case fadeOut = 0
     }
     
-    var movies = [Movie]()
-    let movieDataService = MovieDataService()
-    let watchlistService = WatchlistService()
-    var itemInViewIndex: Int = 0
+    private let movieDataService: MovieDataServiceProtocol
+    private let watchlistService: WatchlistServiceProtocol
+    
+    private var movies = [Movie]()
+    private var itemInViewIndex: Int = 0
     
     private lazy var contentView: MostPopularView = {
         let view = MostPopularView()
@@ -27,6 +28,19 @@ class MostPopularViewController: UIViewController {
         view.watchlistButtonDelegate = self
         return view
     }()
+    
+    init(movieDataService: MovieDataServiceProtocol,
+         watchlistService: WatchlistServiceProtocol) {
+        self.movieDataService = movieDataService
+        self.watchlistService = watchlistService
+        
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func loadView() {
         super.loadView()
@@ -74,7 +88,9 @@ extension MostPopularViewController: MostPopularViewDelegate, WatchlistButtonDel
     func seeMoreTapped(_ mostPopularView: MostPopularView) {
         guard let selectedMovie = movies[safe: itemInViewIndex] else { return }
         
-        let detailViewController = MovieDetailViewController(selectedMovieID: selectedMovie.id)
+        let detailViewController = MovieDetailViewController(selectedMovieID: selectedMovie.id,
+                                                             movieDataService: MovieDataService(),
+                                                             watchlistService: WatchlistService())
         let detailNavigationController = UINavigationController(rootViewController: detailViewController)
         present(detailNavigationController, animated: true)
     }

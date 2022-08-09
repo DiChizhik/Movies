@@ -41,11 +41,14 @@ enum MovieTabBarItem: String, CaseIterable {
                                                       watchlistService: WatchlistService(),
                                                       collectionViewLayout: layout)
         case .mostPopular:
-            return MostPopularViewController()
+            return MostPopularViewController(movieDataService: MovieDataService(),
+                                             watchlistService: WatchlistService())
         case .watchlist:
-            return WatchlistViewController()
+            return WatchlistViewController(movieDataService: MovieDataService(),
+                                           watchlistService: WatchlistService())
         case .search:
-            return SearchViewController()
+            return SearchViewController(movieDataService: MovieDataService(),
+                                        watchlistService: WatchlistService())
         }
     }
 }

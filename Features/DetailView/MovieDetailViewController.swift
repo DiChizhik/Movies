@@ -10,8 +10,9 @@ import Kingfisher
 
 class MovieDetailViewController: UIViewController {
     private var selectedMovieID: Int
-    private let movieDataService = MovieDataService()
-    private let watchlistService = WatchlistService()
+    
+    private let movieDataService: MovieDataServiceProtocol
+    private let watchlistService: WatchlistServiceProtocol
     
     private var movieDetails: MovieDetails?
     private var languageAndGenreData = [CollectionViewSection]()
@@ -23,8 +24,12 @@ class MovieDetailViewController: UIViewController {
         return view
     }()
 
-    init(selectedMovieID: Int) {
+    init(selectedMovieID: Int,
+         movieDataService: MovieDataServiceProtocol,
+         watchlistService: WatchlistServiceProtocol) {
         self.selectedMovieID = selectedMovieID
+        self.movieDataService = movieDataService
+        self.watchlistService = watchlistService
         
         super.init(nibName: nil, bundle: nil)
     }

@@ -8,9 +8,10 @@
 import UIKit
 
 class WatchlistViewController: UIViewController {
-    let watchlistService = WatchlistService()
-    let movieDataService = MovieDataService()
-    var movies = [WatchlistItem]()
+    private let movieDataService: MovieDataServiceProtocol
+    private let watchlistService: WatchlistServiceProtocol
+    
+    private var movies = [WatchlistItem]()
     
     private lazy var contentView: WatchlistView = {
         let view = WatchlistView()
@@ -18,6 +19,19 @@ class WatchlistViewController: UIViewController {
         view.tableView.dataSource = self
         return view
     }()
+    
+    init(movieDataService: MovieDataServiceProtocol,
+         watchlistService: WatchlistServiceProtocol) {
+        self.movieDataService = movieDataService
+        self.watchlistService = watchlistService
+        
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func loadView() {
         self.view = contentView
@@ -71,7 +85,9 @@ extension WatchlistViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let movie = movies[safe: indexPath.row] else { return }
         
-        let detailViewController = MovieDetailViewController(selectedMovieID: movie.id)
+        let detailViewController = MovieDetailViewController(selectedMovieID: movie.id,
+                                                             movieDataService: MovieDataService(),
+                                                             watchlistService: WatchlistService())
         let detailNavigationController = UINavigationController(rootViewController: detailViewController)
         present(detailNavigationController, animated: true)
     }

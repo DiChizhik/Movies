@@ -8,14 +8,12 @@
 import UIKit
 
 class PlayingNowCollectionViewController: UICollectionViewController {
-    private var movieDataService: MovieDataServiceProtocol
-    private var watchlistService: WatchlistServiceProtocol
+    private let movieDataService: MovieDataServiceProtocol
+    private let watchlistService: WatchlistServiceProtocol
     
     private var movies = [Movie]()
     var selectedItemId: Int?
     
-//    Did I get you right when you talked about replacing services with protocols?
-//    I've made changes only on PlayingNoewVC so far.
     init(movieDataService: MovieDataServiceProtocol,
          watchlistService: WatchlistServiceProtocol,
          collectionViewLayout: UICollectionViewLayout) {
@@ -129,8 +127,9 @@ extension PlayingNowCollectionViewController {
 extension PlayingNowCollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let selectedMovieID = movies[indexPath.item].id
-        let detailViewController = MovieDetailViewController(selectedMovieID: selectedMovieID)
-        
+        let detailViewController = MovieDetailViewController(selectedMovieID: selectedMovieID,
+                                                             movieDataService: MovieDataService(),
+                                                             watchlistService: WatchlistService())
         let detailViewNavigationController = UINavigationController(rootViewController: detailViewController)
         present(detailViewNavigationController, animated: true)
     }

@@ -8,8 +8,9 @@
 import UIKit
 
 class SearchViewController: UIViewController {
-    let movieDataService = MovieDataService()
-    let watchlistService = WatchlistService()
+    private let movieDataService: MovieDataServiceProtocol
+    private let watchlistService: WatchlistServiceProtocol
+    
     private var searchResults = [Movie]()
     
     private lazy var contentView: SearchView = {
@@ -19,6 +20,19 @@ class SearchViewController: UIViewController {
         view.tableViewDataSource = self
         return view
     }()
+    
+    init(movieDataService: MovieDataServiceProtocol,
+         watchlistService: WatchlistServiceProtocol) {
+        self.movieDataService = movieDataService
+        self.watchlistService = watchlistService
+        
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func loadView() {
         super.loadView()
@@ -100,7 +114,9 @@ extension SearchViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedMovieID = searchResults[indexPath.row].id
         
-        let detailViewController = MovieDetailViewController(selectedMovieID: selectedMovieID)
+        let detailViewController = MovieDetailViewController(selectedMovieID: selectedMovieID,
+                                                             movieDataService: MovieDataService(),
+                                                             watchlistService: WatchlistService())
         let detailNavigationController = UINavigationController(rootViewController: detailViewController)
         present(detailNavigationController, animated: true)
     }
