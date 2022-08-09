@@ -80,6 +80,13 @@ extension WatchlistViewController: WatchlistButtonDelegate {
     }
 }
 
+//MARK: - MovieDetailViewDelegate
+extension WatchlistViewController: MovieDetailViewDelegate {
+    func updateView() {
+        loadWatchlist()
+    }
+}
+
 // MARK: - UITableViewDelegate
 extension WatchlistViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -88,6 +95,7 @@ extension WatchlistViewController: UITableViewDelegate {
         let detailViewController = MovieDetailViewController(selectedMovieID: movie.id,
                                                              movieDataService: MovieDataService(),
                                                              watchlistService: WatchlistService())
+        detailViewController.delegate = self
         let detailNavigationController = UINavigationController(rootViewController: detailViewController)
         present(detailNavigationController, animated: true)
     }

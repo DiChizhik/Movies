@@ -46,6 +46,12 @@ class SearchViewController: UIViewController {
         navigationItem.searchController = contentView.searchController
         contentView.searchController.searchBar.searchTextField.textColor = .whiteF5
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        contentView.tableView.reloadData()
+    }
 }
 
 // MARK: - WatchlistButtonDelegate
@@ -91,6 +97,13 @@ extension SearchViewController: SearchViewDelegate {
     }
 }
 
+//MARK: - MovieDetailViewDelegate
+extension SearchViewController: MovieDetailViewDelegate {
+    func updateView() {
+        contentView.tableView.reloadData()
+    }
+}
+
 //MARK: - UITableViewDataSource
 extension SearchViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -117,6 +130,7 @@ extension SearchViewController: UITableViewDelegate {
         let detailViewController = MovieDetailViewController(selectedMovieID: selectedMovieID,
                                                              movieDataService: MovieDataService(),
                                                              watchlistService: WatchlistService())
+        detailViewController.delegate = self
         let detailNavigationController = UINavigationController(rootViewController: detailViewController)
         present(detailNavigationController, animated: true)
     }

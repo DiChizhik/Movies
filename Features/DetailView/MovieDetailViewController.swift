@@ -8,6 +8,10 @@
 import UIKit
 import Kingfisher
 
+protocol MovieDetailViewDelegate: AnyObject {
+    func updateView()
+}
+
 class MovieDetailViewController: UIViewController {
     private var selectedMovieID: Int
     
@@ -16,6 +20,8 @@ class MovieDetailViewController: UIViewController {
     
     private var movieDetails: MovieDetails?
     private var languageAndGenreData = [CollectionViewSection]()
+    
+    weak var delegate: MovieDetailViewDelegate?
     
     private lazy var contentView: StackMovieDetailView = {
         let view = StackMovieDetailView()
@@ -111,6 +117,8 @@ private extension MovieDetailViewController {
     }
     
     @objc func dismissView(_ sender: UIButton) {
+        delegate?.updateView()
+        
         dismiss(animated: true)
     }
 }

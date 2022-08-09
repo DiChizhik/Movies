@@ -68,6 +68,12 @@ class MostPopularViewController: UIViewController {
             self.fade(.fadeIn)
         }
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        configureWithData(index: itemInViewIndex)
+    }
 }
  
 // MARK: - Public functions
@@ -91,6 +97,7 @@ extension MostPopularViewController: MostPopularViewDelegate, WatchlistButtonDel
         let detailViewController = MovieDetailViewController(selectedMovieID: selectedMovie.id,
                                                              movieDataService: MovieDataService(),
                                                              watchlistService: WatchlistService())
+        detailViewController.delegate = self
         let detailNavigationController = UINavigationController(rootViewController: detailViewController)
         present(detailNavigationController, animated: true)
     }
@@ -141,6 +148,13 @@ private extension MostPopularViewController {
                        animations: {
             self.contentView.changeAlpha(to: alpha)
                     }, completion: nil)
+    }
+}
+
+//MARK: - MovieDetailViewController
+extension MostPopularViewController: MovieDetailViewDelegate {
+    func updateView() {
+        configureWithData(index: itemInViewIndex)
     }
 }
 

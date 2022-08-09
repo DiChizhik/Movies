@@ -42,6 +42,12 @@ class PlayingNowCollectionViewController: UICollectionViewController {
         loadMovieData()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        collectionView.reloadData()
+    }
+    
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         collectionView.collectionViewLayout.invalidateLayout()
@@ -99,6 +105,13 @@ extension PlayingNowCollectionViewController: WatchlistButtonDelegate {
     }
 }
 
+//MARK: - MovieDetailViewDelegate
+extension PlayingNowCollectionViewController: MovieDetailViewDelegate {
+    func updateView() {
+        collectionView.reloadData()
+    }
+}
+
 // MARK: - UICollectionViewDataSource
 extension PlayingNowCollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -130,6 +143,7 @@ extension PlayingNowCollectionViewController {
         let detailViewController = MovieDetailViewController(selectedMovieID: selectedMovieID,
                                                              movieDataService: MovieDataService(),
                                                              watchlistService: WatchlistService())
+        detailViewController.delegate = self
         let detailViewNavigationController = UINavigationController(rootViewController: detailViewController)
         present(detailViewNavigationController, animated: true)
     }
