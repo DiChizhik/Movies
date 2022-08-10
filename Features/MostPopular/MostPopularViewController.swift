@@ -58,15 +58,7 @@ class MostPopularViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        loadMovieData()
-        
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            guard self.movies.count > self.itemInViewIndex else { return }
-            
-            self.configureWithData(index: self.itemInViewIndex)
-            self.fade(.fadeIn)
-        }
+        loadMovieData()        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -80,14 +72,12 @@ class MostPopularViewController: UIViewController {
 extension MostPopularViewController: MostPopularViewDelegate, WatchlistButtonDelegate {
     func watchlistTapped(_ view: WatchlistHandleable) {
         guard let movie = movies[safe: itemInViewIndex] else { return }
-        
-        let watchlistItem = WatchlistItem(id: movie.id,
-                                          saveDate: Date.now,
-                                          title: movie.title,
-                                          voteAverage: movie.voteAverage,
-                                          posterPath: movie.posterPath)
 
-        let updatedStatus = watchlistService.toggleStatus(for: watchlistItem)
+        let updatedStatus = watchlistService.toggleStatus(for: WatchlistMovieConfiguration(id: Int32(movie.id),
+                                                                                           saveDate: Date.now,
+                                                                                           title: movie.title,
+                                                                                           voteAverage: Int16(movie.voteAverage),
+                                                                                           posterPath: movie.posterPath))
         contentView.updateWatchlistButtonWithStatus(updatedStatus, isShortVariant: false)
     }
     
@@ -119,7 +109,11 @@ private extension MostPopularViewController {
             }
             
             DispatchQueue.main.async {
+                guard self.movies.count > self.itemInViewIndex else { return }
+                
                 self.contentView.collectionView.reloadData()
+                self.configureWithData(index: self.itemInViewIndex)
+                self.fade(.fadeIn)
             }
         }
     }
@@ -153,7 +147,7 @@ private extension MostPopularViewController {
 
 //MARK: - MovieDetailViewController
 extension MostPopularViewController: MovieDetailViewDelegate {
-    func updateView() {
+    func updateView(_ controller: UIViewController) {
         configureWithData(index: itemInViewIndex)
     }
 }

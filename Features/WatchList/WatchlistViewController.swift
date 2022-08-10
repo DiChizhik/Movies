@@ -11,7 +11,10 @@ class WatchlistViewController: UIViewController {
     private let movieDataService: MovieDataServiceProtocol
     private let watchlistService: WatchlistServiceProtocol
     
-    private var movies = [WatchlistItem]()
+//    private var movies = [WatchlistItem]()
+    
+//    CoreData prep
+    private var movies = [WatchlistMovie]()
     
     private lazy var contentView: WatchlistView = {
         let view = WatchlistView()
@@ -55,7 +58,7 @@ class WatchlistViewController: UIViewController {
 private extension WatchlistViewController {
     func loadWatchlist() {
         movies.removeAll()
-        movies = watchlistService.getWatchlistItems()
+        movies = watchlistService.getWatchlist()
         
         contentView.tableView.reloadData()
     }
@@ -68,12 +71,12 @@ extension WatchlistViewController: WatchlistButtonDelegate {
         guard let indexPath = contentView.tableView.indexPath(for: cell) else { return }
         
         if let movie = movies[safe: indexPath.row] {
-            let watchlistItem = WatchlistItem(id: movie.id,
-                                              saveDate: Date.now,
-                                              title: movie.title,
-                                              voteAverage: movie.voteAverage,
-                                              posterPath: movie.posterPath)
-            let _ = watchlistService.toggleStatus(for: watchlistItem)
+            
+            let _ = watchlistService.toggleStatus(for: WatchlistMovieConfiguration(id: Int32(movie.id),
+                                                                                   saveDate: Date.now,
+                                                                                   title: movie.title,
+                                                                                   voteAverage: Int16(movie.voteAverage),
+                                                                                   posterPath: movie.posterPath))
             
             loadWatchlist()
         }
@@ -82,7 +85,7 @@ extension WatchlistViewController: WatchlistButtonDelegate {
 
 //MARK: - MovieDetailViewDelegate
 extension WatchlistViewController: MovieDetailViewDelegate {
-    func updateView() {
+    func updateView(_ controller: UIViewController) {
         loadWatchlist()
     }
 }
@@ -92,7 +95,7 @@ extension WatchlistViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let movie = movies[safe: indexPath.row] else { return }
         
-        let detailViewController = MovieDetailViewController(selectedMovieID: movie.id,
+        let detailViewController = MovieDetailViewController(selectedMovieID: Int(movie.id),
                                                              movieDataService: MovieDataService(),
                                                              watchlistService: WatchlistService())
         detailViewController.delegate = self
@@ -112,8 +115,8 @@ extension WatchlistViewController: UITableViewDataSource {
         cell.watchlistButtonDelegate = self
 
         let item = movies[indexPath.row]
-        let status = watchlistService.getStatus(for: item.id)
-        cell.configure(imageURL: item.posterPath, title: item.title, reviewsScore: item.voteAverage, status: status)
+        let status = watchlistService.getStatus(for: Int(item.id))
+        cell.configure(imageURL: item.posterPath, title: item.title, reviewsScore: (Int(item.voteAverage)), status: status)
         return cell
     }
 }

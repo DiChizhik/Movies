@@ -92,22 +92,20 @@ extension PlayingNowCollectionViewController: WatchlistButtonDelegate {
         
         if let indexPath = collectionView.indexPath(for: cell) {
             let movie = movies[indexPath.item]
-            let watchlistItem = WatchlistItem(id: movie.id,
-                                              saveDate: Date.now,
-                                              title: movie.title,
-                                              voteAverage: movie.voteAverage,
-                                              posterPath: movie.posterPath)
             
-            let updatedStatus = watchlistService.toggleStatus(for: watchlistItem)
+            let updatedStatus = watchlistService.toggleStatus(for: WatchlistMovieConfiguration(id: Int32(movie.id),
+                                                                                                   saveDate: Date.now,
+                                                                                                   title: movie.title,
+                                                                                                   voteAverage: Int16(movie.voteAverage),
+                                                                                                   posterPath: movie.posterPath))
             view.watchlistButton.updateWithStatus(updatedStatus, isShortVariant: true)
-            
         }
     }
 }
 
 //MARK: - MovieDetailViewDelegate
 extension PlayingNowCollectionViewController: MovieDetailViewDelegate {
-    func updateView() {
+    func updateView(_ controller: UIViewController) {
         collectionView.reloadData()
     }
 }
