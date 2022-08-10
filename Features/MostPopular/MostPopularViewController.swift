@@ -66,6 +66,12 @@ class MostPopularViewController: UIViewController {
         
         configureWithData(index: itemInViewIndex)
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        configureForItemInView()
+    }
 }
  
 // MARK: - Public functions

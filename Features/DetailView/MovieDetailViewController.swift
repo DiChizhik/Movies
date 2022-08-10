@@ -68,6 +68,12 @@ class MovieDetailViewController: UIViewController {
 
         contentView.collectionView.collectionViewLayout.invalidateLayout()
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        delegate?.updateView(self)
+    }
 }
 
 // MARK: - Private functions

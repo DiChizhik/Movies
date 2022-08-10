@@ -46,6 +46,7 @@ final class MostPopularView: UIView, WatchlistHandleable {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.register(MostPopularCollectionViewCell.self)
         collectionView.backgroundColor = .darkBlue01
+        collectionView.showsHorizontalScrollIndicator = false
         return collectionView
     }()
     
