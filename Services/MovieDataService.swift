@@ -44,7 +44,6 @@ enum MovieServiceError: Error, LocalizedError, ErrorViewHandleable {
             return UIImage(named: "spy")
         case .failedToGetResponse:
             return UIImage(named: "wifi")
-            
         }
     }
 }

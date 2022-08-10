@@ -127,9 +127,11 @@ private extension MostPopularViewController {
             let movieDescription = movie.overview
             let movieID = movie.id
             
-            let status = watchlistService.getStatus(for: movieID)
-            
-            contentView.configureWith(name: movieName, score: reviewsScore, description: movieDescription, status: status)
+            if let status = try? watchlistService.getStatus(for: movieID) {
+                contentView.configureWith(name: movieName, score: reviewsScore, description: movieDescription, status: status)
+            } else {
+                ErrorViewController.handleError(WatchlistServiceError.failedToFetchFromPersistentStore, presentingViewController: self)
+            }
         }
     }
     

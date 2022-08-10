@@ -99,8 +99,11 @@ private extension MovieDetailViewController {
             contentView.imageView.kf.setImage(with: path)
         }
         
-        let status = watchlistService.getStatus(for: selectedMovieID)
-        contentView.watchlistButton.updateWithStatus(status, isShortVariant: false)
+        if let status = try? watchlistService.getStatus(for: selectedMovieID) {
+            contentView.watchlistButton.updateWithStatus(status, isShortVariant: false)
+        } else {
+            ErrorViewController.handleError(WatchlistServiceError.failedToFetchFromPersistentStore, presentingViewController: self)
+        }
         
         contentView.reviewScoreStackView.setValue(movieDetails.voteAverage)
         contentView.releaseDateLabel.text = movieDetails.releaseDate

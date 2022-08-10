@@ -115,8 +115,12 @@ extension WatchlistViewController: UITableViewDataSource {
         cell.watchlistButtonDelegate = self
 
         let item = movies[indexPath.row]
-        let status = watchlistService.getStatus(for: Int(item.id))
-        cell.configure(imageURL: item.posterPath, title: item.title, reviewsScore: (Int(item.voteAverage)), status: status)
+        if let status = try? watchlistService.getStatus(for: Int(item.id)) {
+            cell.configure(imageURL: item.posterPath, title: item.title, reviewsScore: (Int(item.voteAverage)), status: status)
+        } else {
+            ErrorViewController.handleError(WatchlistServiceError.failedToFetchFromPersistentStore, presentingViewController: self)
+        }
+        
         return cell
     }
 }

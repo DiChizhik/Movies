@@ -9,13 +9,31 @@ import UIKit
 import CoreData
 
 protocol WatchlistServiceProtocol {
-    func getStatus(for id: Int)-> WatchlistStatus
+    func getStatus(for id: Int) throws -> WatchlistStatus
     func toggleStatus(for item: WatchlistMovieConfiguration)-> WatchlistStatus
     func getWatchlist() -> [WatchlistMovie]
 }
 
 enum WatchlistStatus {
     case added, notAdded
+}
+
+enum WatchlistServiceError: Error, ErrorViewHandleable {
+    case failedToFetchFromPersistentStore
+    
+    var errorTitle: String {
+        switch self {
+        case .failedToFetchFromPersistentStore:
+            return "Houston, we have a problem.\nClose and re-open the app."
+        }
+    }
+    
+    var errorImage: UIImage? {
+        switch self {
+        case .failedToFetchFromPersistentStore:
+            return UIImage(named: "dizzy")
+        }
+    }
 }
 
 class Container {
@@ -38,7 +56,7 @@ class WatchlistService: WatchlistServiceProtocol {
     let container = Container.shared
     var predicate: NSComparisonPredicate?
 
-    func getStatus(for id: Int)-> WatchlistStatus {
+    func getStatus(for id: Int) throws -> WatchlistStatus {
         let request = WatchlistMovie.createFetchRequest()
         predicate = NSComparisonPredicate(format: "id == %@", id as NSNumber)
         request.predicate = predicate
@@ -53,11 +71,11 @@ class WatchlistService: WatchlistServiceProtocol {
             }
         } catch {
             print("Fetch failed")
-            return .notAdded
+            throw WatchlistServiceError.failedToFetchFromPersistentStore
         }
     }
     
-    func toggleStatus(for item: WatchlistMovieConfiguration)-> WatchlistStatus {
+    func toggleStatus(for item: WatchlistMovieConfiguration) -> WatchlistStatus {
         let request = WatchlistMovie.createFetchRequest()
         predicate = NSComparisonPredicate(format: "id == %@", item.id as NSNumber)
         request.predicate = predicate

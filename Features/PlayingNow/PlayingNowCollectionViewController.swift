@@ -126,9 +126,12 @@ extension PlayingNowCollectionViewController {
         let path = movie.posterPath
         let movieID = movie.id
         
-        let status = watchlistService.getStatus(for: movieID)
-        
-        cell.configure(imageURL: path, name: movieName, reviewsScore: reviewsScore, status: status)
+        do {
+            let status = try watchlistService.getStatus(for: movieID)
+            cell.configure(imageURL: path, name: movieName, reviewsScore: reviewsScore, status: status)
+        } catch {
+            ErrorViewController.handleError(WatchlistServiceError.failedToFetchFromPersistentStore, presentingViewController: self)
+        }
         
         return cell
     }
