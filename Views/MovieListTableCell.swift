@@ -34,7 +34,7 @@ class MovieListTableCell: UITableViewCell, Reusable, WatchlistHandleable {
     
     lazy var watchlistButton: WatchlistButton = {
         let button = WatchlistButton()
-        button.configuration?.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+        button.configuration?.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0)
         let action = UIAction { [weak self] _ in
             guard let self = self else { return }
             

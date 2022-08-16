@@ -8,7 +8,7 @@
 import UIKit
 import Kingfisher
 
-class MostPopularViewController: UIViewController {
+final class MostPopularViewController: UIViewController {
     private enum Fading: Int {
         case fadeIn = 1
         case fadeOut = 0

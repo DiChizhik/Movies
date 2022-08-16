@@ -31,7 +31,7 @@ enum WatchlistServiceError: Error, ErrorViewHandleable {
     var errorImage: UIImage? {
         switch self {
         case .failedToFetchFromPersistentStore:
-            return UIImage(named: "dizzy")
+            return #imageLiteral(resourceName: "dizzy")
         }
     }
 }

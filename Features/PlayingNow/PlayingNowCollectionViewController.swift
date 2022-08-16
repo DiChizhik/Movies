@@ -7,7 +7,7 @@
 
 import UIKit
 
-class PlayingNowCollectionViewController: UICollectionViewController {
+final class PlayingNowCollectionViewController: UICollectionViewController {
     private let movieDataService: MovieDataServiceProtocol
     private let watchlistService: WatchlistServiceProtocol
     

@@ -12,7 +12,7 @@ protocol MovieDetailViewDelegate: AnyObject {
     func updateView(_ controller: UIViewController)
 }
 
-class MovieDetailViewController: UIViewController {
+final class MovieDetailViewController: UIViewController {
     private var selectedMovieID: Int
     
     private let movieDataService: MovieDataServiceProtocol
@@ -28,6 +28,28 @@ class MovieDetailViewController: UIViewController {
         view.collectionView.dataSource = self
         view.watchlistButtonDelegate = self
         return view
+    }()
+    
+    private lazy var exitButton: UIButton = {
+        let button = UIButton(type: .custom)
+        let action = UIAction { [weak self, weak button] _ in
+            guard let self = self else { return }
+            guard let button = button else { return }
+            self.dismissView(button)
+        }
+        button.addAction(action, for: .touchUpInside)
+        
+        var config = UIButton.Configuration.plain()
+        config.image = UIImage(named: "close")
+        config.imageColorTransformer = UIConfigurationColorTransformer { incoming in
+            var outgoing = incoming
+            outgoing = .whiteF5
+            return outgoing
+        }
+        config.contentInsets = NSDirectionalEdgeInsets(top: 15, leading: 5, bottom: 15, trailing: 20)
+        button.configuration = config
+        
+        return button
     }()
 
     init(selectedMovieID: Int,
@@ -50,8 +72,6 @@ class MovieDetailViewController: UIViewController {
         
         self.view = contentView
         
-        let exitButton = UIButton.systemButton(with: UIImage(systemName: "xmark")!, target: self, action: #selector(dismissView))
-        exitButton.tintColor = UIColor.white
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: exitButton)
 
         navigationController?.navigationBar.barTintColor = .darkBlue01

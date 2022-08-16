@@ -8,7 +8,7 @@
 import UIKit
 
 
-class ErrorViewController: UIViewController, ErrorViewDelegate {
+final class ErrorViewController: UIViewController, ErrorViewDelegate {
     private var error: ErrorViewHandleable
     
     lazy var contentView: ErrorView = {

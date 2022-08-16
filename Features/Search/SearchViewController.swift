@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SearchViewController: UIViewController {
+final class SearchViewController: UIViewController {
     private let movieDataService: MovieDataServiceProtocol
     private let watchlistService: WatchlistServiceProtocol
     

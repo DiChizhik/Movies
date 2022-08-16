@@ -45,11 +45,7 @@ extension ReviewScoreStackView {
     func setValue(_ scoreValue: Int) {
         reviewsScore.text = "\(scoreValue)%"
     
-        if scoreValue > 50 {
-            reviewsScoreIndicator.image = UIImage(named: "highReviewsScore")
-        } else {
-            reviewsScoreIndicator.image = UIImage(named: "lowReviewsScore")
-        }
+        reviewsScoreIndicator.image = scoreValue > 50 ? #imageLiteral(resourceName: "highReviewsScore") : #imageLiteral(resourceName: "lowReviewsScore")
     }
 }
 

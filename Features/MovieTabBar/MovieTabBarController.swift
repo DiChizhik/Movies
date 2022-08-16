@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MovieTabBarController: UITabBarController {
+final class MovieTabBarController: UITabBarController {
     var tabItems: [MovieTabBarItem]
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -32,8 +32,11 @@ class MovieTabBarController: UITabBarController {
         
         setupMovieTabBar()
     }
-    
-    private func setupMovieTabBar() {
+}
+
+//MARK: - Private functions
+private extension MovieTabBarController {
+    func setupMovieTabBar() {
         var controllers = [UIViewController]()
         
         for item in tabItems {
@@ -50,7 +53,7 @@ class MovieTabBarController: UITabBarController {
         setupMovieTabBarAppearance()
     }
     
-    private func setupMovieTabBarAppearance() {
+    func setupMovieTabBarAppearance() {
         UITabBarItem.appearance().setTitleTextAttributes([.foregroundColor: UIColor.lightBlue61], for: .normal)
         UITabBarItem.appearance().setTitleTextAttributes([.foregroundColor : UIColor.whiteF5], for: .selected)
         UITabBar.appearance().tintColor = UIColor.whiteF5

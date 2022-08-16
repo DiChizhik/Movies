@@ -7,13 +7,10 @@
 
 import UIKit
 
-class WatchlistViewController: UIViewController {
+final class WatchlistViewController: UIViewController {
     private let movieDataService: MovieDataServiceProtocol
     private let watchlistService: WatchlistServiceProtocol
     
-//    private var movies = [WatchlistItem]()
-    
-//    CoreData prep
     private var movies = [WatchlistMovie]()
     
     private lazy var contentView: WatchlistView = {

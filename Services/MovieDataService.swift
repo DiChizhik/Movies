@@ -39,11 +39,11 @@ enum MovieServiceError: Error, LocalizedError, ErrorViewHandleable {
     var errorImage: UIImage? {
         switch self {
         case .failedToGetData:
-            return UIImage(named: "dizzy")
+            return #imageLiteral(resourceName: "dizzy")
         case .failedToDecode:
-            return UIImage(named: "spy")
+            return #imageLiteral(resourceName: "spy")
         case .failedToGetResponse:
-            return UIImage(named: "wifi")
+            return #imageLiteral(resourceName: "wifi")
         }
     }
 }
