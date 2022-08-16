@@ -70,6 +70,7 @@ final class MostPopularView: UIView, WatchlistHandleable {
     lazy var watchlistButton: WatchlistButton = {
         let button = WatchlistButton()
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.configuration?.contentInsets.trailing = 0
         button.alpha = 0
         let action = UIAction { [weak self] _ in
             guard let self = self else { return }

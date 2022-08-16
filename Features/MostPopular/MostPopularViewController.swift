@@ -79,11 +79,7 @@ extension MostPopularViewController: MostPopularViewDelegate, WatchlistButtonDel
     func watchlistTapped(_ view: WatchlistHandleable) {
         guard let movie = movies[safe: itemInViewIndex] else { return }
 
-        let updatedStatus = watchlistService.toggleStatus(for: WatchlistMovieConfiguration(id: Int32(movie.id),
-                                                                                           saveDate: Date.now,
-                                                                                           title: movie.title,
-                                                                                           voteAverage: Int16(movie.voteAverage),
-                                                                                           posterPath: movie.posterPath))
+        let updatedStatus = watchlistService.toggleStatus(for: WatchlistMovieConfiguration(movie: movie))
         contentView.updateWatchlistButtonWithStatus(updatedStatus, isShortVariant: false)
     }
     
@@ -155,7 +151,7 @@ private extension MostPopularViewController {
 
 //MARK: - MovieDetailViewController
 extension MostPopularViewController: MovieDetailViewDelegate {
-    func updateView(_ controller: UIViewController) {
+    func didUpdateWatchlist(_ controller: UIViewController) {
         configureWithData(index: itemInViewIndex)
     }
 }

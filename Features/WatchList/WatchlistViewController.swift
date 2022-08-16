@@ -69,11 +69,7 @@ extension WatchlistViewController: WatchlistButtonDelegate {
         
         if let movie = movies[safe: indexPath.row] {
             
-            let _ = watchlistService.toggleStatus(for: WatchlistMovieConfiguration(id: Int32(movie.id),
-                                                                                   saveDate: Date.now,
-                                                                                   title: movie.title,
-                                                                                   voteAverage: Int16(movie.voteAverage),
-                                                                                   posterPath: movie.posterPath))
+            let _ = watchlistService.toggleStatus(for: WatchlistMovieConfiguration(movie: movie))
             
             loadWatchlist()
         }
@@ -82,7 +78,7 @@ extension WatchlistViewController: WatchlistButtonDelegate {
 
 //MARK: - MovieDetailViewDelegate
 extension WatchlistViewController: MovieDetailViewDelegate {
-    func updateView(_ controller: UIViewController) {
+    func didUpdateWatchlist(_ controller: UIViewController) {
         loadWatchlist()
     }
 }

@@ -36,7 +36,7 @@ enum WatchlistServiceError: Error, ErrorViewHandleable {
     }
 }
 
-class Container {
+private class Container {
     static let shared: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "WatchlistMovies")
         container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
@@ -53,46 +53,39 @@ class Container {
 }
 
 class WatchlistService: WatchlistServiceProtocol {
-    let container = Container.shared
-    var predicate: NSComparisonPredicate?
+    private let container = Container.shared
 
     func getStatus(for id: Int) throws -> WatchlistStatus {
         let request = WatchlistMovie.createFetchRequest()
-        predicate = NSComparisonPredicate(format: "id == %@", id as NSNumber)
+        let predicate = NSComparisonPredicate(format: "id == %@", id as NSNumber)
         request.predicate = predicate
         
         do {
-            let movies = try container.viewContext.fetch(request)
-            
-            if !movies.isEmpty {
+            let movies = try container.viewContext.count(for: request)
+            if movies != 0 {
                 return .added
             } else {
                 return .notAdded
             }
         } catch {
-            print("Fetch failed")
             throw WatchlistServiceError.failedToFetchFromPersistentStore
         }
     }
     
     func toggleStatus(for item: WatchlistMovieConfiguration) -> WatchlistStatus {
         let request = WatchlistMovie.createFetchRequest()
-        predicate = NSComparisonPredicate(format: "id == %@", item.id as NSNumber)
+        let predicate = NSComparisonPredicate(format: "id == %@", item.id as NSNumber)
         request.predicate = predicate
         
         do {
             let movies = try container.viewContext.fetch(request)
             
-            if !movies.isEmpty {
-                container.viewContext.delete(movies[0])
+            if let movie = movies.first {
+                container.viewContext.delete(movie)
                 return saveWatchlist() ? .notAdded : .added
             } else {
                 let watchlistMovie = WatchlistMovie(context: container.viewContext)
-                watchlistMovie.id = item.id
-                watchlistMovie.saveDate = item.saveDate
-                watchlistMovie.title = item.title
-                watchlistMovie.voteAverage = item.voteAverage
-                watchlistMovie.posterPath = item.posterPath
+                watchlistMovie.configure(withData: item)
 
                 return saveWatchlist() ? .added : .notAdded
             }
@@ -118,17 +111,14 @@ class WatchlistService: WatchlistServiceProtocol {
     }
     
     private func saveWatchlist() -> Bool {
-        if container.viewContext.hasChanges {
-                do {
-                    try container.viewContext.save()
-                    return true
-                } catch {
-                    print("An error occurred while saving: \(error)")
-                    return false
-                }
+        guard container.viewContext.hasChanges else { return true }
+        do {
+            try container.viewContext.save()
+            return true
+        } catch {
+            print("An error occurred while saving: \(error)")
+            return false
         }
-        
-        return true
     }
 }
 

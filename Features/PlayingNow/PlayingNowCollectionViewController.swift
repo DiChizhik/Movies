@@ -93,11 +93,7 @@ extension PlayingNowCollectionViewController: WatchlistButtonDelegate {
         if let indexPath = collectionView.indexPath(for: cell) {
             let movie = movies[indexPath.item]
             
-            let updatedStatus = watchlistService.toggleStatus(for: WatchlistMovieConfiguration(id: Int32(movie.id),
-                                                                                                   saveDate: Date.now,
-                                                                                                   title: movie.title,
-                                                                                                   voteAverage: Int16(movie.voteAverage),
-                                                                                                   posterPath: movie.posterPath))
+            let updatedStatus = watchlistService.toggleStatus(for: WatchlistMovieConfiguration(movie: movie))
             view.watchlistButton.updateWithStatus(updatedStatus, isShortVariant: true)
         }
     }
@@ -105,7 +101,7 @@ extension PlayingNowCollectionViewController: WatchlistButtonDelegate {
 
 //MARK: - MovieDetailViewDelegate
 extension PlayingNowCollectionViewController: MovieDetailViewDelegate {
-    func updateView(_ controller: UIViewController) {
+    func didUpdateWatchlist(_ controller: UIViewController) {
         collectionView.reloadData()
     }
 }
@@ -129,8 +125,12 @@ extension PlayingNowCollectionViewController {
         do {
             let status = try watchlistService.getStatus(for: movieID)
             cell.configure(imageURL: path, name: movieName, reviewsScore: reviewsScore, status: status)
-        } catch {
-            ErrorViewController.handleError(WatchlistServiceError.failedToFetchFromPersistentStore, presentingViewController: self)
+        } catch let error {
+            if let error = error as? ErrorViewHandleable {
+                ErrorViewController.handleError(error, presentingViewController: self)
+            } else {
+                print("Error doesn't conform to ErrorViewHadleable protocol")
+            }
         }
         
         return cell

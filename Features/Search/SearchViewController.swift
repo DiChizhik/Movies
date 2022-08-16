@@ -62,11 +62,7 @@ extension SearchViewController: WatchlistButtonDelegate {
         if let indexPath = contentView.tableView.indexPath(for: cell) {
             let movie = searchResults[indexPath.row]
 
-            let updatedStatus = watchlistService.toggleStatus(for: WatchlistMovieConfiguration(id: Int32(movie.id),
-                                                                                               saveDate: Date.now,
-                                                                                               title: movie.title,
-                                                                                               voteAverage: Int16(movie.voteAverage),
-                                                                                               posterPath: movie.posterPath))
+            let updatedStatus = watchlistService.toggleStatus(for: WatchlistMovieConfiguration(movie: movie))
             view.watchlistButton.updateWithStatus(updatedStatus, isShortVariant: false)
         }
     }
@@ -98,7 +94,7 @@ extension SearchViewController: SearchViewDelegate {
 
 //MARK: - MovieDetailViewDelegate
 extension SearchViewController: MovieDetailViewDelegate {
-    func updateView(_ controller: UIViewController) {
+    func didUpdateWatchlist(_ controller: UIViewController) {
         contentView.tableView.reloadData()
     }
 }

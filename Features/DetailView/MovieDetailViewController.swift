@@ -9,7 +9,7 @@ import UIKit
 import Kingfisher
 
 protocol MovieDetailViewDelegate: AnyObject {
-    func updateView(_ controller: UIViewController)
+    func didUpdateWatchlist(_ controller: UIViewController)
 }
 
 final class MovieDetailViewController: UIViewController {
@@ -92,7 +92,7 @@ final class MovieDetailViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        delegate?.updateView(self)
+        delegate?.didUpdateWatchlist(self)
     }
 }
 
@@ -146,8 +146,6 @@ private extension MovieDetailViewController {
     }
     
     @objc func dismissView(_ sender: UIButton) {
-        delegate?.updateView(self)
-        
         dismiss(animated: true)
     }
 }
@@ -157,11 +155,7 @@ extension MovieDetailViewController: WatchlistButtonDelegate {
     func watchlistTapped(_ view: WatchlistHandleable) {
         guard let movie = movieDetails else { return }
 
-        let updatedStatus = watchlistService.toggleStatus(for: WatchlistMovieConfiguration(id: Int32(movie.id),
-                                                                                           saveDate: Date.now,
-                                                                                           title: movie.title,
-                                                                                           voteAverage: Int16(movie.voteAverage),
-                                                                                           posterPath: movie.posterPath))
+        let updatedStatus = watchlistService.toggleStatus(for: WatchlistMovieConfiguration(movie: movie))
         contentView.watchlistButton.updateWithStatus(updatedStatus, isShortVariant: false)
     }   
 }
