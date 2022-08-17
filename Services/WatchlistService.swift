@@ -57,7 +57,7 @@ class WatchlistService: WatchlistServiceProtocol {
 
     func getStatus(for id: Int) throws -> WatchlistStatus {
         let request = WatchlistMovie.createFetchRequest()
-        let predicate = NSComparisonPredicate(format: "id == %@", id as NSNumber)
+        let predicate = NSPredicate(format: "id == %d", id)
         request.predicate = predicate
         
         do {
@@ -74,7 +74,7 @@ class WatchlistService: WatchlistServiceProtocol {
     
     func toggleStatus(for item: WatchlistMovieConfiguration) -> WatchlistStatus {
         let request = WatchlistMovie.createFetchRequest()
-        let predicate = NSComparisonPredicate(format: "id == %@", item.id as NSNumber)
+        let predicate = NSPredicate(format: "id == %d", item.id)
         request.predicate = predicate
         
         do {
