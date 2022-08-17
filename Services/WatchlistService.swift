@@ -113,9 +113,8 @@ class CoreDataWatchlistService: WatchlistServiceProtocol {
 //            report an error
             completion(.failure(.failedToFetchFromPersistentStore))
         }
-        
     }
-    
+
     func getWatchlist(completion: (Result<[WatchlistItem], WatchlistServiceError>)-> Void) {
         let request = WatchlistMovie.createFetchRequest()
         let sort = NSSortDescriptor(key: "saveDate", ascending: false)
@@ -264,5 +263,4 @@ class UserDefaultsWatchlistService: WatchlistServiceProtocol {
         }
     }
 }
-
 

@@ -120,6 +120,7 @@ extension WatchlistViewController: UITableViewDataSource {
         cell.watchlistButtonDelegate = self
 
         let item = movies[indexPath.row]
+
 //        if let status = try? watchlistService.getStatus(for: Int(item.id)) {
 //            cell.configure(imageURL: item.posterPath, title: item.title, reviewsScore: (Int(item.voteAverage)), status: status)
 //        } else {

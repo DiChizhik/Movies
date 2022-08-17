@@ -182,7 +182,9 @@
 				0268A25828A3AF9E00A30BEF /* WatchlistMovie+CoreDataProperties.swift */,
 				025F059A284786CF00FF070D /* Movie.swift */,
 				0223A3DD285A739B00E3602D /* MovieDetails.swift */,
+
 				0216A91928ACD13A0083B65D /* WatchlistItem.swift */,
+
 			);
 			path = Models;
 			sourceTree = "<group>";

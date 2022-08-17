@@ -74,8 +74,6 @@ extension SearchViewController: WatchlistButtonDelegate {
             }
         }
     }
-    
-    
 }
 
 //MARK: - SearchViewDelegate
@@ -118,6 +116,7 @@ extension SearchViewController: UITableViewDataSource {
         cell.watchlistButtonDelegate = self
         
         let movie = searchResults[indexPath.row]
+
 //        if let status = try? watchlistService.getStatus(for: movie.id) {
 //            cell.configure(imageURL: movie.posterPath, title: movie.title, reviewsScore: movie.voteAverage, status: status)
 //        } else {
@@ -131,8 +130,6 @@ extension SearchViewController: UITableViewDataSource {
                 cell?.configure(imageURL: movie.posterPath, title: movie.title, reviewsScore: movie.voteAverage, status: .notAdded)
             }
         }
-
-        
         
         return cell
     }

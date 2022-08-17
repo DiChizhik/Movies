@@ -27,7 +27,6 @@ extension WatchlistMovie {
         self.saveDate = Date.now
         self.title = movieData.title
         self.voteAverage = Int16(movieData.voteAverage)
-        self.posterPath = movieData.posterPath
     }
 }
 
