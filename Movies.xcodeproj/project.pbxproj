@@ -29,7 +29,6 @@
 		023463B42872CE28001A703C /* MostPopularView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 023463B32872CE28001A703C /* MostPopularView.swift */; };
 		025F059928476BD200FF070D /* MostPopularCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 025F059828476BD200FF070D /* MostPopularCollectionViewCell.swift */; };
 		025F059B284786CF00FF070D /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 025F059A284786CF00FF070D /* Movie.swift */; };
-		0268A25628A3AF3100A30BEF /* WatchlistMovies.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0268A25428A3AF3000A30BEF /* WatchlistMovies.xcdatamodeld */; };
 		0268A25928A3AF9E00A30BEF /* WatchlistMovie+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0268A25728A3AF9E00A30BEF /* WatchlistMovie+CoreDataClass.swift */; };
 		0268A25A28A3AF9E00A30BEF /* WatchlistMovie+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0268A25828A3AF9E00A30BEF /* WatchlistMovie+CoreDataProperties.swift */; };
 		026D0D13284E646F00B5BF8B /* MovieDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 026D0D12284E646F00B5BF8B /* MovieDataService.swift */; };
@@ -38,6 +37,7 @@
 		0277AE182861C76700054D50 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0277AE172861C76700054D50 /* String.swift */; };
 		0277AE1A2861DF9100054D50 /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0277AE192861DF9100054D50 /* LaunchViewController.swift */; };
 		0277AE5528646E0800054D50 /* DetailCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0277AE5428646E0800054D50 /* DetailCollectionViewCell.swift */; };
+		02A6D73128AD123A00403553 /* CoreDataWatchlistItem.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0268A25428A3AF3000A30BEF /* CoreDataWatchlistItem.xcdatamodeld */; };
 		02F514E5286B948F006D7843 /* SelfSizingCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F514E4286B948F006D7843 /* SelfSizingCollectionView.swift */; };
 		DD8D6E752894082900A62950 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8D6E732894082900A62950 /* ErrorView.swift */; };
 		DD8D6E762894082900A62950 /* ErrorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8D6E742894082900A62950 /* ErrorViewController.swift */; };
@@ -90,6 +90,7 @@
 		0277AE172861C76700054D50 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		0277AE192861DF9100054D50 /* LaunchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
 		0277AE5428646E0800054D50 /* DetailCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCollectionViewCell.swift; sourceTree = "<group>"; };
+		02A6D72E28AD0EB500403553 /* CoreDataWatchlistItem.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CoreDataWatchlistItem.xcdatamodel; sourceTree = "<group>"; };
 		02F514E4286B948F006D7843 /* SelfSizingCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfSizingCollectionView.swift; sourceTree = "<group>"; };
 		DD8D6E732894082900A62950 /* ErrorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
 		DD8D6E742894082900A62950 /* ErrorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorViewController.swift; sourceTree = "<group>"; };
@@ -182,9 +183,7 @@
 				0268A25828A3AF9E00A30BEF /* WatchlistMovie+CoreDataProperties.swift */,
 				025F059A284786CF00FF070D /* Movie.swift */,
 				0223A3DD285A739B00E3602D /* MovieDetails.swift */,
-
 				0216A91928ACD13A0083B65D /* WatchlistItem.swift */,
-
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -242,7 +241,7 @@
 		02334D00283E185E0099C92B = {
 			isa = PBXGroup;
 			children = (
-				0268A25428A3AF3000A30BEF /* WatchlistMovies.xcdatamodeld */,
+				0268A25428A3AF3000A30BEF /* CoreDataWatchlistItem.xcdatamodeld */,
 				02271138285A7D6C0049BECA /* Application */,
 				02271137285A7AAD0049BECA /* Storyboards */,
 				0227113A285A7E180049BECA /* Resources */,
@@ -394,7 +393,6 @@
 			files = (
 				0268A25928A3AF9E00A30BEF /* WatchlistMovie+CoreDataClass.swift in Sources */,
 				0277AE1A2861DF9100054D50 /* LaunchViewController.swift in Sources */,
-				0268A25628A3AF3100A30BEF /* WatchlistMovies.xcdatamodeld in Sources */,
 				DD922D6F2887F9EA00061FF7 /* WatchlistButton.swift in Sources */,
 				0268A25A28A3AF9E00A30BEF /* WatchlistMovie+CoreDataProperties.swift in Sources */,
 				023463B0286F24C2001A703C /* UIStackView.swift in Sources */,
@@ -407,6 +405,7 @@
 				023463B2286F282A001A703C /* LeftAlignedCollectionViewFlowLayout.swift in Sources */,
 				023463AE286F1F76001A703C /* StackMovieDetailView.swift in Sources */,
 				026D0D13284E646F00B5BF8B /* MovieDataService.swift in Sources */,
+				02A6D73128AD123A00403553 /* CoreDataWatchlistItem.xcdatamodeld in Sources */,
 				DD8D6E7C28983B8F00A62950 /* MovieListTableCell.swift in Sources */,
 				021C2B75287D6AC5004F8113 /* UITableView.swift in Sources */,
 				025F059928476BD200FF070D /* MostPopularCollectionViewCell.swift in Sources */,
@@ -669,13 +668,14 @@
 /* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
-		0268A25428A3AF3000A30BEF /* WatchlistMovies.xcdatamodeld */ = {
+		0268A25428A3AF3000A30BEF /* CoreDataWatchlistItem.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				02A6D72E28AD0EB500403553 /* CoreDataWatchlistItem.xcdatamodel */,
 				0268A25528A3AF3000A30BEF /* WatchlistMovies.xcdatamodel */,
 			);
-			currentVersion = 0268A25528A3AF3000A30BEF /* WatchlistMovies.xcdatamodel */;
-			path = WatchlistMovies.xcdatamodeld;
+			currentVersion = 02A6D72E28AD0EB500403553 /* CoreDataWatchlistItem.xcdatamodel */;
+			path = CoreDataWatchlistItem.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

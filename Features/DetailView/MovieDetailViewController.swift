@@ -125,11 +125,6 @@ private extension MovieDetailViewController {
             contentView.imageView.kf.setImage(with: path)
         }
         
-//        if let status = try? watchlistService.getStatus(for: selectedMovieID) {
-//            contentView.watchlistButton.updateWithStatus(status, isShortVariant: false)
-//        } else {
-//            ErrorViewController.handleError(WatchlistServiceError.failedToFetchFromPersistentStore, presentingViewController: self)
-//        }
         watchlistService.getStatus(for: selectedMovieID) { [weak contentView] result in
             switch result {
             case .success(let status):
@@ -163,8 +158,6 @@ extension MovieDetailViewController: WatchlistButtonDelegate {
     func watchlistTapped(_ view: WatchlistHandleable) {
         guard let movie = movieDetails else { return }
 
-//        let updatedStatus = watchlistService.toggleStatus(for: movie)
-//        contentView.watchlistButton.updateWithStatus(updatedStatus, isShortVariant: false)
         watchlistService.toggleStatus(for: movie) { [weak view] result in
             switch result {
             case .success(let updatedStatus):

@@ -39,7 +39,7 @@ enum WatchlistServiceError: Error, ErrorViewHandleable {
 
 private class Container {
     static let shared: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: "WatchlistMovies")
+        let container = NSPersistentContainer(name: "CoreDataWatchlistItem")
         container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         container.loadPersistentStores {storeDescription, error in
             if let error = error {
@@ -53,14 +53,14 @@ private class Container {
     }
 }
 
-//typealias WatchlistService = CoreDataWatchlistService
-typealias WatchlistService = UserDefaultsWatchlistService
+typealias WatchlistService = CoreDataWatchlistService
+//typealias WatchlistService = UserDefaultsWatchlistService
 
 class CoreDataWatchlistService: WatchlistServiceProtocol {
     private let container = Container.shared
 
     func getStatus(for id: Int, completion: (Result<WatchlistStatus, WatchlistServiceError>)-> Void) {
-        let request = WatchlistMovie.createFetchRequest()
+        let request = CoreDataWatchlistItem.createFetchRequest()
         let predicate = NSPredicate(format: "id == %d", id)
         request.predicate = predicate
         
@@ -78,7 +78,7 @@ class CoreDataWatchlistService: WatchlistServiceProtocol {
     }
     
     func toggleStatus(for item: WatchlistItemProtocol, completion: (Result<WatchlistStatus, WatchlistServiceError>)-> Void) {
-        let request = WatchlistMovie.createFetchRequest()
+        let request = CoreDataWatchlistItem.createFetchRequest()
         let predicate = NSPredicate(format: "id == %d", item.id)
         request.predicate = predicate
         
@@ -97,7 +97,7 @@ class CoreDataWatchlistService: WatchlistServiceProtocol {
                     }
                 }
             } else {
-                let watchlistMovie = WatchlistMovie(context: container.viewContext)
+                let watchlistMovie = CoreDataWatchlistItem(context: container.viewContext)
                 watchlistMovie.configure(withData: item)
 
                 saveWatchlist { result in
@@ -116,7 +116,7 @@ class CoreDataWatchlistService: WatchlistServiceProtocol {
     }
 
     func getWatchlist(completion: (Result<[WatchlistItem], WatchlistServiceError>)-> Void) {
-        let request = WatchlistMovie.createFetchRequest()
+        let request = CoreDataWatchlistItem.createFetchRequest()
         let sort = NSSortDescriptor(key: "saveDate", ascending: false)
         request.sortDescriptors = [sort]
         
@@ -163,17 +163,6 @@ class UserDefaultsWatchlistService: WatchlistServiceProtocol {
     }
     
     func toggleStatus(for item: WatchlistItemProtocol, completion: (Result<WatchlistStatus, WatchlistServiceError>)-> Void) {
-//        var watchlist = getSavedWatchlist()
-//
-//        let currentStatus: WatchlistStatus = watchlist[item.id] != nil ? .added : .notAdded
-//        switch currentStatus {
-//        case .added:
-//            watchlist.removeValue(forKey: item.id)
-//            return saveWatchlist(watchlist) ? .notAdded : .added
-//        case .notAdded:
-//            watchlist[item.id] = item
-//            return saveWatchlist(watchlist) ? .added : .notAdded
-//        }
         getSavedWatchlist { result in
             switch result {
             case .success(var watchlist):

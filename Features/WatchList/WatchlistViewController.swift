@@ -56,7 +56,6 @@ private extension WatchlistViewController {
     func loadWatchlist() {
         movies.removeAll()
         
-//        movies = watchlistService.getWatchlist()
         watchlistService.getWatchlist { [weak self] result in
             guard let self = self else { return }
             
@@ -79,8 +78,6 @@ extension WatchlistViewController: WatchlistButtonDelegate {
         guard let indexPath = contentView.tableView.indexPath(for: cell) else { return }
         
         if let movie = movies[safe: indexPath.row] {
-            
-//          let _ = watchlistService.toggleStatus(for: movie)
             watchlistService.toggleStatus(for: movie) { _ in return }
             
             loadWatchlist()
@@ -121,12 +118,6 @@ extension WatchlistViewController: UITableViewDataSource {
 
         let item = movies[indexPath.row]
 
-//        if let status = try? watchlistService.getStatus(for: Int(item.id)) {
-//            cell.configure(imageURL: item.posterPath, title: item.title, reviewsScore: (Int(item.voteAverage)), status: status)
-//        } else {
-//            ErrorViewController.handleError(WatchlistServiceError.failedToFetchFromPersistentStore, presentingViewController: self)
-//        }
-        
         watchlistService.getStatus(for: item.id) { [weak cell] result in
             switch result {
             case .success(let status):

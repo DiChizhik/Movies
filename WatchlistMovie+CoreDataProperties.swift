@@ -10,10 +10,10 @@ import Foundation
 import CoreData
 
 
-extension WatchlistMovie {
+extension CoreDataWatchlistItem {
 
-    @nonobjc public class func createFetchRequest() -> NSFetchRequest<WatchlistMovie> {
-        return NSFetchRequest<WatchlistMovie>(entityName: "WatchlistMovie")
+    @nonobjc public class func createFetchRequest() -> NSFetchRequest<CoreDataWatchlistItem> {
+        return NSFetchRequest<CoreDataWatchlistItem>(entityName: "CoreDataWatchlistItem")
     }
 
     @NSManaged public var id: Int32
@@ -27,9 +27,10 @@ extension WatchlistMovie {
         self.saveDate = Date.now
         self.title = movieData.title
         self.voteAverage = Int16(movieData.voteAverage)
+        self.posterPath = movieData.posterPath
     }
 }
 
-extension WatchlistMovie : Identifiable {
+extension CoreDataWatchlistItem: Identifiable {
 
 }

@@ -79,8 +79,6 @@ extension MostPopularViewController: MostPopularViewDelegate, WatchlistButtonDel
     func watchlistTapped(_ view: WatchlistHandleable) {
         guard let movie = movies[safe: itemInViewIndex] else { return }
 
-//        let updatedStatus = watchlistService.toggleStatus(for: movie)
-//        contentView.updateWatchlistButtonWithStatus(updatedStatus, isShortVariant: false)
         watchlistService.toggleStatus(for: movie) { [weak view] result in
             switch result {
             case .success(let updatedStatus):
@@ -137,11 +135,6 @@ private extension MostPopularViewController {
             let movieDescription = movie.overview
             let movieID = movie.id
             
-//            if let status = try? watchlistService.getStatus(for: movieID) {
-//                contentView.configureWith(name: movieName, score: reviewsScore, description: movieDescription, status: status)
-//            } else {
-//                ErrorViewController.handleError(WatchlistServiceError.failedToFetchFromPersistentStore, presentingViewController: self)
-//            }
             watchlistService.getStatus(for: movieID) { [weak contentView] result in
                 switch result {
                 case .success(let status):

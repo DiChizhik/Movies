@@ -13,22 +13,6 @@ protocol WatchlistItemProtocol {
     var title: String { get }
     var voteAverage: Int { get }
     var posterPath: URL? { get }
-    
-//    init(movie: CoreDataHandleable) {
-//        self.id = Int32(movie.id)
-//        self.saveDate = Date.now
-//        self.title = movie.title
-//        self.voteAverage = Int16(movie.voteAverage)
-//        self.posterPath = movie.posterPath
-//    }
-//
-//    init(movie: WatchlistMovie) {
-//        self.id = movie.id
-//        self.saveDate = movie.saveDate
-//        self.title = movie.title
-//        self.voteAverage = movie.voteAverage
-//        self.posterPath = movie.posterPath
-//    }
 }
 
 struct WatchlistItem: Codable, WatchlistItemProtocol {
@@ -38,15 +22,7 @@ struct WatchlistItem: Codable, WatchlistItemProtocol {
     let voteAverage: Int
     let posterPath: URL?
     
-//    init(id: Int, title: String, voteAverage: Int, posterPath: URL?) {
-//        self.id = id
-//        self.saveDate = Date.now
-//        self.title = title
-//        self.voteAverage = voteAverage
-//        self.posterPath = posterPath
-//    }
-    
-    init(from coreDataWatchlistItem: WatchlistMovie) {
+    init(from coreDataWatchlistItem: CoreDataWatchlistItem) {
         self.id = Int(coreDataWatchlistItem.id)
         self.saveDate = coreDataWatchlistItem.saveDate
         self.title = coreDataWatchlistItem.title

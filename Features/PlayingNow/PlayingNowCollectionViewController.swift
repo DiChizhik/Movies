@@ -129,17 +129,6 @@ extension PlayingNowCollectionViewController {
         let path = movie.posterPath
         let movieID = movie.id
         
-//        do {
-//            let status = try watchlistService.getStatus(for: movieID)
-//            cell.configure(imageURL: path, name: movieName, reviewsScore: reviewsScore, status: status)
-//        } catch let error {
-//            if let error = error as? ErrorViewHandleable {
-//                ErrorViewController.handleError(error, presentingViewController: self)
-//            } else {
-//                print("Error doesn't conform to ErrorViewHadleable protocol")
-//            }
-//        }
-        
         watchlistService.getStatus(for: movieID) { [weak cell] result in
             switch result {
             case .success(let status):
