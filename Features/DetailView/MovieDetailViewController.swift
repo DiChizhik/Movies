@@ -8,13 +8,20 @@
 import UIKit
 import Kingfisher
 
-class MovieDetailViewController: UIViewController {
+protocol MovieDetailViewDelegate: AnyObject {
+    func didUpdateWatchlist(_ controller: UIViewController)
+}
+
+final class MovieDetailViewController: UIViewController {
     private var selectedMovieID: Int
-    private let movieDataService = MovieDataService()
-    private let watchlistService = WatchlistService()
+    
+    private let movieDataService: MovieDataServiceProtocol
+    private let watchlistService: WatchlistServiceProtocol
     
     private var movieDetails: MovieDetails?
     private var languageAndGenreData = [CollectionViewSection]()
+    
+    weak var delegate: MovieDetailViewDelegate?
     
     private lazy var contentView: StackMovieDetailView = {
         let view = StackMovieDetailView()
@@ -22,9 +29,35 @@ class MovieDetailViewController: UIViewController {
         view.watchlistButtonDelegate = self
         return view
     }()
+    
+    private lazy var exitButton: UIButton = {
+        let button = UIButton(type: .custom)
+        let action = UIAction { [weak self, weak button] _ in
+            guard let self = self else { return }
+            guard let button = button else { return }
+            self.dismissView(button)
+        }
+        button.addAction(action, for: .touchUpInside)
+        
+        var config = UIButton.Configuration.plain()
+        config.image = UIImage(named: "close")
+        config.imageColorTransformer = UIConfigurationColorTransformer { incoming in
+            var outgoing = incoming
+            outgoing = .whiteF5
+            return outgoing
+        }
+        config.contentInsets = NSDirectionalEdgeInsets(top: 15, leading: 5, bottom: 15, trailing: 20)
+        button.configuration = config
+        
+        return button
+    }()
 
-    init(selectedMovieID: Int) {
+    init(selectedMovieID: Int,
+         movieDataService: MovieDataServiceProtocol,
+         watchlistService: WatchlistServiceProtocol) {
         self.selectedMovieID = selectedMovieID
+        self.movieDataService = movieDataService
+        self.watchlistService = watchlistService
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -39,8 +72,6 @@ class MovieDetailViewController: UIViewController {
         
         self.view = contentView
         
-        let exitButton = UIButton.systemButton(with: UIImage(systemName: "xmark")!, target: self, action: #selector(dismissView))
-        exitButton.tintColor = UIColor.white
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: exitButton)
 
         navigationController?.navigationBar.barTintColor = .darkBlue01
@@ -56,6 +87,12 @@ class MovieDetailViewController: UIViewController {
         super.viewWillTransition(to: size, with: coordinator)
 
         contentView.collectionView.collectionViewLayout.invalidateLayout()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        delegate?.didUpdateWatchlist(self)
     }
 }
 
@@ -88,8 +125,11 @@ private extension MovieDetailViewController {
             contentView.imageView.kf.setImage(with: path)
         }
         
-        let status = watchlistService.getStatus(for: selectedMovieID)
-        contentView.watchlistButton.updateWithStatus(status, isShortVariant: false)
+        if let status = try? watchlistService.getStatus(for: selectedMovieID) {
+            contentView.watchlistButton.updateWithStatus(status, isShortVariant: false)
+        } else {
+            ErrorViewController.handleError(WatchlistServiceError.failedToFetchFromPersistentStore, presentingViewController: self)
+        }
         
         contentView.reviewScoreStackView.setValue(movieDetails.voteAverage)
         contentView.releaseDateLabel.text = movieDetails.releaseDate
@@ -113,15 +153,9 @@ private extension MovieDetailViewController {
 // MARK: - WatchlistButtonDelegate
 extension MovieDetailViewController: WatchlistButtonDelegate {
     func watchlistTapped(_ view: WatchlistHandleable) {
-        guard let movieDetails = movieDetails else { return }
-        
-        let watchlistItem = WatchlistItem(id: selectedMovieID,
-                                          saveDate: Date.now,
-                                          title: movieDetails.title,
-                                          voteAverage: movieDetails.voteAverage,
-                                          posterPath: movieDetails.posterPath)
+        guard let movie = movieDetails else { return }
 
-        let updatedStatus = watchlistService.toggleStatus(for: watchlistItem)
+        let updatedStatus = watchlistService.toggleStatus(for: WatchlistMovieConfiguration(movie: movie))
         contentView.watchlistButton.updateWithStatus(updatedStatus, isShortVariant: false)
     }   
 }

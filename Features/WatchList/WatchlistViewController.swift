@@ -7,10 +7,11 @@
 
 import UIKit
 
-class WatchlistViewController: UIViewController {
-    let watchlistService = WatchlistService()
-    let movieDataService = MovieDataService()
-    var movies = [WatchlistItem]()
+final class WatchlistViewController: UIViewController {
+    private let movieDataService: MovieDataServiceProtocol
+    private let watchlistService: WatchlistServiceProtocol
+    
+    private var movies = [WatchlistMovie]()
     
     private lazy var contentView: WatchlistView = {
         let view = WatchlistView()
@@ -18,6 +19,19 @@ class WatchlistViewController: UIViewController {
         view.tableView.dataSource = self
         return view
     }()
+    
+    init(movieDataService: MovieDataServiceProtocol,
+         watchlistService: WatchlistServiceProtocol) {
+        self.movieDataService = movieDataService
+        self.watchlistService = watchlistService
+        
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func loadView() {
         self.view = contentView
@@ -41,7 +55,7 @@ class WatchlistViewController: UIViewController {
 private extension WatchlistViewController {
     func loadWatchlist() {
         movies.removeAll()
-        movies = watchlistService.getWatchlistItems()
+        movies = watchlistService.getWatchlist()
         
         contentView.tableView.reloadData()
     }
@@ -54,15 +68,18 @@ extension WatchlistViewController: WatchlistButtonDelegate {
         guard let indexPath = contentView.tableView.indexPath(for: cell) else { return }
         
         if let movie = movies[safe: indexPath.row] {
-            let watchlistItem = WatchlistItem(id: movie.id,
-                                              saveDate: Date.now,
-                                              title: movie.title,
-                                              voteAverage: movie.voteAverage,
-                                              posterPath: movie.posterPath)
-            let _ = watchlistService.toggleStatus(for: watchlistItem)
+            
+            let _ = watchlistService.toggleStatus(for: WatchlistMovieConfiguration(movie: movie))
             
             loadWatchlist()
         }
+    }
+}
+
+//MARK: - MovieDetailViewDelegate
+extension WatchlistViewController: MovieDetailViewDelegate {
+    func didUpdateWatchlist(_ controller: UIViewController) {
+        loadWatchlist()
     }
 }
 
@@ -71,7 +88,10 @@ extension WatchlistViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let movie = movies[safe: indexPath.row] else { return }
         
-        let detailViewController = MovieDetailViewController(selectedMovieID: movie.id)
+        let detailViewController = MovieDetailViewController(selectedMovieID: Int(movie.id),
+                                                             movieDataService: MovieDataService(),
+                                                             watchlistService: WatchlistService())
+        detailViewController.delegate = self
         let detailNavigationController = UINavigationController(rootViewController: detailViewController)
         present(detailNavigationController, animated: true)
     }
@@ -88,8 +108,12 @@ extension WatchlistViewController: UITableViewDataSource {
         cell.watchlistButtonDelegate = self
 
         let item = movies[indexPath.row]
-        let status = watchlistService.getStatus(for: item.id)
-        cell.configure(imageURL: item.posterPath, title: item.title, reviewsScore: item.voteAverage, status: status)
+        if let status = try? watchlistService.getStatus(for: Int(item.id)) {
+            cell.configure(imageURL: item.posterPath, title: item.title, reviewsScore: (Int(item.voteAverage)), status: status)
+        } else {
+            ErrorViewController.handleError(WatchlistServiceError.failedToFetchFromPersistentStore, presentingViewController: self)
+        }
+        
         return cell
     }
 }

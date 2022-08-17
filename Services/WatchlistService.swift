@@ -6,76 +6,119 @@
 //
 
 import UIKit
+import CoreData
 
 protocol WatchlistServiceProtocol {
-    func getStatus(for id: Int)-> WatchlistStatus
-    func toggleStatus(for item: WatchlistItem) -> WatchlistStatus
-    func getWatchlistItems() -> [WatchlistItem]
+    func getStatus(for id: Int) throws -> WatchlistStatus
+    func toggleStatus(for item: WatchlistMovieConfiguration)-> WatchlistStatus
+    func getWatchlist() -> [WatchlistMovie]
 }
 
 enum WatchlistStatus {
     case added, notAdded
 }
 
-class WatchlistService: WatchlistServiceProtocol {
-    typealias Watchlist = [Int : WatchlistItem]
-    private static let watchlistKey: String = "watchlist"
+enum WatchlistServiceError: Error, ErrorViewHandleable {
+    case failedToFetchFromPersistentStore
     
-    func getStatus(for id: Int)-> WatchlistStatus {
-        let watchlist = getWatchlist()
-        
-        return watchlist[id] != nil ? .added : .notAdded
-    }
-    
-    func toggleStatus(for item: WatchlistItem)-> WatchlistStatus {
-        var watchlist = getWatchlist()
-        
-        let currentStatus: WatchlistStatus = watchlist[item.id] != nil ? .added : .notAdded
-        switch currentStatus {
-        case .added:
-            watchlist.removeValue(forKey: item.id)
-            return saveWatchlist(watchlist) ? .notAdded : .added
-        case .notAdded:
-            watchlist[item.id] = item
-            return saveWatchlist(watchlist) ? .added : .notAdded
+    var errorTitle: String {
+        switch self {
+        case .failedToFetchFromPersistentStore:
+            return "Houston, we have a problem.\nClose and re-open the app."
         }
     }
     
-    func getWatchlistItems() -> [WatchlistItem] {
-        let watchlist = getWatchlist()
-        
-        var items = [WatchlistItem]()
-        for value in watchlist.values {
-            items.append(value)
+    var errorImage: UIImage? {
+        switch self {
+        case .failedToFetchFromPersistentStore:
+            return #imageLiteral(resourceName: "dizzy")
         }
+    }
+}
 
-        return items
-    }
-    
-    private func getWatchlist() -> Watchlist {
-        let defaults = UserDefaults.standard
-        
-        if let watchlistData = defaults.object(forKey: WatchlistService.watchlistKey) as? Data {
-            let decoder = JSONDecoder()
-            if let watchlist = try? decoder.decode(Watchlist.self, from: watchlistData) {
-                return watchlist
-            } else {
-                return Watchlist()
+private class Container {
+    static let shared: NSPersistentContainer = {
+        let container = NSPersistentContainer(name: "WatchlistMovies")
+        container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        container.loadPersistentStores {storeDescription, error in
+            if let error = error {
+                print("Unresolved error \(error)")
             }
-        } else {
-            return Watchlist()
+        }
+        return container
+    }()
+    
+    private init() {
+    }
+}
+
+class WatchlistService: WatchlistServiceProtocol {
+    private let container = Container.shared
+
+    func getStatus(for id: Int) throws -> WatchlistStatus {
+        let request = WatchlistMovie.createFetchRequest()
+        let predicate = NSPredicate(format: "id == %d", id)
+        request.predicate = predicate
+        
+        do {
+            let movies = try container.viewContext.count(for: request)
+            if movies != 0 {
+                return .added
+            } else {
+                return .notAdded
+            }
+        } catch {
+            throw WatchlistServiceError.failedToFetchFromPersistentStore
         }
     }
     
-    private func saveWatchlist(_ list: Watchlist) -> Bool {
-        let encoder = JSONEncoder()
+    func toggleStatus(for item: WatchlistMovieConfiguration) -> WatchlistStatus {
+        let request = WatchlistMovie.createFetchRequest()
+        let predicate = NSPredicate(format: "id == %d", item.id)
+        request.predicate = predicate
         
-        if let watchlistData = try? encoder.encode(list) {
-            let defaults = UserDefaults.standard
-            defaults.set(watchlistData, forKey: WatchlistService.watchlistKey)
+        do {
+            let movies = try container.viewContext.fetch(request)
+            
+            if let movie = movies.first {
+                container.viewContext.delete(movie)
+                return saveWatchlist() ? .notAdded : .added
+            } else {
+                let watchlistMovie = WatchlistMovie(context: container.viewContext)
+                watchlistMovie.configure(withData: item)
+
+                return saveWatchlist() ? .added : .notAdded
+            }
+        } catch {
+//            replace with throwing function later
+            return saveWatchlist() ? .added : .notAdded
+        }
+        
+    }
+    
+    func getWatchlist() -> [WatchlistMovie] {
+        let request = WatchlistMovie.createFetchRequest()
+        let sort = NSSortDescriptor(key: "saveDate", ascending: false)
+        request.sortDescriptors = [sort]
+        
+        do {
+            let watchlistMovies = try container.viewContext.fetch(request)
+            return watchlistMovies
+        } catch {
+            print("Fetch failed")
+            return [WatchlistMovie]()
+        }
+    }
+    
+    private func saveWatchlist() -> Bool {
+        guard container.viewContext.hasChanges else { return true }
+        do {
+            try container.viewContext.save()
             return true
-        } else {
+        } catch {
+            print("An error occurred while saving: \(error)")
             return false
         }
     }
 }
+

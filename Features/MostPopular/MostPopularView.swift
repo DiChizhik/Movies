@@ -46,6 +46,7 @@ final class MostPopularView: UIView, WatchlistHandleable {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.register(MostPopularCollectionViewCell.self)
         collectionView.backgroundColor = .darkBlue01
+        collectionView.showsHorizontalScrollIndicator = false
         return collectionView
     }()
     
@@ -69,6 +70,7 @@ final class MostPopularView: UIView, WatchlistHandleable {
     lazy var watchlistButton: WatchlistButton = {
         let button = WatchlistButton()
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.configuration?.contentInsets.trailing = 0
         button.alpha = 0
         let action = UIAction { [weak self] _ in
             guard let self = self else { return }

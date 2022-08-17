@@ -11,18 +11,12 @@ struct Movies: Decodable {
     var results: [Movie]
 }
 
-struct Movie: Decodable {
-//    This enum and property below seem redundant.
-    enum Popularity {
-        case high, low
-    }
-    
+struct Movie: Decodable, CoreDataHandleable {
     let id: Int
     let posterPath: URL?
     let overview: String?
     let title: String
     let voteAverage: Int
-    let popularity: Popularity
     
     enum CodingKeys: String, CodingKey {
         case id, overview, title, reviewsScore
@@ -48,7 +42,5 @@ struct Movie: Decodable {
         overview = try values.decodeIfPresent(String.self, forKey: .overview)
         title = try values.decode(String.self, forKey: .title)
         voteAverage = Int(try values.decode(Double.self, forKey: .voteAverage) * 10)
-        
-        popularity = voteAverage > 50 ? .high : .low
     }
 }

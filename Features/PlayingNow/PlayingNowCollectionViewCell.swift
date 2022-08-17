@@ -102,8 +102,7 @@ private extension PlayingNowCollectionViewCell {
             reviewScoreStackView.topAnchor.constraint(equalTo: name.bottomAnchor, constant: 4),
             reviewScoreStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             
-            watchlistButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            watchlistButton.heightAnchor.constraint(equalTo: reviewScoreStackView.heightAnchor),
+            watchlistButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 8),
             watchlistButton.centerYAnchor.constraint(equalTo: reviewScoreStackView.centerYAnchor)
         ])
     }

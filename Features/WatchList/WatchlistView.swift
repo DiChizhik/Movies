@@ -7,7 +7,7 @@
 
 import UIKit
 
-class WatchlistView: UIView {
+final class WatchlistView: UIView {
     private(set) lazy var tableView: UITableView = {
        let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false

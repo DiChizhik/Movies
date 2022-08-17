@@ -7,15 +7,13 @@
 
 import UIKit
 
-class PlayingNowCollectionViewController: UICollectionViewController {
-    private var movieDataService: MovieDataServiceProtocol
-    private var watchlistService: WatchlistServiceProtocol
+final class PlayingNowCollectionViewController: UICollectionViewController {
+    private let movieDataService: MovieDataServiceProtocol
+    private let watchlistService: WatchlistServiceProtocol
     
     private var movies = [Movie]()
     var selectedItemId: Int?
     
-//    Did I get you right when you talked about replacing services with protocols?
-//    I've made changes only on PlayingNoewVC so far.
     init(movieDataService: MovieDataServiceProtocol,
          watchlistService: WatchlistServiceProtocol,
          collectionViewLayout: UICollectionViewLayout) {
@@ -42,6 +40,12 @@ class PlayingNowCollectionViewController: UICollectionViewController {
         collectionView.register(PlayingNowCollectionViewCell.self)
 
         loadMovieData()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        collectionView.reloadData()
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -88,16 +92,17 @@ extension PlayingNowCollectionViewController: WatchlistButtonDelegate {
         
         if let indexPath = collectionView.indexPath(for: cell) {
             let movie = movies[indexPath.item]
-            let watchlistItem = WatchlistItem(id: movie.id,
-                                              saveDate: Date.now,
-                                              title: movie.title,
-                                              voteAverage: movie.voteAverage,
-                                              posterPath: movie.posterPath)
             
-            let updatedStatus = watchlistService.toggleStatus(for: watchlistItem)
+            let updatedStatus = watchlistService.toggleStatus(for: WatchlistMovieConfiguration(movie: movie))
             view.watchlistButton.updateWithStatus(updatedStatus, isShortVariant: true)
-            
         }
+    }
+}
+
+//MARK: - MovieDetailViewDelegate
+extension PlayingNowCollectionViewController: MovieDetailViewDelegate {
+    func didUpdateWatchlist(_ controller: UIViewController) {
+        collectionView.reloadData()
     }
 }
 
@@ -117,9 +122,16 @@ extension PlayingNowCollectionViewController {
         let path = movie.posterPath
         let movieID = movie.id
         
-        let status = watchlistService.getStatus(for: movieID)
-        
-        cell.configure(imageURL: path, name: movieName, reviewsScore: reviewsScore, status: status)
+        do {
+            let status = try watchlistService.getStatus(for: movieID)
+            cell.configure(imageURL: path, name: movieName, reviewsScore: reviewsScore, status: status)
+        } catch let error {
+            if let error = error as? ErrorViewHandleable {
+                ErrorViewController.handleError(error, presentingViewController: self)
+            } else {
+                print("Error doesn't conform to ErrorViewHadleable protocol")
+            }
+        }
         
         return cell
     }
@@ -129,8 +141,10 @@ extension PlayingNowCollectionViewController {
 extension PlayingNowCollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let selectedMovieID = movies[indexPath.item].id
-        let detailViewController = MovieDetailViewController(selectedMovieID: selectedMovieID)
-        
+        let detailViewController = MovieDetailViewController(selectedMovieID: selectedMovieID,
+                                                             movieDataService: MovieDataService(),
+                                                             watchlistService: WatchlistService())
+        detailViewController.delegate = self
         let detailViewNavigationController = UINavigationController(rootViewController: detailViewController)
         present(detailViewNavigationController, animated: true)
     }

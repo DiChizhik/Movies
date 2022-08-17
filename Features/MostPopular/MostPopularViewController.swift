@@ -8,16 +8,17 @@
 import UIKit
 import Kingfisher
 
-class MostPopularViewController: UIViewController {
+final class MostPopularViewController: UIViewController {
     private enum Fading: Int {
         case fadeIn = 1
         case fadeOut = 0
     }
     
-    var movies = [Movie]()
-    let movieDataService = MovieDataService()
-    let watchlistService = WatchlistService()
-    var itemInViewIndex: Int = 0
+    private let movieDataService: MovieDataServiceProtocol
+    private let watchlistService: WatchlistServiceProtocol
+    
+    private var movies = [Movie]()
+    private var itemInViewIndex: Int = 0
     
     private lazy var contentView: MostPopularView = {
         let view = MostPopularView()
@@ -27,6 +28,19 @@ class MostPopularViewController: UIViewController {
         view.watchlistButtonDelegate = self
         return view
     }()
+    
+    init(movieDataService: MovieDataServiceProtocol,
+         watchlistService: WatchlistServiceProtocol) {
+        self.movieDataService = movieDataService
+        self.watchlistService = watchlistService
+        
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func loadView() {
         super.loadView()
@@ -44,15 +58,19 @@ class MostPopularViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        loadMovieData()
+        loadMovieData()        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            guard self.movies.count > self.itemInViewIndex else { return }
-            
-            self.configureWithData(index: self.itemInViewIndex)
-            self.fade(.fadeIn)
-        }
+        configureWithData(index: itemInViewIndex)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        configureForItemInView()
     }
 }
  
@@ -60,21 +78,18 @@ class MostPopularViewController: UIViewController {
 extension MostPopularViewController: MostPopularViewDelegate, WatchlistButtonDelegate {
     func watchlistTapped(_ view: WatchlistHandleable) {
         guard let movie = movies[safe: itemInViewIndex] else { return }
-        
-        let watchlistItem = WatchlistItem(id: movie.id,
-                                          saveDate: Date.now,
-                                          title: movie.title,
-                                          voteAverage: movie.voteAverage,
-                                          posterPath: movie.posterPath)
 
-        let updatedStatus = watchlistService.toggleStatus(for: watchlistItem)
+        let updatedStatus = watchlistService.toggleStatus(for: WatchlistMovieConfiguration(movie: movie))
         contentView.updateWatchlistButtonWithStatus(updatedStatus, isShortVariant: false)
     }
     
     func seeMoreTapped(_ mostPopularView: MostPopularView) {
         guard let selectedMovie = movies[safe: itemInViewIndex] else { return }
         
-        let detailViewController = MovieDetailViewController(selectedMovieID: selectedMovie.id)
+        let detailViewController = MovieDetailViewController(selectedMovieID: selectedMovie.id,
+                                                             movieDataService: MovieDataService(),
+                                                             watchlistService: WatchlistService())
+        detailViewController.delegate = self
         let detailNavigationController = UINavigationController(rootViewController: detailViewController)
         present(detailNavigationController, animated: true)
     }
@@ -96,7 +111,11 @@ private extension MostPopularViewController {
             }
             
             DispatchQueue.main.async {
+                guard self.movies.count > self.itemInViewIndex else { return }
+                
                 self.contentView.collectionView.reloadData()
+                self.configureWithData(index: self.itemInViewIndex)
+                self.fade(.fadeIn)
             }
         }
     }
@@ -110,9 +129,11 @@ private extension MostPopularViewController {
             let movieDescription = movie.overview
             let movieID = movie.id
             
-            let status = watchlistService.getStatus(for: movieID)
-            
-            contentView.configureWith(name: movieName, score: reviewsScore, description: movieDescription, status: status)
+            if let status = try? watchlistService.getStatus(for: movieID) {
+                contentView.configureWith(name: movieName, score: reviewsScore, description: movieDescription, status: status)
+            } else {
+                ErrorViewController.handleError(WatchlistServiceError.failedToFetchFromPersistentStore, presentingViewController: self)
+            }
         }
     }
     
@@ -125,6 +146,13 @@ private extension MostPopularViewController {
                        animations: {
             self.contentView.changeAlpha(to: alpha)
                     }, completion: nil)
+    }
+}
+
+//MARK: - MovieDetailViewController
+extension MostPopularViewController: MovieDetailViewDelegate {
+    func didUpdateWatchlist(_ controller: UIViewController) {
+        configureWithData(index: itemInViewIndex)
     }
 }
 

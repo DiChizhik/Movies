@@ -7,7 +7,7 @@
 
 import UIKit
 
-class StackMovieDetailView: UIView, WatchlistHandleable {
+final class StackMovieDetailView: UIView, WatchlistHandleable {
     weak var watchlistButtonDelegate: WatchlistButtonDelegate?
     
     private(set) lazy var titleLabel: UILabel = {
@@ -43,6 +43,7 @@ class StackMovieDetailView: UIView, WatchlistHandleable {
     
     lazy var watchlistButton: WatchlistButton = {
         let button = WatchlistButton()
+        button.configuration?.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0)
         let action = UIAction { [weak self] _ in
             guard let self = self else { return }
     
@@ -172,6 +173,7 @@ private extension StackMovieDetailView {
         let reviewAndWatchlistStack = UIStackView(arrangedSubviews: [reviewScoreStackView, spacer, watchlistButton])
         reviewAndWatchlistStack.translatesAutoresizingMaskIntoConstraints = false
         reviewAndWatchlistStack.axis = .horizontal
+        reviewAndWatchlistStack.alignment = .center
         
         let centerAlignedStack = UIStackView()
         centerAlignedStack.translatesAutoresizingMaskIntoConstraints = false
@@ -179,17 +181,14 @@ private extension StackMovieDetailView {
         centerAlignedStack.alignment = .center
         centerAlignedStack.addArrangedSubview(titleLabel)
         centerAlignedStack.addArrangedSubview(imageView, spaceBefore: 16)
-        centerAlignedStack.addArrangedSubview(reviewAndWatchlistStack, spaceBefore: 19)
+        centerAlignedStack.addArrangedSubview(reviewAndWatchlistStack, spaceBefore: 12)
         
         let releaseStack = UIStackView(arrangedSubviews: [releasedOnLabel, releaseDateLabel])
         releaseStack.axis = .horizontal
-//        Why do we need .leading here if its description says "a layout for vertical stacks where the stack view aligns the leading edge of its arranged views along its leading edge. This is equivalent to the top alignment for horizontal stacks."
-//        releaseStack.alignment = .leading
         releaseStack.spacing = 4
         
         let durationStack = UIStackView(arrangedSubviews: [lastsLabel, durationLabel])
         durationStack.axis = .horizontal
-//        durationStack.alignment = .leading
         durationStack.spacing = 4
         
         scrollContentStack.addArrangedSubview(centerAlignedStack)
