@@ -7,6 +7,7 @@
 
 import Foundation
 
+
 struct MovieDetails: Codable, WatchlistItemProtocol {
     let id: Int
     let title: String

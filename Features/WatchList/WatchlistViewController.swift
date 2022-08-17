@@ -80,7 +80,7 @@ extension WatchlistViewController: WatchlistButtonDelegate {
         
         if let movie = movies[safe: indexPath.row] {
             
-//            let _ = watchlistService.toggleStatus(for: movie)
+//          let _ = watchlistService.toggleStatus(for: movie)
             watchlistService.toggleStatus(for: movie) { _ in return }
             
             loadWatchlist()
