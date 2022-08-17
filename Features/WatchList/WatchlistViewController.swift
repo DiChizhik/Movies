@@ -11,7 +11,7 @@ final class WatchlistViewController: UIViewController {
     private let movieDataService: MovieDataServiceProtocol
     private let watchlistService: WatchlistServiceProtocol
     
-    private var movies = [WatchlistMovie]()
+    private var movies = [WatchlistItem]()
     
     private lazy var contentView: WatchlistView = {
         let view = WatchlistView()
@@ -55,7 +55,18 @@ final class WatchlistViewController: UIViewController {
 private extension WatchlistViewController {
     func loadWatchlist() {
         movies.removeAll()
-        movies = watchlistService.getWatchlist()
+        
+//        movies = watchlistService.getWatchlist()
+        watchlistService.getWatchlist { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let savedWatchlist):
+                self.movies = savedWatchlist
+            case .failure(_):
+                self.movies = [WatchlistItem]()
+            }
+        }
         
         contentView.tableView.reloadData()
     }
@@ -69,7 +80,8 @@ extension WatchlistViewController: WatchlistButtonDelegate {
         
         if let movie = movies[safe: indexPath.row] {
             
-            let _ = watchlistService.toggleStatus(for: WatchlistMovieConfiguration(movie: movie))
+//            let _ = watchlistService.toggleStatus(for: movie)
+            watchlistService.toggleStatus(for: movie) { _ in return }
             
             loadWatchlist()
         }
@@ -108,10 +120,19 @@ extension WatchlistViewController: UITableViewDataSource {
         cell.watchlistButtonDelegate = self
 
         let item = movies[indexPath.row]
-        if let status = try? watchlistService.getStatus(for: Int(item.id)) {
-            cell.configure(imageURL: item.posterPath, title: item.title, reviewsScore: (Int(item.voteAverage)), status: status)
-        } else {
-            ErrorViewController.handleError(WatchlistServiceError.failedToFetchFromPersistentStore, presentingViewController: self)
+//        if let status = try? watchlistService.getStatus(for: Int(item.id)) {
+//            cell.configure(imageURL: item.posterPath, title: item.title, reviewsScore: (Int(item.voteAverage)), status: status)
+//        } else {
+//            ErrorViewController.handleError(WatchlistServiceError.failedToFetchFromPersistentStore, presentingViewController: self)
+//        }
+        
+        watchlistService.getStatus(for: item.id) { [weak cell] result in
+            switch result {
+            case .success(let status):
+                cell?.configure(imageURL: item.posterPath, title: item.title, reviewsScore: (Int(item.voteAverage)), status: status)
+            case .failure(_):
+                cell?.configure(imageURL: item.posterPath, title: item.title, reviewsScore: (Int(item.voteAverage)), status: .added)
+            }
         }
         
         return cell

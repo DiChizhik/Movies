@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0216A91A28ACD13A0083B65D /* WatchlistItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0216A91928ACD13A0083B65D /* WatchlistItem.swift */; };
 		021C2B6D287C1B53004F8113 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 021C2B6C287C1B53004F8113 /* SearchViewController.swift */; };
 		021C2B71287C1CE6004F8113 /* SearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 021C2B70287C1CE6004F8113 /* SearchTableViewCell.swift */; };
 		021C2B75287D6AC5004F8113 /* UITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 021C2B74287D6AC5004F8113 /* UITableView.swift */; };
@@ -57,6 +58,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0216A91928ACD13A0083B65D /* WatchlistItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistItem.swift; sourceTree = "<group>"; };
 		021C2B6C287C1B53004F8113 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		021C2B70287C1CE6004F8113 /* SearchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTableViewCell.swift; sourceTree = "<group>"; };
 		021C2B74287D6AC5004F8113 /* UITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableView.swift; sourceTree = "<group>"; };
@@ -180,6 +182,7 @@
 				0268A25828A3AF9E00A30BEF /* WatchlistMovie+CoreDataProperties.swift */,
 				025F059A284786CF00FF070D /* Movie.swift */,
 				0223A3DD285A739B00E3602D /* MovieDetails.swift */,
+				0216A91928ACD13A0083B65D /* WatchlistItem.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -423,6 +426,7 @@
 				02334D25283E438F0099C92B /* PlayingNowCollectionViewCell.swift in Sources */,
 				DD922D712887FCFE00061FF7 /* UIColor.swift in Sources */,
 				02334D0F283E185E0099C92B /* SceneDelegate.swift in Sources */,
+				0216A91A28ACD13A0083B65D /* WatchlistItem.swift in Sources */,
 				DD922D7728881A1B00061FF7 /* ReviewScoreStackView.swift in Sources */,
 				DD922D7D288974BA00061FF7 /* WatchlistView.swift in Sources */,
 				02F514E5286B948F006D7843 /* SelfSizingCollectionView.swift in Sources */,

@@ -93,8 +93,15 @@ extension PlayingNowCollectionViewController: WatchlistButtonDelegate {
         if let indexPath = collectionView.indexPath(for: cell) {
             let movie = movies[indexPath.item]
             
-            let updatedStatus = watchlistService.toggleStatus(for: WatchlistMovieConfiguration(movie: movie))
-            view.watchlistButton.updateWithStatus(updatedStatus, isShortVariant: true)
+//            let updatedStatus = watchlistService.toggleStatus(for: movie)
+            watchlistService.toggleStatus(for: movie) { [weak view] result in
+                switch result {
+                case .success(let updatedStatus):
+                    view?.watchlistButton.updateWithStatus(updatedStatus, isShortVariant: true)
+                case .failure(_):
+                    return
+                }
+            }
         }
     }
 }
@@ -122,17 +129,26 @@ extension PlayingNowCollectionViewController {
         let path = movie.posterPath
         let movieID = movie.id
         
-        do {
-            let status = try watchlistService.getStatus(for: movieID)
-            cell.configure(imageURL: path, name: movieName, reviewsScore: reviewsScore, status: status)
-        } catch let error {
-            if let error = error as? ErrorViewHandleable {
-                ErrorViewController.handleError(error, presentingViewController: self)
-            } else {
-                print("Error doesn't conform to ErrorViewHadleable protocol")
+//        do {
+//            let status = try watchlistService.getStatus(for: movieID)
+//            cell.configure(imageURL: path, name: movieName, reviewsScore: reviewsScore, status: status)
+//        } catch let error {
+//            if let error = error as? ErrorViewHandleable {
+//                ErrorViewController.handleError(error, presentingViewController: self)
+//            } else {
+//                print("Error doesn't conform to ErrorViewHadleable protocol")
+//            }
+//        }
+        
+        watchlistService.getStatus(for: movieID) { [weak cell] result in
+            switch result {
+            case .success(let status):
+                cell?.configure(imageURL: path, name: movieName, reviewsScore: reviewsScore, status: status)
+            case .failure(_):
+                cell?.configure(imageURL: path, name: movieName, reviewsScore: reviewsScore, status: .notAdded)
             }
         }
-        
+
         return cell
     }
 }

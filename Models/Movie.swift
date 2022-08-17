@@ -11,7 +11,7 @@ struct Movies: Decodable {
     var results: [Movie]
 }
 
-struct Movie: Decodable, CoreDataHandleable {
+struct Movie: Decodable, WatchlistItemProtocol {
     let id: Int
     let posterPath: URL?
     let overview: String?

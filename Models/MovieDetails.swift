@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct MovieDetails: Codable, CoreDataHandleable {
+struct MovieDetails: Codable, WatchlistItemProtocol {
     let id: Int
     let title: String
     let posterPath: URL?
