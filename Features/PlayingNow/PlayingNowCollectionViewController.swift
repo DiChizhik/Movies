@@ -89,11 +89,10 @@ private extension PlayingNowCollectionViewController {
 extension PlayingNowCollectionViewController: WatchlistButtonDelegate {
     func watchlistTapped(_ view: WatchlistHandleable) {
         guard let cell = view as? UICollectionViewCell else { return }
-        
+
         if let indexPath = collectionView.indexPath(for: cell) {
             let movie = movies[indexPath.item]
-            
-//            let updatedStatus = watchlistService.toggleStatus(for: movie)
+
             watchlistService.toggleStatus(for: movie) { [weak view] result in
                 switch result {
                 case .success(let updatedStatus):
@@ -103,6 +102,9 @@ extension PlayingNowCollectionViewController: WatchlistButtonDelegate {
                 }
             }
         }
+//        let error = NSError(domain: "test error message", code: -1, userInfo: nil)
+//        Crashlytics.crashlytics().record(error: self as! Error)
+
     }
 }
 

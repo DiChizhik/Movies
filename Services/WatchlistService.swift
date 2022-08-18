@@ -4,9 +4,10 @@
 //
 //  Created by Diana Chizhik on 21.07.22.
 //
-
-import UIKit
 import CoreData
+import FirebaseCrashlytics
+import UIKit
+
 
 protocol WatchlistServiceProtocol {
     func getStatus(for id: Int, completion: (Result<WatchlistStatus, WatchlistServiceError>)-> Void)
@@ -72,7 +73,13 @@ class CoreDataWatchlistService: WatchlistServiceProtocol {
                 completion(.success(.notAdded))
             }
         } catch {
-//            report an error
+//            I'm not sure about the form of recording errors. This is what I've come up with so far. Tried recodring just WatchlistServiceError.failedToFetchFromPersistentStore. Looked ok to me as well, however NSError allows for sending additional info.
+            let userInfo: [String : Any] = [
+                "error" : WatchlistServiceError.failedToFetchFromPersistentStore
+            ]
+            let error = NSError(domain: "WatchlistServiceError", code: 1, userInfo: userInfo)
+            Crashlytics.crashlytics().record(error: error)
+
             completion(.failure(.failedToFetchFromPersistentStore))
         }
     }

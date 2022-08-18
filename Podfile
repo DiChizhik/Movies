@@ -1,0 +1,14 @@
+# Uncomment the next line to define a global platform for your project
+# platform :ios, '15.0'
+
+target 'Movies' do
+  # Comment the next line if you don't want to use dynamic frameworks
+  use_frameworks!
+
+  # Pods for Movies
+
+pod 'Kingfisher', '~> 7.0'
+pod 'Firebase'
+pod 'FirebaseAnalytics'
+pod 'FirebaseCrashlytics'
+end
