@@ -49,8 +49,6 @@ enum MovieServiceError: Error, LocalizedError, ErrorViewHandleable {
 }
 
 class MovieDataService: MovieDataServiceProtocol {
-    private static let key = "b2b14caf40262a9c19a366b15e4e3537"
-    
     var playingNowPage = 1
     var mostPopularPage = 1
     var isPlayingNowRequestCompleted = true
@@ -64,7 +62,7 @@ class MovieDataService: MovieDataServiceProtocol {
         urlComponents.host = "api.themoviedb.org"
         urlComponents.path = "/3/movie/now_playing"
         urlComponents.queryItems = [
-            URLQueryItem(name: "api_key", value: MovieDataService.key),
+            URLQueryItem(name: "api_key", value: MovieDataServiceInfo.key),
             URLQueryItem(name: "page", value: String(playingNowPage))
         ]
         guard let url = urlComponents.url else { return }
@@ -103,7 +101,7 @@ class MovieDataService: MovieDataServiceProtocol {
         urlComponents.host = "api.themoviedb.org"
         urlComponents.path = "/3/movie/popular"
         urlComponents.queryItems = [
-            URLQueryItem(name: "api_key", value: MovieDataService.key),
+            URLQueryItem(name: "api_key", value: MovieDataServiceInfo.key),
             URLQueryItem(name: "page", value: String(mostPopularPage))
         ]
         guard let url = urlComponents.url else { return }
@@ -141,7 +139,7 @@ class MovieDataService: MovieDataServiceProtocol {
         urlComponents.host = "api.themoviedb.org"
         urlComponents.path = "/3/movie/\(movieId)"
         urlComponents.queryItems = [
-            URLQueryItem(name: "api_key", value: MovieDataService.key)
+            URLQueryItem(name: "api_key", value: MovieDataServiceInfo.key)
         ]
         guard let url = urlComponents.url else { return }
         
@@ -175,7 +173,7 @@ class MovieDataService: MovieDataServiceProtocol {
         urlComponents.host = "api.themoviedb.org"
         urlComponents.path = "/3/search/movie"
         urlComponents.queryItems = [
-            URLQueryItem(name: "api_key", value: MovieDataService.key),
+            URLQueryItem(name: "api_key", value: MovieDataServiceInfo.key),
             URLQueryItem(name: "query", value: query),
             URLQueryItem(name: "page", value: "1")
         ]
