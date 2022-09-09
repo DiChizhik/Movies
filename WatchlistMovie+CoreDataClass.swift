@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-@objc(WatchlistMovie)
-public class WatchlistMovie: NSManagedObject {
+@objc(CoreDataWatchlistItem)
+public class CoreDataWatchlistItem: NSManagedObject {
 
 }

@@ -62,12 +62,16 @@ extension SearchViewController: WatchlistButtonDelegate {
         if let indexPath = contentView.tableView.indexPath(for: cell) {
             let movie = searchResults[indexPath.row]
 
-            let updatedStatus = watchlistService.toggleStatus(for: WatchlistMovieConfiguration(movie: movie))
-            view.watchlistButton.updateWithStatus(updatedStatus, isShortVariant: false)
+            watchlistService.toggleStatus(for: movie) { [weak view] result in
+                switch result {
+                case .success(let updatedStatus):
+                    view?.watchlistButton.updateWithStatus(updatedStatus, isShortVariant: false)
+                case .failure:
+                    break
+                }
+            }
         }
     }
-    
-    
 }
 
 //MARK: - SearchViewDelegate
@@ -110,12 +114,15 @@ extension SearchViewController: UITableViewDataSource {
         cell.watchlistButtonDelegate = self
         
         let movie = searchResults[indexPath.row]
-        if let status = try? watchlistService.getStatus(for: movie.id) {
-            cell.configure(imageURL: movie.posterPath, title: movie.title, reviewsScore: movie.voteAverage, status: status)
-        } else {
-            ErrorViewController.handleError(WatchlistServiceError.failedToFetchFromPersistentStore, presentingViewController: self)
+
+        watchlistService.getStatus(for: movie.id) { [weak cell] result in
+            switch result {
+            case .success(let status):
+                cell?.configure(imageURL: movie.posterPath, title: movie.title, reviewsScore: movie.voteAverage, status: status)
+            case .failure(_):
+                cell?.configure(imageURL: movie.posterPath, title: movie.title, reviewsScore: movie.voteAverage, status: .notAdded)
+            }
         }
-        
         
         return cell
     }
