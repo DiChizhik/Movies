@@ -75,13 +75,12 @@ private extension WatchlistViewController {
 extension WatchlistViewController: WatchlistButtonDelegate {
     func watchlistTapped(_ view: WatchlistHandleable) {
         guard let cell = view as? UITableViewCell else { return }
-        guard let indexPath = contentView.tableView.indexPath(for: cell) else { return }
+        guard let indexPath = contentView.tableView.indexPath(for: cell),
+              let movie = movies[safe: indexPath.row] else { return }
         
-        if let movie = movies[safe: indexPath.row] {
-            watchlistService.toggleStatus(for: movie) { _ in return }
+        watchlistService.toggleStatus(for: movie) { _ in return }
             
-            loadWatchlist()
-        }
+        loadWatchlist()
     }
 }
 

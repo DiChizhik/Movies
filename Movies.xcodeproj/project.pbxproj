@@ -14,6 +14,8 @@
 		021C2B77287D6F55004F8113 /* UICollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 021C2B76287D6F55004F8113 /* UICollectionView.swift */; };
 		021C2BA4287DAE2A004F8113 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 021C2BA3287DAE2A004F8113 /* SearchView.swift */; };
 		0223A3DE285A739B00E3602D /* MovieDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0223A3DD285A739B00E3602D /* MovieDetails.swift */; };
+		0223FB7828CB674B008C0AF6 /* CoreDataWatchlistService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0223FB7728CB674B008C0AF6 /* CoreDataWatchlistService.swift */; };
+		0223FB7A28CB6760008C0AF6 /* UserDefaultsWatchlistService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0223FB7928CB6760008C0AF6 /* UserDefaultsWatchlistService.swift */; };
 		02271136285A78940049BECA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 02271135285A78940049BECA /* Main.storyboard */; };
 		02334D0D283E185E0099C92B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02334D0C283E185E0099C92B /* AppDelegate.swift */; };
 		02334D0F283E185E0099C92B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02334D0E283E185E0099C92B /* SceneDelegate.swift */; };
@@ -37,8 +39,8 @@
 		0277AE1A2861DF9100054D50 /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0277AE192861DF9100054D50 /* LaunchViewController.swift */; };
 		0277AE5528646E0800054D50 /* DetailCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0277AE5428646E0800054D50 /* DetailCollectionViewCell.swift */; };
 		02A6D73128AD123A00403553 /* CoreDataWatchlistItem.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0268A25428A3AF3000A30BEF /* CoreDataWatchlistItem.xcdatamodeld */; };
-		02A6D73828AE326C00403553 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 02A6D73728AE326C00403553 /* GoogleService-Info.plist */; };
 		02A6D73D28AE5A3B00403553 /* MovieDataServiceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A6D73C28AE5A3B00403553 /* MovieDataServiceInfo.swift */; };
+		02A6D74128AE7BB900403553 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 02A6D74028AE7BB900403553 /* GoogleService-Info.plist */; };
 		02F514E5286B948F006D7843 /* SelfSizingCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F514E4286B948F006D7843 /* SelfSizingCollectionView.swift */; };
 		520B7E6CA6BC5BFDE9444078 /* Pods_Movies.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE7FF005008F9A4B55F07F82 /* Pods_Movies.framework */; };
 		DD8D6E752894082900A62950 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8D6E732894082900A62950 /* ErrorView.swift */; };
@@ -67,6 +69,8 @@
 		021C2B76287D6F55004F8113 /* UICollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICollectionView.swift; sourceTree = "<group>"; };
 		021C2BA3287DAE2A004F8113 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		0223A3DD285A739B00E3602D /* MovieDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetails.swift; sourceTree = "<group>"; };
+		0223FB7728CB674B008C0AF6 /* CoreDataWatchlistService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataWatchlistService.swift; sourceTree = "<group>"; };
+		0223FB7928CB6760008C0AF6 /* UserDefaultsWatchlistService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsWatchlistService.swift; sourceTree = "<group>"; };
 		02271135285A78940049BECA /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		02334D09283E185E0099C92B /* Movies.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Movies.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		02334D0C283E185E0099C92B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -93,8 +97,8 @@
 		0277AE192861DF9100054D50 /* LaunchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
 		0277AE5428646E0800054D50 /* DetailCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCollectionViewCell.swift; sourceTree = "<group>"; };
 		02A6D72E28AD0EB500403553 /* CoreDataWatchlistItem.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CoreDataWatchlistItem.xcdatamodel; sourceTree = "<group>"; };
-		02A6D73728AE326C00403553 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		02A6D73C28AE5A3B00403553 /* MovieDataServiceInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDataServiceInfo.swift; sourceTree = "<group>"; };
+		02A6D74028AE7BB900403553 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		02F514E4286B948F006D7843 /* SelfSizingCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfSizingCollectionView.swift; sourceTree = "<group>"; };
 		8E0C0B39AFAF1239D1AF5207 /* Pods-Movies.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Movies.release.xcconfig"; path = "Target Support Files/Pods-Movies/Pods-Movies.release.xcconfig"; sourceTree = "<group>"; };
 		A05BC71B99CED4586B153046 /* Pods-Movies.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Movies.debug.xcconfig"; path = "Target Support Files/Pods-Movies/Pods-Movies.debug.xcconfig"; sourceTree = "<group>"; };
@@ -198,9 +202,11 @@
 		0223A3DC285A735500E3602D /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				026D0D12284E646F00B5BF8B /* MovieDataService.swift */,
 				02A6D73C28AE5A3B00403553 /* MovieDataServiceInfo.swift */,
+				026D0D12284E646F00B5BF8B /* MovieDataService.swift */,
 				DD922D7A2889547B00061FF7 /* WatchlistService.swift */,
+				0223FB7728CB674B008C0AF6 /* CoreDataWatchlistService.swift */,
+				0223FB7928CB6760008C0AF6 /* UserDefaultsWatchlistService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -249,7 +255,7 @@
 		02334D00283E185E0099C92B = {
 			isa = PBXGroup;
 			children = (
-				02A6D73728AE326C00403553 /* GoogleService-Info.plist */,
+				02A6D74028AE7BB900403553 /* GoogleService-Info.plist */,
 				0268A25428A3AF3000A30BEF /* CoreDataWatchlistItem.xcdatamodeld */,
 				02271138285A7D6C0049BECA /* Application */,
 				02271137285A7AAD0049BECA /* Storyboards */,
@@ -404,7 +410,7 @@
 			files = (
 				02271136285A78940049BECA /* Main.storyboard in Resources */,
 				DD922D73288800D800061FF7 /* Colors.xcassets in Resources */,
-				02A6D73828AE326C00403553 /* GoogleService-Info.plist in Resources */,
+				02A6D74128AE7BB900403553 /* GoogleService-Info.plist in Resources */,
 				02334D19283E18600099C92B /* LaunchScreen.storyboard in Resources */,
 				02334D16283E18600099C92B /* Images.xcassets in Resources */,
 			);
@@ -509,6 +515,7 @@
 				021C2B71287C1CE6004F8113 /* SearchTableViewCell.swift in Sources */,
 				DD8D6E752894082900A62950 /* ErrorView.swift in Sources */,
 				021C2BA4287DAE2A004F8113 /* SearchView.swift in Sources */,
+				0223FB7828CB674B008C0AF6 /* CoreDataWatchlistService.swift in Sources */,
 				025F059B284786CF00FF070D /* Movie.swift in Sources */,
 				026D0D37284F8A3C00B5BF8B /* MovieDetailViewController.swift in Sources */,
 				DD8D6E7928940D2F00A62950 /* Collection.swift in Sources */,
@@ -519,6 +526,7 @@
 				DD922D7728881A1B00061FF7 /* ReviewScoreStackView.swift in Sources */,
 				DD922D7D288974BA00061FF7 /* WatchlistView.swift in Sources */,
 				02F514E5286B948F006D7843 /* SelfSizingCollectionView.swift in Sources */,
+				0223FB7A28CB6760008C0AF6 /* UserDefaultsWatchlistService.swift in Sources */,
 				DD922D6D2887EA0600061FF7 /* WatchlistViewController.swift in Sources */,
 				DD8D6E86289A69CC00A62950 /* MovieTabBarController.swift in Sources */,
 				026D0D39284F9CE900B5BF8B /* PaddingLabel.swift in Sources */,

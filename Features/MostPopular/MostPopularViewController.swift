@@ -83,7 +83,7 @@ extension MostPopularViewController: MostPopularViewDelegate, WatchlistButtonDel
             switch result {
             case .success(let updatedStatus):
                 view?.watchlistButton.updateWithStatus(updatedStatus, isShortVariant: false)
-            case .failure(_):
+            case .failure:
                 break
             }
         }
@@ -135,12 +135,14 @@ private extension MostPopularViewController {
             let movieDescription = movie.overview
             let movieID = movie.id
             
-            watchlistService.getStatus(for: movieID) { [weak contentView] result in
+            watchlistService.getStatus(for: movieID) { [weak self] result in
+                guard let self = self else { return }
+                
                 switch result {
                 case .success(let status):
-                    contentView?.configureWith(name: movieName, score: reviewsScore, description: movieDescription, status: status)
+                    self.contentView.configureWith(name: movieName, score: reviewsScore, description: movieDescription, status: status)
                 case .failure(_):
-                    contentView?.configureWith(name: movieName, score: reviewsScore, description: movieDescription, status: .notAdded)
+                    self.contentView.configureWith(name: movieName, score: reviewsScore, description: movieDescription, status: .notAdded)
                 }
             }
         }

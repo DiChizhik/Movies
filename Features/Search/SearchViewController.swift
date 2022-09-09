@@ -66,7 +66,7 @@ extension SearchViewController: WatchlistButtonDelegate {
                 switch result {
                 case .success(let updatedStatus):
                     view?.watchlistButton.updateWithStatus(updatedStatus, isShortVariant: false)
-                case .failure(_):
+                case .failure:
                     break
                 }
             }

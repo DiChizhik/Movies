@@ -97,14 +97,11 @@ extension PlayingNowCollectionViewController: WatchlistButtonDelegate {
                 switch result {
                 case .success(let updatedStatus):
                     view?.watchlistButton.updateWithStatus(updatedStatus, isShortVariant: true)
-                case .failure(_):
+                case .failure:
                     return
                 }
             }
         }
-//        let error = NSError(domain: "test error message", code: -1, userInfo: nil)
-//        Crashlytics.crashlytics().record(error: self as! Error)
-
     }
 }
 

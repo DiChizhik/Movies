@@ -154,7 +154,7 @@ class MovieDataService: MovieDataServiceProtocol {
                 return
             }
             let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd"
+            dateFormatter.dateFormat = "yyyy-MM-dd" 
             let jsonDecoder = JSONDecoder()
             jsonDecoder.dateDecodingStrategy = .formatted(dateFormatter)
                     
